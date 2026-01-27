@@ -21,4 +21,4 @@
 | Aroush   | 11 hours   |
 | Jiya     | 12 hours   |
 | Puntawat | 12 hours   |
-| Sailesh  | hour(s)    |
+| Sailesh  | 12 hours    |
