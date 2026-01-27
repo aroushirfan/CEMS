@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: cems_backend
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
