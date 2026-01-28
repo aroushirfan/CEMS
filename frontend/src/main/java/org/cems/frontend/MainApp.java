@@ -4,15 +4,22 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.cems.frontend.view.SceneNavigator;
 
 public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        // Point to the fxml folder in your resources
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("view/login-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        // 1. Initialize the navigator with the primary stage
+        SceneNavigator.setStage(stage);
+
+        // 2. Set the window title
         stage.setTitle("CEMS - Campus Event Management System");
-        stage.setScene(scene);
-        stage.show();
+
+        // 3. Use the navigator to load your first page from resources/view/pages/
+        SceneNavigator.loadPage("home-view.fxml");
+    }
+
+    public static void main(String[] args) {
+        launch();
     }
 }
