@@ -1,6 +1,6 @@
 package com.cems.cemsbackend.controller;
 
-import com.cems.cemsbackend.model.dto.EventDto.*;
+import com.cems.shared.model.EventDto.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ public class EventController {
     // GET /events
     @GetMapping()
     public ResponseEntity<List<EventResponseDTO>> getAllEvents() {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     // get by id
@@ -24,7 +24,7 @@ public class EventController {
     public ResponseEntity<EventResponseDTO> getEventById(
             @PathVariable String id
     ) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     // create an event
@@ -33,7 +33,7 @@ public class EventController {
     public ResponseEntity<EventResponseDTO> createEvent(
             @RequestBody @Valid EventRequestDTO body
     ) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     // update an event
@@ -42,7 +42,7 @@ public class EventController {
     public ResponseEntity<EventResponseDTO> updateEvent(
             @PathVariable String id
     ) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     // delete an event
@@ -51,6 +51,6 @@ public class EventController {
     public ResponseEntity<?> deleteEvent (
             @PathVariable String id
     ) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 }

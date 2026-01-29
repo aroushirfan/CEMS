@@ -1,4 +1,4 @@
-package com.cems.cemsbackend.model.dto;
+package com.cems.shared.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,6 +17,66 @@ public class EventDto {
         @NotBlank @NotNull
         private Instant dateTime;
         private boolean approved = false;
+
+        public EventRequestDTO() {
+        }
+
+        public EventRequestDTO(String title, String description, String location, Long capacity, Instant dateTime, boolean approved) {
+            this.title = title;
+            this.description = description;
+            this.location = location;
+            this.capacity = capacity;
+            this.dateTime = dateTime;
+            this.approved = approved;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
+        }
+
+        public Long getCapacity() {
+            return capacity;
+        }
+
+        public void setCapacity(Long capacity) {
+            this.capacity = capacity;
+        }
+
+        public Instant getDateTime() {
+            return dateTime;
+        }
+
+        public void setDateTime(Instant dateTime) {
+            this.dateTime = dateTime;
+        }
+
+        public boolean isApproved() {
+            return approved;
+        }
+
+        public void setApproved(boolean approved) {
+            this.approved = approved;
+        }
     }
     static public class EventResponseDTO {
         private UUID id;

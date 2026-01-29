@@ -8,11 +8,10 @@
 		<version>4.0.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.cems</groupId>
 	<artifactId>cemsbackend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>cems_backend</name>
 	<description>cems_backend</description>
+	<packaging>jar</packaging>
 	<url/>
 	<licenses>
 		<license/>
@@ -71,6 +70,11 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.cems</groupId>
+			<artifactId>shared</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 
