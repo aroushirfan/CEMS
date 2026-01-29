@@ -21,6 +21,9 @@ public class Event {
     private UUID id;
     @Column(nullable = false)
     private String title;
+    private String description;
+    private String location;
+    private long capacity;
     @Column(nullable = false, name = "date_time")
     private Instant dateTime;
     @Column(nullable = false)
@@ -30,13 +33,16 @@ public class Event {
     @ManyToOne(optional = false)
     private User eventOwner;
 
-    public Event() {
-    }
+    public Event() {}
 
-    public Event(String title, Instant dateTime, User eventOwner) {
+    public Event(String title, String description, String location, long capacity, Instant dateTime, User eventOwner, boolean approved) {
         this.title = title;
+        this.description = description;
+        this.location = location;
+        this.capacity = capacity;
         this.dateTime = dateTime;
         this.eventOwner = eventOwner;
+        this.approved = approved;
     }
 
     public User getEventOwner() {
@@ -86,4 +92,29 @@ public class Event {
     public void setApproved(boolean approved) {
         this.approved = approved;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public long getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(long capacity) {
+        this.capacity = capacity;
+    }
+
 }
