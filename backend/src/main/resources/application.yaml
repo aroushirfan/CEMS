@@ -10,3 +10,5 @@ spring:
     hibernate:
       ddl-auto: create-drop
     show-sql: true
+  jackson:
+    property-naming-strategy: SNAKE_CASE

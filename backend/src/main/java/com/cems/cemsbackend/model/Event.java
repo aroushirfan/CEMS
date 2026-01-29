@@ -1,5 +1,6 @@
 package com.cems.cemsbackend.model;
 
+import com.cems.shared.model.EventDto;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -43,6 +44,15 @@ public class Event {
         this.dateTime = dateTime;
         this.eventOwner = eventOwner;
         this.approved = approved;
+    }
+
+    public Event updateFromDto(EventDto.EventRequestDTO dto) {
+        if (dto.getTitle() != null) this.setTitle(dto.getTitle());
+        if (dto.getDescription() != null) this.setDescription(dto.getDescription());
+        if (dto.getLocation() != null) this.setLocation(dto.getLocation());
+        if (dto.getCapacity() != null) this.setCapacity(dto.getCapacity());
+        if (dto.getDateTime() != null) this.setDateTime(dto.getDateTime());
+        return this;
     }
 
     public User getEventOwner() {
