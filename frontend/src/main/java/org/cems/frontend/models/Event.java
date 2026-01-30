@@ -25,7 +25,7 @@ public class Event {
     public ObjectProperty<Instant> dateTimeProperty() { return dateTime; }
     public BooleanProperty approvedProperty() { return approved; }
 
-    // Getters for logic
+    // Getters
     public String getTitle() { return title.get(); }
     public Instant getDateTime() { return dateTime.get(); }
 }
