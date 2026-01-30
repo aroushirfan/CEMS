@@ -12,22 +12,20 @@ public class EventDto {
         private String title;
         private String description;
         private String location;
-        @NotBlank @NotNull
+        @NotNull
         private Long capacity;
-        @NotBlank @NotNull
+        @NotNull
         private Instant dateTime;
-        private boolean approved = false;
 
         public EventRequestDTO() {
         }
 
-        public EventRequestDTO(String title, String description, String location, Long capacity, Instant dateTime, boolean approved) {
+        public EventRequestDTO(String title, String description, String location, Long capacity, Instant dateTime) {
             this.title = title;
             this.description = description;
             this.location = location;
             this.capacity = capacity;
             this.dateTime = dateTime;
-            this.approved = approved;
         }
 
         public String getTitle() {
@@ -70,13 +68,6 @@ public class EventDto {
             this.dateTime = dateTime;
         }
 
-        public boolean isApproved() {
-            return approved;
-        }
-
-        public void setApproved(boolean approved) {
-            this.approved = approved;
-        }
     }
     static public class EventResponseDTO {
         private UUID id;
