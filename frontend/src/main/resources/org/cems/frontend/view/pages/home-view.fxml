@@ -1,0 +1,20 @@
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.control.Label?>
+<HBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.cems.frontend.controllers.pages.HomeController">
+    <fx:include source="../components/sidebar.fxml" />
+
+    <VBox HBox.hgrow="ALWAYS">
+        <fx:include source="../components/navbar.fxml" />
+
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+            <VBox spacing="30" style="-fx-padding: 0 40 40 40;">
+                <Label text="All Available Events" style="-fx-font-size: 32; -fx-font-weight: bold;" />
+                <FlowPane fx:id="eventGrid" hgap="25" vgap="25">
+                </FlowPane>
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</HBox>

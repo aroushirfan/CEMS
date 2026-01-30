@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="sidebarRoot" prefHeight="700.0" prefWidth="240.0" spacing="10.0" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-width: 0 1 0 0;"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.cems.frontend.controllers.components.SidebarController">
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="30.0" />
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <VBox>
+            <Label style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #1A237E;" text="CEMS" />
+            <Label style="-fx-font-size: 12; -fx-text-fill: #757575;" text="logo" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Label style="-fx-font-size: 20; -fx-cursor: hand;" text="«" />
+    </HBox>
+
+    <Region prefHeight="40.0" />
+
+    <VBox spacing="8.0">
+        <Button onAction="#goToHome" maxWidth="Infinity" alignment="BASELINE_LEFT" style="-fx-background-color: transparent;" text="Home" />
+        <Button onAction="#goToAllEvents" maxWidth="Infinity" alignment="BASELINE_LEFT" style="-fx-background-color: #F0E6FF; -fx-text-fill: #6200EE; -fx-font-weight: bold; -fx-background-radius: 5;" text="All Events" />
+        <Button maxWidth="Infinity" alignment="BASELINE_LEFT" style="-fx-background-color: transparent;" text="Users" />
+        <Button maxWidth="Infinity" alignment="BASELINE_LEFT" style="-fx-background-color: transparent;" text="Settings" />
+        <Button maxWidth="Infinity" alignment="BASELINE_LEFT" style="-fx-background-color: transparent;" text="English" />
+    </VBox>
+
+    <Region VBox.vgrow="ALWAYS" />
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-padding: 10 0;">
+        <Label text="Dark Mode" />
+        <ToggleButton fx:id="darkModeToggle" onAction="#handleDarkMode" style="-fx-background-radius: 15;" text="ON" />
+    </HBox>
+
+    <Button fx:id="logoutButton" maxWidth="Infinity" onAction="#handleLogout"
+            style="-fx-background-color: #546E7A; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10;" text="Logout" />
+</VBox>
