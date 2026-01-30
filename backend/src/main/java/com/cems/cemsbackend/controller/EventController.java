@@ -1,5 +1,6 @@
 package com.cems.cemsbackend.controller;
 
+import com.cems.cemsbackend.mappers.EventMapper;
 import com.cems.cemsbackend.model.Event;
 import com.cems.cemsbackend.model.User;
 import com.cems.cemsbackend.repository.EventRepository;
@@ -37,16 +38,35 @@ public class EventController {
     // GET /events
     @GetMapping()
     public ResponseEntity<List<EventResponseDTO>> getAllEvents() {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        try {
+            List<Event> events = eventRepository.findAll();
+            if (events.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            }
+            List<EventResponseDTO> response = events.stream()
+                    .map(EventMapper::toDto)
+                    .toList();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to fetch events");
+        }
     }
 
     // get by id
     // GET /events/{id}
     @GetMapping(path = "/{id}")
     public ResponseEntity<EventResponseDTO> getEventById(
-            @PathVariable String id
+            @PathVariable("id") UUID id
     ) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        try {
+            var event = eventRepository.findById(id).orElse(null);
+            if (event == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(EventMapper.toDto(event));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to fetch event");
+        }
     }
 
     // create an event
@@ -123,7 +143,7 @@ public class EventController {
     // DELETE /events/{id}
     @DeleteMapping(path = "/{id}")
     @Transactional
-    public ResponseEntity<?> deleteEvent (
+    public ResponseEntity<?> deleteEvent(
             @PathVariable String id
     ) {
         Optional<Event> eventOpt;
