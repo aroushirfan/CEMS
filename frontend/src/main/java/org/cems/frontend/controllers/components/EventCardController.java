@@ -1,8 +1,10 @@
 package org.cems.frontend.controllers.components;
 
+import com.cems.shared.model.EventDto;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import org.cems.frontend.models.Event;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class EventCardController {
     @FXML private Label titleLabel;
@@ -10,13 +12,17 @@ public class EventCardController {
     @FXML private Label locationLabel;
     @FXML private Label spotsLabel;
 
-    public void setEventData(Event event) {
+    public void setEventData(EventDto.EventResponseDTO event) {
         titleLabel.setText(event.getTitle());
-        // In a real app, format the Instant here
-        dateTimeLabel.setText(event.getDateTime().toString());
+        locationLabel.setText(event.getLocation());
 
-        // For now, these are static as per the design
-        locationLabel.setText("Auditorium");
-        spotsLabel.setText("55 spots left (145/200)");
+        if (event.getDateTime() != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+                    .withZone(ZoneId.systemDefault());
+            dateTimeLabel.setText(formatter.format(event.getDateTime()));
+        }
+
+        // Use the real capacity from your database
+        spotsLabel.setText("Capacity: " + event.getCapacity());
     }
 }
