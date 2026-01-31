@@ -99,7 +99,6 @@ public class EventController {
                     event.isApproved()
             ));
         } catch (Exception e) {
-            System.out.println("Exceptionnnnn");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
