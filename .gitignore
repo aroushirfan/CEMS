@@ -1,1 +1,9 @@
 .DS_Store
+.idea
+# IntelliJ build folder
+out/
+# Maven build folder
+target/
+# IntelliJ settings
+.idea/
+*.iml
