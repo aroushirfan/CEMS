@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 public class EventDto {
@@ -146,6 +147,18 @@ public class EventDto {
 
         public void setApproved(boolean approved) {
             this.approved = approved;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == null || getClass() != o.getClass()) return false;
+            EventResponseDTO that = (EventResponseDTO) o;
+            return getCapacity() == that.getCapacity() && isApproved() == that.isApproved() && Objects.equals(getId(), that.getId()) && Objects.equals(getTitle(), that.getTitle()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getLocation(), that.getLocation()) && Objects.equals(getDateTime(), that.getDateTime());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getId(), getTitle(), getDescription(), getLocation(), getCapacity(), getDateTime(), isApproved());
         }
     }
 }
