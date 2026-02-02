@@ -1,39 +1,72 @@
 package org.cems.frontend.controllers.pages;
 
+import com.cems.shared.model.EventDto;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import org.cems.frontend.controllers.components.EventCardController;
-import org.cems.frontend.models.Event;
-import org.cems.frontend.services.MockEventService;
+import org.cems.frontend.services.ApiEventService; // Your new service
+import org.cems.frontend.services.IEventService;
 
 import java.io.IOException;
 import java.util.List;
 
 public class HomeController {
     @FXML private FlowPane eventGrid;
-    private final MockEventService eventService = new MockEventService();
+
+    // Use the interface for flexibility
+    private final IEventService eventService = new ApiEventService();
 
     @FXML
     public void initialize() {
-        // Fetch data from Mock Service
-        List<Event> events = eventService.getAllEvents();
+        fetchEvents();
+    }
 
-        for (Event event : events) {
+    private void fetchEvents() {
+        // Create a background task to prevent UI freezing
+        Task<List<EventDto.EventResponseDTO>> task = new Task<>() {
+            @Override
+            protected List<EventDto.EventResponseDTO> call() throws Exception {
+                return eventService.getAllEvents(); // API call
+            }
+        };
+
+        // When the data arrives successfully
+        task.setOnSucceeded(e -> {
+            List<EventDto.EventResponseDTO> events = task.getValue();
+            populateGrid(events);
+        });
+
+        // If the API call fails
+        task.setOnFailed(e -> {
+            Throwable problem = task.getException();
+            problem.printStackTrace();
+            // In a real app, you would show an error dialog here
+        });
+
+        // Start the thread
+        new Thread(task).start();
+    }
+
+    private void populateGrid(List<EventDto.EventResponseDTO> events) {
+        eventGrid.getChildren().clear(); // Clear grid before adding new data
+
+        for (EventDto.EventResponseDTO event : events) {
             try {
-                // Load the component from the components folder
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/cems/frontend/view/components/event-card.fxml"));
                 VBox card = loader.load();
 
-                // Inject the data into the card's controller
                 EventCardController cardController = loader.getController();
+
+                // CRITICAL: You must update setEventData in EventCardController
+                // to accept EventDto.EventResponseDTO
                 cardController.setEventData(event);
 
-                // Add to the grid in home-view.fxml
                 eventGrid.getChildren().add(card);
-            } catch (IOException e) {
-                e.printStackTrace(); // Handle with AlertHelper later
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }

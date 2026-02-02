@@ -1,9 +1,9 @@
 package org.cems.frontend.services;
 
-import org.cems.frontend.models.Event;
+import com.cems.shared.model.EventDto;
 
 import java.util.List;
 
 public interface IEventService {
-    List<Event> getAllEvents();;
+    List<EventDto.EventResponseDTO> getAllEvents() throws Exception;
 }
