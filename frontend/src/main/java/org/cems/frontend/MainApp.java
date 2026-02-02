@@ -16,7 +16,10 @@ public class MainApp extends Application {
         stage.setTitle("CEMS - Campus Event Management System");
 
         // 3. Use the navigator to load your first page from resources/view/pages/
-        SceneNavigator.loadPage("home-view.fxml");
+//        SceneNavigator.loadPage("home-view.fxml");
+//        SceneNavigator.loadPage("UserSettings.fxml");
+        SceneNavigator.loadPage("Signup.fxml");
+//        SceneNavigator.loadPage("Login.fxml");
     }
 
     public static void main(String[] args) {

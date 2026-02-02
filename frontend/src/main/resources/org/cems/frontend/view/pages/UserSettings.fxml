@@ -30,10 +30,12 @@
             <HBox spacing="30">
                 <!-- Profile Picture -->
                 <VBox alignment="TOP_CENTER" spacing="15">
-                    <ImageView fx:id="profileImage" fitHeight="120" fitWidth="120" style="-fx-border-radius: 60; -fx-background-radius: 60;">
-                  <image>
-                     <Image url="@../../../../../../../../../../../Downloads/images.jpeg" />
-                  </image></ImageView>
+                    <ImageView
+                            fx:id="profileImage"
+                            fitHeight="120"
+                            fitWidth="120"
+                            preserveRatio="true"
+                    />
                     <Button fx:id="editProfileButton" style="-fx-background-color: #999; -fx-text-fill: white; -fx-background-radius: 20;" text="Edit Profile" />
                 </VBox>
 

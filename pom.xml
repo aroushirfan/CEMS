@@ -13,6 +13,7 @@
     <modules>
         <module>shared</module>
         <module>backend</module>
+        <module>frontend</module>
         <!-- frontend will be added later -->
     </modules>
 
