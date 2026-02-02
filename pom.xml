@@ -20,7 +20,7 @@
     <modules>
         <module>shared</module>
         <module>backend</module>
-        <!-- frontend will be added later -->
+        <module>frontend</module>
     </modules>
 
     <dependencyManagement>
