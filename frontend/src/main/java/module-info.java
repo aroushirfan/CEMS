@@ -1,4 +1,4 @@
-module org.cems.frontend {
+module com.cems.frontend {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
@@ -11,10 +11,10 @@ module org.cems.frontend {
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.datatype.jsr310;
 
-    opens org.cems.frontend.controllers.pages to javafx.fxml;
-    opens org.cems.frontend.controllers.components to javafx.fxml;
-    opens org.cems.frontend to javafx.fxml;
-    opens org.cems.frontend.models to javafx.base;
+    opens com.cems.frontend.controllers.pages to javafx.fxml;
+    opens com.cems.frontend.controllers.components to javafx.fxml;
+    opens com.cems.frontend to javafx.fxml;
+    opens com.cems.frontend.models to javafx.base;
 
-    exports org.cems.frontend;
+    exports com.cems.frontend;
 }
