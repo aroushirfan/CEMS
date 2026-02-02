@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cems.frontend.controllers.pages.HomeController">
+    <fx:include source="../components/sidebar_home.fxml" />
+
+    <VBox HBox.hgrow="ALWAYS">
+        <fx:include source="../components/navbar.fxml" />
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+            <VBox spacing="30" style="-fx-padding: 0 40 40 40;">
+                <FlowPane fx:id="eventGrid" hgap="25" vgap="25">
+                </FlowPane>
+            <ImageView fitHeight="150.0" fitWidth="461.0" pickOnBounds="true" preserveRatio="true" />
+            <VBox prefHeight="50.0" prefWidth="466.0" style="-fx-background-color: grey;" />
+            </VBox>
+        </ScrollPane>
+      <VBox alignment="TOP_RIGHT" prefHeight="378.0" prefWidth="548.0">
+         <children>
+            <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" prefHeight="44.0" prefWidth="189.0" style="-fx-text-fill: #1B336F;" text="see all events">
+               <font>
+                  <Font size="19.0" />
+               </font>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="30.0" top="10.0" />
+               </padding>
+            </Label>
+            <Label alignment="TOP_CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="35.0" prefWidth="142.0" text="Events">
+               <font>
+                  <Font size="29.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="W_RESIZE" />
+               </cursor>
+            </Label>
+         </children>
+      </VBox>
+    </VBox>
+</HBox>
