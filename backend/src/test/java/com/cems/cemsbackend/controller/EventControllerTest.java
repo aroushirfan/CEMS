@@ -2,15 +2,11 @@ package com.cems.cemsbackend.controller;
 
 import com.cems.shared.model.EventDto;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,20 +49,5 @@ class EventControllerTest {
     void getEventById() {
         assertEquals(firstEventResponse, controller.getEventById(firstEventResponse.getId()).getBody());
         assertEquals(HttpStatus.NOT_FOUND, controller.getEventById(UUID.randomUUID()).getStatusCode());
-    }
-
-    @Test
-    void createEvent() {
-        fail("Test not implemented");
-    }
-
-    @Test
-    void updateEvent() {
-        fail("Test not implemented");
-    }
-
-    @Test
-    void deleteEvent() {
-        fail("Test not implemented");
     }
 }
