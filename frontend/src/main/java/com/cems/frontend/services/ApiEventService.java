@@ -49,4 +49,25 @@ public class ApiEventService implements IEventService {
             throw new RuntimeException("HTTP Error: " + response.statusCode() + " | Details: " + response.body());
         }
     }
+
+    @Override
+    public EventDto.EventResponseDTO createEvent(EventDto.EventRequestDTO data) throws Exception {
+        // Convert DTO to JSON using your SNAKE_CASE mapper
+        String json = mapper.writeValueAsString(data);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 201) {
+            return mapper.readValue(response.body(), EventDto.EventResponseDTO.class);
+        } else {
+            // Backend returns 400 for validation errors via GlobalExceptionHandling
+            throw new RuntimeException("Error: " + response.body());
+        }
+    }
 }
