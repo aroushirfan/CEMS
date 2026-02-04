@@ -27,6 +27,12 @@
     <VBox spacing="8.0">
         <Button onAction="#goToHome" maxWidth="Infinity" alignment="BASELINE_LEFT" style="-fx-background-color: transparent;" text="Home" />
         <Button onAction="#goToAllEvents" maxWidth="Infinity" alignment="BASELINE_LEFT" style="-fx-background-color: #F0E6FF; -fx-text-fill: #6200EE; -fx-font-weight: bold; -fx-background-radius: 5;" text="All Events" />
+        <Button fx:id="createEventBtn"
+                onAction="#goToCreateEvent"
+                maxWidth="Infinity"
+                alignment="BASELINE_LEFT"
+                style="-fx-background-color: transparent;"
+                text="Create Event" />
         <Button maxWidth="Infinity" alignment="BASELINE_LEFT" style="-fx-background-color: transparent;" text="Users" />
         <Button maxWidth="Infinity" alignment="BASELINE_LEFT" style="-fx-background-color: transparent;" text="Settings" />
         <Button maxWidth="Infinity" alignment="BASELINE_LEFT" style="-fx-background-color: transparent;" text="English" />

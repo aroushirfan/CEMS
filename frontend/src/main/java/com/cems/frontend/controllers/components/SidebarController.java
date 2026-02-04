@@ -52,6 +52,12 @@ public class SidebarController {
     }
 
     @FXML
+    private void goToCreateEvent() {
+        // This will be our new page
+        SceneNavigator.loadPage("create-event-view.fxml");
+    }
+
+    @FXML
     private void handleLogout() {
         // Uses utility to return to the login screen
         SceneNavigator.loadPage("login-view.fxml");
