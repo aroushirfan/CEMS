@@ -1,12 +1,13 @@
 package com.cems.frontend.controllers.components;
 
-import com.cems.shared.model.EventDto.EventRequestDTO;
-import com.cems.shared.model.EventDto.EventResponseDTO;
+import com.cems.frontend.models.Event; // Using your property-based model
+import com.cems.shared.model.EventDto.EventRequestDTO; // Still used for sending data
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.Instant;
+import java.time.ZonedDateTime; // Required for precise time mapping
 
 public class EventFormController {
 
@@ -20,14 +21,18 @@ public class EventFormController {
 
     @FXML
     public void initialize() {
+        // Populate hours 00-23
         for (int i = 0; i < 24; i++) {
             hourComboBox.getItems().add(String.format("%02d", i));
         }
+        // Populate minutes in 15-minute increments
         minuteComboBox.getItems().addAll("00", "15", "30", "45");
 
+        // Defaults
         hourComboBox.setValue("12");
         minuteComboBox.setValue("00");
 
+        // Prevent selecting past dates
         datePicker.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -37,8 +42,12 @@ public class EventFormController {
         });
     }
 
+    /**
+     * Collects data from the form to create a Request DTO for the API.
+     */
     public EventRequestDTO getFormData() {
         if (datePicker.getValue() == null) throw new IllegalArgumentException("Date is required");
+
         int hour = Integer.parseInt(hourComboBox.getValue());
         int minute = Integer.parseInt(minuteComboBox.getValue());
 
@@ -51,16 +60,37 @@ public class EventFormController {
                 titleField.getText(),
                 descriptionField.getText(),
                 locationField.getText(),
-                Long.parseLong(capacityField.getText()),
+                Long.parseLong(capacityField.getText()), // Matches backend long type
                 eventInstant
         );
     }
 
-    public void setFormData(EventResponseDTO event) {
+    /**
+     * Best Practice: Populates the UI fields using the Frontend Model.
+     * This decouples the form from the backend DTO structure.
+     */
+    public void setFormData(Event event) {
+        // Standard text field population
         titleField.setText(event.getTitle());
         descriptionField.setText(event.getDescription());
         locationField.setText(event.getLocation());
         capacityField.setText(String.valueOf(event.getCapacity()));
-        datePicker.setValue(event.getDateTime().atZone(ZoneId.systemDefault()).toLocalDate());
+
+        if (event.getDateTime() != null) {
+            ZonedDateTime zdt = event.getDateTime().atZone(ZoneId.systemDefault());
+
+            // Set the DatePicker
+            datePicker.setValue(zdt.toLocalDate());
+
+            // Set the Time selection based on model data
+            hourComboBox.setValue(String.format("%02d", zdt.getHour()));
+
+            // Logic to snap to the nearest 15-minute increment in the dropdown
+            int minute = zdt.getMinute();
+            if (minute < 15) minuteComboBox.setValue("00");
+            else if (minute < 30) minuteComboBox.setValue("15");
+            else if (minute < 45) minuteComboBox.setValue("30");
+            else minuteComboBox.setValue("45");
+        }
     }
 }

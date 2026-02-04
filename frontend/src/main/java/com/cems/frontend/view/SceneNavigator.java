@@ -1,5 +1,8 @@
 package com.cems.frontend.view;
 
+import com.cems.frontend.controllers.pages.EditEventController;
+import com.cems.frontend.controllers.pages.EventDetailController;
+import com.cems.frontend.models.Event; // Import your property-based model
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -22,11 +25,51 @@ public class SceneNavigator {
                 return;
             }
 
+            // Maintain current window dimensions
             double width = mainStage.getWidth();
             double height = mainStage.getHeight();
 
             FXMLLoader loader = new FXMLLoader(resource);
             Scene scene = new Scene(loader.load(), width, height);
+
+            mainStage.setScene(scene);
+            mainStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Loads the detail page using the Frontend Model.
+     * No more DTOs allowed in the view layer!
+     */
+    public static void loadEventDetail(Event event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/com/cems/frontend/view/pages/event-detail-view.fxml"));
+
+            Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
+
+            EventDetailController controller = loader.getController();
+            controller.initData(event); // Controller now accepts Event model
+
+            mainStage.setScene(scene);
+            mainStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Loads the edit page using the Frontend Model.
+     */
+    public static void loadEditPage(Event event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/com/cems/frontend/view/pages/edit-event-view.fxml"));
+
+            Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
+
+            EditEventController controller = loader.getController();
+            controller.initData(event); // Controller now accepts Event model
 
             mainStage.setScene(scene);
             mainStage.show();
