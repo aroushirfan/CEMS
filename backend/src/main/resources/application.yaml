@@ -12,4 +12,6 @@ spring:
     show-sql: true
   jackson:
     property-naming-strategy: SNAKE_CASE
+jwt:
+  secret: F0GPizbHuE/xop0/o9ZSfAb8O6vLpmRa52bd0MhuvIA=
 

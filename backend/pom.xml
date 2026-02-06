@@ -76,6 +76,11 @@
 			<version>3.0.1</version>
 		</dependency>
 		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.13.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.cems</groupId>
 			<artifactId>shared</artifactId>
 			<version>${project.version}</version>
