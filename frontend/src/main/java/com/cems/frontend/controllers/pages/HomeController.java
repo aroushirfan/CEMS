@@ -7,7 +7,7 @@ import com.cems.frontend.services.ApiEventService;
 import com.cems.frontend.services.IEventService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList; // Use this for efficient searching
+import javafx.collections.transformation.FilteredList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,22 +20,19 @@ import java.util.List;
 
 public class HomeController {
     @FXML private FlowPane eventGrid;
-    @FXML private TextField searchField; // Injected from FXML
+    @FXML private TextField searchField;
 
     private final IEventService eventService = new ApiEventService();
     private final ObservableList<Event> masterData = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        setupSearchFilter(); // Connect search field to the data
+        setupSearchFilter();
         fetchEvents();
     }
 
     private void setupSearchFilter() {
-        // 1. Wrap master data in a FilteredList
         FilteredList<Event> filteredData = new FilteredList<>(masterData, p -> true);
-
-        // 2. Set the filter Predicate whenever the search text changes
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(event -> {
                 if (newValue == null || newValue.isBlank()) return true;
@@ -44,8 +41,6 @@ public class HomeController {
                 return event.getTitle().toLowerCase().contains(filter) ||
                         event.getLocation().toLowerCase().contains(filter);
             });
-
-            // Re-populate the grid with filtered results
             populateGrid(filteredData);
         });
     }
@@ -59,8 +54,8 @@ public class HomeController {
         };
 
         task.setOnSucceeded(e -> {
-            masterData.setAll(task.getValue()); // Update master list
-            populateGrid(masterData); // Initial population
+            masterData.setAll(task.getValue());
+            populateGrid(masterData);
         });
 
         new Thread(task).start();
