@@ -20,7 +20,7 @@ import java.util.List;
 
 public class HomeController {
     @FXML private FlowPane eventGrid;
-    @FXML private TextField searchField; // Injected from FXML
+    @FXML private TextField searchField;
 
     private final IEventService eventService = new ApiEventService();
     private final ObservableList<Event> masterData = FXCollections.observableArrayList();
@@ -32,7 +32,6 @@ public class HomeController {
     }
 
     private void setupSearchFilter() {
-        // Wrap master data in a FilteredList
         FilteredList<Event> filteredData = new FilteredList<>(masterData, p -> true);
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(event -> {
@@ -55,8 +54,8 @@ public class HomeController {
         };
 
         task.setOnSucceeded(e -> {
-            masterData.setAll(task.getValue()); // Update master list
-            populateGrid(masterData); // Initial population
+            masterData.setAll(task.getValue());
+            populateGrid(masterData);
         });
 
         new Thread(task).start();
