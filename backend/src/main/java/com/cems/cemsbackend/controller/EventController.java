@@ -86,7 +86,8 @@ public class EventController {
             Optional<User> userOpt = Optional.empty();
             try {
                 userOpt = userRepository.getUserById((UUID) auth.getPrincipal());
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
             if (userOpt.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid User ID");
             }
@@ -151,6 +152,31 @@ public class EventController {
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
             }
+        }
+    }
+
+    //approve an event
+    @PutMapping(path = "/{id}/approve")
+    @Transactional
+    public ResponseEntity<EventResponseDTO> approveEvent(@PathVariable String id) {
+        try {
+            UUID eventId;
+            try {
+                eventId = UUID.fromString(id);
+            } catch (IllegalArgumentException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Event ID");
+            }
+            var eventOpt = eventRepository.findById(eventId);
+            if (eventOpt.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event with id not found");
+            }
+            Event event = eventOpt.get();
+            event.setApproved(true);
+            Event saved = eventRepository.save(event);
+            return ResponseEntity.ok(EventMapper.toDto(saved));
+        } catch (Exception e) {
+            if (e instanceof ResponseStatusException) throw e;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
