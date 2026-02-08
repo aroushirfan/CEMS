@@ -14,6 +14,9 @@ public class Event {
     private final BooleanProperty approved = new SimpleBooleanProperty();
     private final ObjectProperty<User> eventOwner = new SimpleObjectProperty<>();
 
+    public Event() {
+    }
+
     public Event(UUID id, String title, String description, String location, long capacity, Instant dateTime, boolean approved, User owner) {
         this.id.set(id);
         this.title.set(title);
@@ -35,7 +38,7 @@ public class Event {
     public BooleanProperty approvedProperty() { return approved; }
     public ObjectProperty<User> eventOwnerProperty() { return eventOwner; }
 
-    // Standard Getters
+    // Getters
     public UUID getId() { return id.get(); }
     public String getTitle() { return title.get(); }
     public String getDescription() { return description.get(); }
@@ -44,7 +47,7 @@ public class Event {
     public Instant getDateTime() { return dateTime.get(); }
     public boolean isApproved() { return approved.get(); }
 
-    // Standard Setters (Required for refresh logic)
+    // Setters
     public void setId(UUID id) { this.id.set(id); }
     public void setTitle(String title) { this.title.set(title); }
     public void setDescription(String description) { this.description.set(description); }
