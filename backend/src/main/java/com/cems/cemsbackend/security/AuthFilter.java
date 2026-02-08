@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -37,7 +38,9 @@ public class AuthFilter extends OncePerRequestFilter {
             Claims claims = jwtService.parseAllClaims(token);
             if (claims != null) {
                 UUID userId = jwtService.getUserIdFromClaims(claims);
-                Authentication auth = new UsernamePasswordAuthenticationToken(userId, null, List.of());
+                var role = jwtService.getRoleFromClaims(claims);
+                List<GrantedAuthority> roles = role == null ? List.of() : List.of(role);
+                Authentication auth = new UsernamePasswordAuthenticationToken(userId, null, roles);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
