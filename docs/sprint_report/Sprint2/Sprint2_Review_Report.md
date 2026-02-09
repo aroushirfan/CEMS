@@ -19,11 +19,13 @@ The working backend and frontend connection, event management features, user acc
 
 ## What Went Well
 - Smooth integration between frontend and backend
+- Completed most planned tasks on time
 - Successful implementation of authentication and authorization despite not being planned
 - Good communication and collaboration among team members
 - Effective use of Trello for task tracking and management
 
 ## What Could Be Improved
+- Well most of the things went smooth but maybe a bit more time could have been allocated for testing and longed for better or more online resources for designing the UI using JavaFX.
 
 ## Next Sprint Focus
 Sprint 3 will focus on extending the functional prototype, integrating CI/CD with Jenkins, and preparing a local Docker image to support deployment workflows.
@@ -32,7 +34,7 @@ Sprint 3 will focus on extending the functional prototype, integrating CI/CD wit
 
 | Team Member | Hours Spent |
 |-------------|-------------|
-| Aroush      |             |
-| Jiya        |             |
-| Puntawat    |             |
-| Sailesh     |             |
+| Aroush      | 12          |
+| Jiya        | 10          |
+| Puntawat    | 6.5         |
+| Sailesh     | 21          |
