@@ -1,68 +1,79 @@
 package com.cems.frontend.controllers.pages;
 
-import com.cems.shared.model.EventDto;
+import com.cems.frontend.models.Event;
+import com.cems.frontend.view.SceneNavigator;
+import com.cems.frontend.controllers.components.EventCardController;
+import com.cems.frontend.services.ApiEventService;
+import com.cems.frontend.services.IEventService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import com.cems.frontend.controllers.components.EventCardController;
-import com.cems.frontend.services.ApiEventService; // Your new service
-import com.cems.frontend.services.IEventService;
 
 import java.io.IOException;
 import java.util.List;
 
 public class HomeController {
     @FXML private FlowPane eventGrid;
+    @FXML private TextField searchField;
 
-    // Use the interface for flexibility
     private final IEventService eventService = new ApiEventService();
+    private final ObservableList<Event> masterData = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
+        setupSearchFilter();
         fetchEvents();
     }
 
+    private void setupSearchFilter() {
+        FilteredList<Event> filteredData = new FilteredList<>(masterData, p -> true);
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(event -> {
+                if (newValue == null || newValue.isBlank()) return true;
+
+                String filter = newValue.toLowerCase();
+                return event.getTitle().toLowerCase().contains(filter) ||
+                        event.getLocation().toLowerCase().contains(filter);
+            });
+            populateGrid(filteredData);
+        });
+    }
+
     private void fetchEvents() {
-        // Create a background task to prevent UI freezing
-        Task<List<EventDto.EventResponseDTO>> task = new Task<>() {
+        Task<List<Event>> task = new Task<>() {
             @Override
-            protected List<EventDto.EventResponseDTO> call() throws Exception {
-                return eventService.getAllEvents(); // API call
+            protected List<Event> call() throws Exception {
+                return eventService.getAllEvents();
             }
         };
 
-        // When the data arrives successfully
         task.setOnSucceeded(e -> {
-            List<EventDto.EventResponseDTO> events = task.getValue();
-            populateGrid(events);
+            masterData.setAll(task.getValue());
+            populateGrid(masterData);
         });
 
-        // If the API call fails
-        task.setOnFailed(e -> {
-            Throwable problem = task.getException();
-            problem.printStackTrace();
-            // In a real app, you would show an error dialog here
-        });
-
-        // Start the thread
         new Thread(task).start();
     }
 
-    private void populateGrid(List<EventDto.EventResponseDTO> events) {
-        eventGrid.getChildren().clear(); // Clear grid before adding new data
+    private void populateGrid(List<Event> events) {
+        eventGrid.getChildren().clear();
 
-        for (EventDto.EventResponseDTO event : events) {
+        for (Event eventModel : events) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cems/frontend/view/components/event-card.fxml"));
                 VBox card = loader.load();
 
                 EventCardController cardController = loader.getController();
+                cardController.setEventModel(eventModel);
 
-                // CRITICAL: You must update setEventData in EventCardController
-                // to accept EventDto.EventResponseDTO
-                cardController.setEventData(event);
+                card.setOnMouseClicked(e -> SceneNavigator.loadEventDetail(eventModel));
+                cardController.getLearnMoreButton().setOnAction(e -> SceneNavigator.loadEventDetail(eventModel));
 
                 eventGrid.getChildren().add(card);
             } catch (IOException ex) {

@@ -1,7 +1,8 @@
 package com.cems.frontend.controllers.components;
 
-import com.cems.shared.model.EventDto;
+import com.cems.frontend.models.Event;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -12,17 +13,20 @@ public class EventCardController {
     @FXML private Label locationLabel;
     @FXML private Label spotsLabel;
 
-    public void setEventData(EventDto.EventResponseDTO event) {
-        titleLabel.setText(event.getTitle());
-        locationLabel.setText(event.getLocation());
+    @FXML private Button learnMoreButton;
 
+    public void setEventModel(Event event) {
+        titleLabel.textProperty().bind(event.titleProperty());
         if (event.getDateTime() != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                     .withZone(ZoneId.systemDefault());
             dateTimeLabel.setText(formatter.format(event.getDateTime()));
         }
+        locationLabel.setText(event.getLocation() != null ? event.getLocation() : "TBD");
+        spotsLabel.textProperty().bind(event.capacityProperty().asString("Capacity: %d"));
+    }
 
-        // Use the real capacity from your database
-        spotsLabel.setText("Capacity: " + event.getCapacity());
+    public Button getLearnMoreButton() {
+        return learnMoreButton;
     }
 }
