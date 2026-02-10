@@ -13,8 +13,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -79,26 +77,15 @@ public class EventController {
             @RequestBody @Valid EventRequestDTO body
     ) {
         try {
-            var auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "");
-            }
-            Optional<User> userOpt = Optional.empty();
-            try {
-                userOpt = userRepository.getUserById((UUID) auth.getPrincipal());
-            } catch (Exception ignored) {
-            }
-            if (userOpt.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid User ID");
-            }
-            User user = userOpt.get();
+            User testUser = new User(UUID.randomUUID().toString(), "woeifjhoi23j412", "o2hafodujhfaoew234124");
+            userRepository.save(testUser);
             Event event = eventRepository.save(new Event(
                     body.getTitle(),
                     body.getDescription(),
                     body.getLocation(),
                     body.getCapacity(),
                     body.getDateTime(),
-                    user,
+                    testUser,
                     false
             ));
 //            public EventResponseDTO(UUID id, String title, String description, String location, long capacity, Instant dateTime, boolean approved)
@@ -112,11 +99,7 @@ public class EventController {
                     event.isApproved()
             ));
         } catch (Exception e) {
-            if (e instanceof ResponseStatusException) {
-                throw e;
-            } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-            }
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -155,31 +138,6 @@ public class EventController {
         }
     }
 
-    //approve an event
-    @PutMapping(path = "/{id}/approve")
-    @Transactional
-    public ResponseEntity<EventResponseDTO> approveEvent(@PathVariable String id) {
-        try {
-            UUID eventId;
-            try {
-                eventId = UUID.fromString(id);
-            } catch (IllegalArgumentException e) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Event ID");
-            }
-            var eventOpt = eventRepository.findById(eventId);
-            if (eventOpt.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event with id not found");
-            }
-            Event event = eventOpt.get();
-            event.setApproved(true);
-            Event saved = eventRepository.save(event);
-            return ResponseEntity.ok(EventMapper.toDto(saved));
-        } catch (Exception e) {
-            if (e instanceof ResponseStatusException) throw e;
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
-    }
-
     // delete an event
     // DELETE /events/{id}
     @DeleteMapping(path = "/{id}")
@@ -197,65 +155,5 @@ public class EventController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event with id not found");
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-    }
-
-    // get event by owner
-    // GET /events/admin
-    @GetMapping(path = "/admin")
-    public ResponseEntity<List<EventResponseDTO>> getEventByOwner() {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not authenticated");
-            }
-            Optional<User> userOpt = userRepository.getUserById((UUID) authentication.getPrincipal());
-            if (userOpt.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not found");
-            }
-            var events = eventRepository.getEventsByEventOwner(userOpt.get());
-            return ResponseEntity.ok(events.stream().map(EventMapper::toDto).toList());
-        } catch (Exception e) {
-            if (e instanceof ResponseStatusException) {
-                throw e;
-            } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-            }
-        }
-    }
-
-    // get event by owner and id
-    // GET /events/admin/{id}
-    @GetMapping(path = "/admin/{id}")
-    public ResponseEntity<EventResponseDTO> getEventByOwnerAndId(
-            @PathVariable String id
-    ) {
-        try {
-            UUID eventId;
-            try {
-                eventId = UUID.fromString(id);
-            } catch (IllegalArgumentException e) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event ID is invalid");
-            }
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not authenticated");
-            }
-            var userId = (UUID) authentication.getPrincipal();
-            Optional<User> userOpt = userRepository.getUserById(userId);
-            if (userOpt.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not found");
-            }
-            var event = eventRepository.getEventByEventOwnerAndId(userOpt.get(), eventId);
-            if (event.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event with ID not found");
-            }
-            return ResponseEntity.ok(EventMapper.toDto(event.get()));
-        } catch (Exception e) {
-            if (e instanceof ResponseStatusException) {
-                throw e;
-            } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-            }
-        }
     }
 }

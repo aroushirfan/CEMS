@@ -22,26 +22,18 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String hashedPassword;
+    private String refreshToken;
     @Column(nullable = false)
     private int accessLevel = AccessLevel.USER;
-    @Column(nullable = false)
-    private String firstName;
-    @Column(nullable = true)
-    private String middleName;
-    @Column(nullable = true)
-    private String lastName;
     @ManyToMany(mappedBy = "attendees")
     private List<Event> attendingEvents;
     @OneToMany(mappedBy = "eventOwner")
     private List<Event> ownedEvents;
 
-    public User(String email, String hashedPassword, int accessLevel, String firstName, String middleName, String lastName) {
+    public User(String email, String hashedPassword, String refreshToken) {
         this.email = email;
         this.hashedPassword = hashedPassword;
-        this.accessLevel = accessLevel;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
+        this.refreshToken = refreshToken;
     }
 
     public User() {}
@@ -78,6 +70,13 @@ public class User {
         this.hashedPassword = hashedPassword;
     }
 
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 
     public int getAccessLevel() {
         return accessLevel;
@@ -85,29 +84,5 @@ public class User {
 
     public void setAccessLevel(int accessLevel) {
         this.accessLevel = accessLevel;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
     }
 }
