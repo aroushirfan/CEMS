@@ -1,9 +1,11 @@
 package com.cems.shared.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 public class EventDto {
@@ -12,22 +14,20 @@ public class EventDto {
         private String title;
         private String description;
         private String location;
-        @NotBlank @NotNull
+        @NotNull
         private Long capacity;
-        @NotBlank @NotNull
+        @NotNull
         private Instant dateTime;
-        private boolean approved = false;
 
         public EventRequestDTO() {
         }
 
-        public EventRequestDTO(String title, String description, String location, Long capacity, Instant dateTime, boolean approved) {
+        public EventRequestDTO(String title, String description, String location, Long capacity, Instant dateTime) {
             this.title = title;
             this.description = description;
             this.location = location;
             this.capacity = capacity;
             this.dateTime = dateTime;
-            this.approved = approved;
         }
 
         public String getTitle() {
@@ -70,13 +70,6 @@ public class EventDto {
             this.dateTime = dateTime;
         }
 
-        public boolean isApproved() {
-            return approved;
-        }
-
-        public void setApproved(boolean approved) {
-            this.approved = approved;
-        }
     }
     static public class EventResponseDTO {
         private UUID id;
@@ -154,6 +147,18 @@ public class EventDto {
 
         public void setApproved(boolean approved) {
             this.approved = approved;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == null || getClass() != o.getClass()) return false;
+            EventResponseDTO that = (EventResponseDTO) o;
+            return getCapacity() == that.getCapacity() && isApproved() == that.isApproved() && Objects.equals(getId(), that.getId()) && Objects.equals(getTitle(), that.getTitle()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getLocation(), that.getLocation()) && Objects.equals(getDateTime(), that.getDateTime());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getId(), getTitle(), getDescription(), getLocation(), getCapacity(), getDateTime(), isApproved());
         }
     }
 }

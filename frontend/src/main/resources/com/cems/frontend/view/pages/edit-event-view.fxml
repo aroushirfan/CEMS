@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20.0" alignment="TOP_CENTER" style="-fx-background-color: #F3F4F6;"
+      xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.cems.frontend.controllers.pages.EditEventController">
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+
+    <VBox spacing="25.0" maxWidth="600" style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+
+        <Label text="Edit Event Details" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #111827;"/>
+        <Separator />
+
+        <fx:include fx:id="eventForm" source="../components/event-form.fxml"/>
+
+        <HBox spacing="15" alignment="CENTER_RIGHT">
+            <Button text="Cancel" onAction="#handleCancel"
+                    style="-fx-background-color: transparent; -fx-text-fill: #6B7280; -fx-cursor: hand; -fx-font-weight: bold;"/>
+
+            <Button text="Save Changes" onAction="#handleUpdate"
+                    style="-fx-background-color: #4F46E5; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 25; -fx-background-radius: 6; -fx-cursor: hand;"/>
+        </HBox>
+    </VBox>
+</VBox>

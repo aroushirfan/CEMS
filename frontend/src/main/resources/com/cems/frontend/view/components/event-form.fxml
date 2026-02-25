@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.cems.frontend.controllers.components.EventFormController">
+    <children>
+        <VBox spacing="5.0">
+            <Label text="Event Title" style="-fx-font-weight: bold; -fx-text-fill: #374151;" />
+            <TextField fx:id="titleField" promptText="Enter event title"
+                       style="-fx-padding: 8; -fx-background-radius: 5;" />
+        </VBox>
+
+        <VBox spacing="5.0">
+            <Label text="Description" style="-fx-font-weight: bold; -fx-text-fill: #374151;" />
+            <TextArea fx:id="descriptionField" promptText="Enter event details..." prefHeight="100.0"
+                      style="-fx-padding: 8; -fx-background-radius: 5;" wrapText="true" />
+        </VBox>
+
+        <HBox spacing="15.0">
+            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                <Label text="Location" style="-fx-font-weight: bold; -fx-text-fill: #374151;" />
+                <TextField fx:id="locationField" promptText="e.g. Hall A"
+                           style="-fx-padding: 8; -fx-background-radius: 5;" />
+            </VBox>
+            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                <Label text="Capacity" style="-fx-font-weight: bold; -fx-text-fill: #374151;" />
+                <TextField fx:id="capacityField" promptText="e.g. 100"
+                           style="-fx-padding: 8; -fx-background-radius: 5;" />
+            </VBox>
+        </HBox>
+
+        <VBox spacing="5.0">
+            <Label text="Date and Time" style="-fx-font-weight: bold; -fx-text-fill: #374151;" />
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <DatePicker fx:id="datePicker" HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                            style="-fx-padding: 5; -fx-background-radius: 5;" />
+
+                <Label text="at" style="-fx-text-fill: #6B7280;" />
+
+                <ComboBox fx:id="hourComboBox" prefWidth="80.0" promptText="HH"
+                          style="-fx-background-radius: 5;" />
+                <Label text=":" />
+                <ComboBox fx:id="minuteComboBox" prefWidth="80.0" promptText="MM"
+                          style="-fx-background-radius: 5;" />
+            </HBox>
+        </VBox>
+    </children>
+</VBox>

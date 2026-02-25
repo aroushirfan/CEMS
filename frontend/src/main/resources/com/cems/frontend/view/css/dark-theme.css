@@ -1,0 +1,20 @@
+.root { -fx-base: #2b2b2b; }
+
+/* Styling for the search bar */
+.search-bar {
+    -fx-background-color: #3c3f41;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #999999;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #4b4b4b;
+    -fx-border-width: 1;
+    -fx-padding: 8 15 8 15;
+    -fx-font-size: 14px;
+}
+
+/* Highlight the search bar when the user clicks it */
+.search-bar:focused {
+    -fx-border-color: #3d81d4; /* Standard IntelliJ blue highlight */
+    -fx-background-color: #45494a;
+}

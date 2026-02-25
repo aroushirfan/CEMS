@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20.0" style="-fx-background-color: #F3F4F6;"
+      xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.cems.frontend.controllers.pages.CreateEventController">
+    <padding>
+        <Insets top="30" right="60" bottom="30" left="60"/>
+    </padding>
+
+    <VBox spacing="5.0">
+        <Label text="Create New Event" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: #111827;" />
+        <Label text="Set up your event details and invite participants." style="-fx-text-fill: #6B7280;" />
+    </VBox>
+
+    <VBox spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #E5E7EB; -fx-padding: 25;">
+        <fx:include fx:id="eventForm" source="../components/event-form.fxml" />
+    </VBox>
+
+    <HBox spacing="15.0" alignment="CENTER_RIGHT">
+        <Button text="Cancel" onAction="#handleCancel"
+                style="-fx-background-color: transparent; -fx-text-fill: #374151; -fx-cursor: hand;" />
+        <Button text="Save Event" onAction="#handleSubmit"
+                style="-fx-background-color: #4F46E5; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10 25; -fx-cursor: hand;" />
+    </HBox>
+</VBox>

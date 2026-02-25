@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20.0" style="-fx-background-color: #F3F4F6;"
+      xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.cems.frontend.controllers.pages.EventDetailController">
+    <padding>
+        <Insets top="30" right="60" bottom="30" left="60"/>
+    </padding>
+
+    <HBox spacing="15.0" alignment="CENTER_LEFT">
+        <Button text="← Back to Events" onAction="#handleBack"
+                style="-fx-background-color: transparent; -fx-text-fill: #4F46E5; -fx-font-weight: bold; -fx-cursor: hand;" />
+    </HBox>
+
+    <VBox spacing="25.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #E5E7EB; -fx-padding: 40;">
+
+        <VBox spacing="10.0">
+            <Label fx:id="titleLabel" text="Event Title"
+                   style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #111827;" />
+            <Separator />
+        </VBox>
+
+        <GridPane hgap="40.0" vgap="20.0">
+            <columnConstraints>
+                <ColumnConstraints minWidth="100" prefWidth="150" />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+
+            <children>
+                <Label text="WHEN" style="-fx-text-fill: #6B7280; -fx-font-weight: bold;" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                <Label fx:id="dateLabel" style="-fx-font-size: 16;" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+                <Label text="WHERE" style="-fx-text-fill: #6B7280; -fx-font-weight: bold;" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                <Label fx:id="locationLabel" style="-fx-font-size: 16;" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+                <Label text="CAPACITY" style="-fx-text-fill: #6B7280; -fx-font-weight: bold;" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                <Label fx:id="capacityLabel" style="-fx-font-size: 16;" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+            </children>
+        </GridPane>
+
+        <VBox spacing="10.0">
+            <Label text="ABOUT THIS EVENT" style="-fx-text-fill: #6B7280; -fx-font-weight: bold;" />
+            <Label fx:id="descriptionLabel" wrapText="true"
+                   style="-fx-font-size: 15; -fx-line-spacing: 5; -fx-text-fill: #374151;" />
+        </VBox>
+
+        <Separator />
+
+        <HBox spacing="15.0" alignment="CENTER_RIGHT">
+            <Button text="Delete Event" onAction="#handleDelete"
+                    style="-fx-background-color: #FEE2E2; -fx-text-fill: #DC2626; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10 20; -fx-cursor: hand;" />
+            <Button text="Edit Details" onAction="#handleEdit"
+                    style="-fx-background-color: #4F46E5; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10 25; -fx-cursor: hand;" />
+        </HBox>
+    </VBox>
+</VBox>
