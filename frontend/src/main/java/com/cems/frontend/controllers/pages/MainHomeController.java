@@ -32,7 +32,7 @@ public class MainHomeController {
             for (Event event : events) {
 
                 FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource("/org/cems/frontend/components/EventCard.fxml")
+                        getClass().getResource("/org/cems/frontend/components/event-card.fxml")
                 );
 
                 VBox card = loader.load();
