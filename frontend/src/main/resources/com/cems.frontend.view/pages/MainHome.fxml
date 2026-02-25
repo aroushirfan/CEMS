@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cems.frontend.controllers.pages.HomeController">
+
+    <fx:include source="../components/sidebar_home.fxml" />
+
+    <VBox HBox.hgrow="ALWAYS">
+
+        <fx:include source="../components/navbar.fxml" />
+
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+
+            <VBox spacing="0">
+
+                <!-- HERO + GREY BAR + ICONS -->
+                <StackPane HBox.hgrow="ALWAYS">
+
+                    <!-- HERO + GREY BAR -->
+                    <VBox spacing="0" HBox.hgrow="ALWAYS">
+
+                        <!-- RESPONSIVE HERO IMAGE -->
+                        <ImageView fx:id="heroImage" fitHeight="260" preserveRatio="true" HBox.hgrow="ALWAYS">
+                            <image>
+                                <Image url="@../assets/hero.jpg" />
+                            </image>
+                        </ImageView>
+
+                        <!-- GREY BAR -->
+                        <HBox style="-fx-background-color: #E5E5E5;                                      -fx-padding: 55 0 55 0;" HBox.hgrow="ALWAYS">
+                        </HBox>
+
+                    </VBox>
+
+                    <!-- ICONS OVERLAPPING -->
+                    <HBox alignment="CENTER" prefHeight="303.0" prefWidth="960.0" spacing="120" style="-fx-translate-y: 85;" StackPane.alignment="BOTTOM_CENTER"> <!-- small overlap -->
+
+                        <VBox alignment="CENTER" spacing="10">
+                            <ImageView fitHeight="45" preserveRatio="true">
+                                <image><Image url="@../assets/icons/search.png" /></image>
+                            </ImageView>
+                            <Label text="Discover campus events" />
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="10">
+                            <ImageView fitHeight="45" preserveRatio="true">
+                                <image><Image url="@../assets/icons/list.png" /></image>
+                            </ImageView>
+                            <Label text="Track Attendance" />
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="10">
+                            <ImageView fitHeight="45" preserveRatio="true">
+                                <image><Image url="@../assets/icons/bell.png" /></image>
+                            </ImageView>
+                            <Label text="Event Alerts" />
+                        </VBox>
+
+                    </HBox>
+
+                </StackPane>
+
+                <!-- CONTENT -->
+                <VBox spacing="30" style="-fx-padding: 20 40 40 40;">
+
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Events">
+                            <font><Font size="28" /></font>
+                        </Label>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label style="-fx-text-fill: #1B336F; -fx-font-size:16" text="see all events" />
+                    </HBox>
+
+                    <FlowPane fx:id="eventGrid" hgap="25" vgap="25" />
+
+                </VBox>
+
+            </VBox>
+
+        </ScrollPane>
+
+    </VBox>
+
+</HBox>

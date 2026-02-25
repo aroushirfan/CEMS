@@ -1,4 +1,4 @@
-module org.cems.frontend {
+module com.cems.frontend {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
@@ -6,17 +6,15 @@ module org.cems.frontend {
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
 
-    // Remove the line: opens org.cems.frontend.controllers to javafx.fxml;
-    // Because that package is now empty
+    requires shared;
+    requires java.net.http;
+    requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.datatype.jsr310;
 
-    // Open your hybrid sub-packages instead
-    opens org.cems.frontend.controllers.pages to javafx.fxml;
-    opens org.cems.frontend.controllers.components to javafx.fxml;
+    opens com.cems.frontend.controllers.pages to javafx.fxml;
+    opens com.cems.frontend.controllers.components to javafx.fxml;
+    opens com.cems.frontend to javafx.fxml;
+    opens com.cems.frontend.models to javafx.base;
 
-    // Allows FXML to find your MainApp or common view classes
-    opens org.cems.frontend to javafx.fxml;
-
-    opens org.cems.frontend.models to javafx.base;
-
-    exports org.cems.frontend;
+    exports com.cems.frontend;
 }
