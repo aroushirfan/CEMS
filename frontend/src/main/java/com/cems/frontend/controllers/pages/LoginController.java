@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class LoginController {
 
-    @FXML private TextField usernameField;
+    @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
 
     @FXML
@@ -26,7 +26,7 @@ public class LoginController {
     @FXML
     private void handleCancel(ActionEvent event) {
         // Clear fields or close app
-        usernameField.clear();
+        emailField.clear();
         passwordField.clear();
     }
     @FXML
@@ -41,7 +41,7 @@ public class LoginController {
     //Login button
     @FXML
     private void handleLogin(ActionEvent event) {
-        String username = usernameField.getText();
+        String username = emailField.getText();
         String password = passwordField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
