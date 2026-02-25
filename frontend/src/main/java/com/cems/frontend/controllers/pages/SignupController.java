@@ -49,7 +49,7 @@ public class SignupController {
     //  Redirect to login page
     @FXML
     private void goToLogin(ActionEvent event) {
-        switchScene(event, "/org/cems/frontend/view/pages/login.fxml");
+        switchScene(event, "/org/cems/frontend/view/pages/Login.fxml");
     }
 
     // Scene switcher
