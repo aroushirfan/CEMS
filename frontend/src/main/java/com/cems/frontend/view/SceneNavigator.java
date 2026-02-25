@@ -2,6 +2,7 @@ package com.cems.frontend.view;
 
 import com.cems.frontend.controllers.pages.EditEventController;
 import com.cems.frontend.controllers.pages.EventDetailController;
+
 import com.cems.frontend.models.Event; // Import your property-based model
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
