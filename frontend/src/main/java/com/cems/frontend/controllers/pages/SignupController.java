@@ -33,7 +33,7 @@ public class SignupController {
             return;
         }
 
-        // TEMporary (replace with backend later)
+        // Temporary (replace with backend later)
         System.out.println("User registered: " + email);
 
 
