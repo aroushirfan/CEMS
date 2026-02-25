@@ -120,7 +120,7 @@ public class UserSettingsController {
     private void loadDefaultProfileImage() {
         Image image = new Image(
                 getClass().getResource(
-                        "/org/cems/frontend/view/assets/profile.jpeg"
+                        "/com/cems/frontend/view/assets/profile.jpeg"
                 ).toExternalForm()
         );
         profileImage.setImage(image);
