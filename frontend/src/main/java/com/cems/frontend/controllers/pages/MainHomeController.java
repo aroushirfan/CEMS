@@ -1,5 +1,6 @@
 package com.cems.frontend.controllers.pages;
 
+import com.cems.frontend.services.ApiEventService;
 import com.cems.frontend.services.IEventService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +17,7 @@ public class MainHomeController {
     @FXML
     private FlowPane eventsContainer;
 
-    private IEventService eventService = new MockEventService();
+    private IEventService eventService = new ApiEventService();
 
     @FXML
     public void initialize() {
@@ -51,3 +52,5 @@ public class MainHomeController {
         }
     }
 }
+
+
