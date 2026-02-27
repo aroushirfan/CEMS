@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,6 +75,7 @@ public class EventController {
     // create an event
     // POST /events
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'FACULTY')")
     @Transactional
     public ResponseEntity<EventResponseDTO> createEvent(
             @RequestBody @Valid EventRequestDTO body
@@ -123,6 +125,7 @@ public class EventController {
     // update an event
     // PUT /events/{id}
     @PutMapping(path = "/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FACULTY')")
     public ResponseEntity<EventResponseDTO> updateEvent(
             @PathVariable String id,
             @RequestBody EventRequestDTO body
@@ -157,6 +160,7 @@ public class EventController {
 
     //approve an event
     @PutMapping(path = "/{id}/approve")
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public ResponseEntity<EventResponseDTO> approveEvent(@PathVariable String id) {
         try {
@@ -180,16 +184,25 @@ public class EventController {
         }
     }
 
-    // delete an event
+    // delete an event by owner
     // DELETE /events/{id}
     @DeleteMapping(path = "/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'FACULTY')")
     @Transactional
     public ResponseEntity<?> deleteEvent(
             @PathVariable String id
     ) {
         Optional<Event> eventOpt;
         try {
-            eventOpt = eventRepository.deleteEventById(UUID.fromString(id));
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not authenticated");
+            }
+            Optional<User> userOpt = userRepository.getUserById((UUID) authentication.getPrincipal());
+            if (userOpt.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not found");
+            }
+            eventOpt = eventRepository.deleteEventByIdAndEventOwner(UUID.fromString(id), userOpt.get());
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Id");
         }
