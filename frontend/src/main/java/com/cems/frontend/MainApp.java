@@ -11,9 +11,10 @@ public class MainApp extends Application {
         stage.setTitle("CEMS - Campus Event Management System");
 //        SceneNavigator.loadPage("home-view.fxml");
 
-        SceneNavigator.loadPage("UserSettings.fxml");
-////        SceneNavigator.loadPage("Signup.fxml");
-////        SceneNavigator.loadPage("Login.fxml");
+        SceneNavigator.loadPage("Attendance.fxml");
+//        SceneNavigator.loadPage("UserSettings.fxml");
+//        SceneNavigator.loadPage("Signup.fxml");
+//        SceneNavigator.loadPage("Login.fxml");
 //        SceneNavigator.loadPage("MainHome.fxml");
     }
 

@@ -1,0 +1,38 @@
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+}
+
+/* Remove header background styling */
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Remove vertical cell borders */
+.table-view .cell {
+    -fx-border-color: transparent;
+    -fx-padding: 8 10 8 10;
+}
+
+/* Row styling */
+.table-view .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #e0e0e0 transparent; /* bottom border only */
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Remove selection grey highlight */
+.table-view .table-row-cell:filled:selected {
+    -fx-background-color: transparent;
+}
+
+/* Optional: subtle hover */
+.table-view .table-row-cell:hover {
+    -fx-background-color: #f8f8f8;
+}
