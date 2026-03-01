@@ -1,12 +1,10 @@
 package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.models.Attendance;
-import com.cems.frontend.models.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -16,12 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import jdk.jshell.spi.ExecutionControl;
 
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 import java.util.UUID;
 
 public class AttendanceController {
@@ -63,7 +57,6 @@ public class AttendanceController {
     private final String CHECKED_IN =  "Checked In";
     private final String PENDING =  "Pending";
 
-    private final ObservableList<String> sortList = FXCollections.observableArrayList();
     private final ObservableList<Attendance> attendanceModelObservable = FXCollections.observableArrayList(
 //            TODO: remove dummy data
             new Attendance(UUID.randomUUID(), UUID.randomUUID(),Instant.now(),"checked in"),
@@ -77,9 +70,7 @@ public class AttendanceController {
     void sortByChanged(ActionEvent event) {
         String sortValue = sortByComboBox.getValue();
         switch (sortValue) {
-            case SORT_BY -> {
-                attendanceTableView.getSortOrder().clear();
-            }
+            case SORT_BY -> attendanceTableView.getSortOrder().clear();
             case CHECKED_IN -> {
                 attendanceTableView.getSortOrder().clear();
                 statusColumn.setSortType(TableColumn.SortType.DESCENDING);
@@ -92,7 +83,7 @@ public class AttendanceController {
                 attendanceTableView.getSortOrder().add(statusColumn);
                 attendanceTableView.sort();
             }
-        };
+        }
     }
 
     //    TODO: search functionality: search by name or email of attendee
@@ -118,9 +109,7 @@ public class AttendanceController {
 
     private void updateAttendanceRecords(){
         totalRegisteredLabel.setText(String.valueOf(attendanceModelObservable.size()));
-
         //        Filter by status to get count for checked in and pending attendees
-
         attendeesCheckedInLabel.setText(String.valueOf(attendanceModelObservable.size()));
         attendeesPendingLabel.setText(String.valueOf(attendanceModelObservable.size()));
 
