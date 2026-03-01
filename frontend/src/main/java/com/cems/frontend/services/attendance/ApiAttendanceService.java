@@ -22,12 +22,12 @@ public class ApiAttendanceService implements IAttendanceService {
     }
 
     @Override
-    public List<Attendance> getEventAttendance() throws Exception {
-        HttpRequest request = LocalHttpClient.buildGetRequest("attendance");
+    public List<Attendance> getEventAttendance(String eventId) throws Exception {
+        HttpRequest request = LocalHttpClient.buildGetRequest("attendance//event/" + eventId);
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
-            List<AttendanceResponseDTO> attendanceResponseDTOS = objectMapper.readValue(response.body(), new TypeReference<List<AttendanceResponseDTO>>() {});
+            List<AttendanceResponseDTO> attendanceResponseDTOS = objectMapper.readValue(response.body(), new TypeReference<>() {});
             return AttendanceMapper.toModelList(attendanceResponseDTOS);
         }else {
             throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());

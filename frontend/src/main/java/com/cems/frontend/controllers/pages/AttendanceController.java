@@ -9,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableView;
@@ -84,7 +83,7 @@ public class AttendanceController {
 
     //    TODO: sort functionality: sort by status of attendance
     @FXML
-    void sortByChanged(ActionEvent event) {
+    void sortByChanged() {
         String sortValue = sortByComboBox.getValue();
         switch (sortValue) {
             case SORT_BY -> attendanceTableView.getSortOrder().clear();
@@ -141,7 +140,7 @@ public class AttendanceController {
         Task<List<Attendance>> fetchTask = new Task<>() {
             @Override
             protected List<Attendance> call() throws Exception {
-                return attendanceService.getEventAttendance();
+                return attendanceService.getEventAttendance(UUID.randomUUID().toString());
             }
         };
 

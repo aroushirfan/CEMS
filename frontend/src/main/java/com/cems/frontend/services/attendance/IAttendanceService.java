@@ -5,5 +5,5 @@ import com.cems.frontend.models.Attendance;
 import java.util.List;
 
 public interface IAttendanceService {
-    List<Attendance> getEventAttendance() throws Exception;
+    List<Attendance> getEventAttendance(String eventId) throws Exception;
 }
