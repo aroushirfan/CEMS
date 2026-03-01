@@ -4,7 +4,7 @@
     -fx-table-cell-border-color: transparent;
 }
 
-/* Remove header background styling */
+/* Col styling */
 .table-view .column-header-background {
     -fx-background-color: transparent;
 }
@@ -14,7 +14,6 @@
     -fx-border-color: transparent;
 }
 
-/* Remove vertical cell borders */
 .table-view .cell {
     -fx-border-color: transparent;
     -fx-padding: 8 10 8 10;
@@ -23,16 +22,44 @@
 /* Row styling */
 .table-view .table-row-cell {
     -fx-background-color: transparent;
-    -fx-border-color: transparent transparent #e0e0e0 transparent; /* bottom border only */
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
     -fx-border-width: 0 0 1 0;
 }
 
-/* Remove selection grey highlight */
 .table-view .table-row-cell:filled:selected {
-    -fx-background-color: transparent;
+    -fx-background-color: #F5EFFF;
+    -fx-text-background-color: black;
 }
 
-/* Optional: subtle hover */
+/* subtle hover */
 .table-view .table-row-cell:hover {
     -fx-background-color: #f8f8f8;
 }
+
+
+.node {
+    -fx-border-color: transparent #D9D9D9 transparent transparent;
+    -fx-border-width: 0 2px 0 0;
+}
+
+/*.profile-btn {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-radius: 100px;*/
+/*    -fx-border-radius: 100px;*/
+/*    -fx-border-color: transparent;*/
+/*    -fx-padding: 0;*/
+/*    -fx-cursor: hand;*/
+/*    -fx-min-width: 72px;*/
+/*    -fx-min-height: 72px;*/
+/*    -fx-max-width: 72px;*/
+/*    -fx-max-height: 72px;*/
+/*}*/
+
+/*.profile-btn:hover {*/
+/*    -fx-border-color: #0096FF;*/
+/*    -fx-border-width: 2px;*/
+/*}*/
+
+/*.profile-btn:pressed {*/
+/*    -fx-opacity: 0.8;*/
+/*}*/

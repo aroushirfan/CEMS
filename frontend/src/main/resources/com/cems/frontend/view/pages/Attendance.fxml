@@ -17,18 +17,27 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<HBox spacing="0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.pages.AttendanceController">
+<HBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.pages.AttendanceController">
 
     <!-- Sidebar -->
     <fx:include source="../components/sidebar_settings.fxml" />
 
     <!-- Main content -->
     <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS">
-        <VBox spacing="10.0" style="-fx-padding: 40;">
-         <HBox prefHeight="50.0" prefWidth="481.0">
+        <VBox spacing="20.0" style="-fx-padding: 40;">
+         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="481.0">
             <children>
                   <!-- Page Heading -->
-                  <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="Attendance" />
+                  <Label maxHeight="1.7976931348623157E308" style="-fx-font-size: 24; -fx-font-weight: bold;" text="Attendance" />
+               <Pane prefHeight="200.0" prefWidth="200.0" styleClass="node" stylesheets="@../css/attendance.css" HBox.hgrow="ALWAYS">
+                  <HBox.margin>
+                     <Insets right="10.0" />
+                  </HBox.margin></Pane>
+               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../assets/icons/profile.png" />
+                  </image>
+               </ImageView>
             </children>
          </HBox>
          <VBox maxHeight="1.7976931348623157E308" prefHeight="550.0" prefWidth="485.0" spacing="30.0" VBox.vgrow="ALWAYS">
@@ -114,16 +123,15 @@
                   <padding>
                      <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                   </padding></HBox>
-               <VBox maxHeight="1.7976931348623157E308" spacing="10.0" VBox.vgrow="ALWAYS">
+               <VBox maxHeight="1.7976931348623157E308" spacing="20.0" VBox.vgrow="ALWAYS">
                   <children>
                      <HBox minHeight="11.0" prefWidth="486.0" spacing="30.0">
                         <children>
-                           <HBox alignment="CENTER_LEFT" styleClass="search-box" stylesheets="@../css/searchbar.css" HBox.hgrow="ALWAYS">
+                           <HBox fx:id="searchBox" alignment="CENTER_LEFT" styleClass="search-box" stylesheets="@../css/searchbar.css" HBox.hgrow="ALWAYS">
                               <children>
                                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                       <Image url="@../assets/icons/magnifier.png" />
-                                    </image></ImageView>
+                                    <Image url="@../assets/icons/magnifier.png" />
+                                 </ImageView>
                                  <TextField fx:id="searchTextField" maxWidth="1.7976931348623157E308" promptText="Search attendees by name or email..." styleClass="search-field" stylesheets="@../css/searchbar.css" HBox.hgrow="ALWAYS" />
                               </children>
                               <HBox.margin>
@@ -136,18 +144,22 @@
                            <ComboBox fx:id="sortByComboBox" maxHeight="1.7976931348623157E308" onAction="#sortByChanged" prefWidth="150.0" promptText="Status" styleClass="drop-down" stylesheets="@../css/searchbar.css" />
                         </children>
                      </HBox>
-                     <TableView fx:id="AttendanceTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" stylesheets="@../css/attendance.css" VBox.vgrow="ALWAYS">
-                       <columns>
-                         <TableColumn fx:id="nameColumn" minWidth="-1.0" prefWidth="137.99999618530273" text="Name" />
-                         <TableColumn fx:id="emailColumn" minWidth="-1.0" prefWidth="142.8000030517578" text="Email" />
-                           <TableColumn fx:id="statusColumn" minWidth="-1.0" prefWidth="106.0" text="Status" />
-                           <TableColumn fx:id="checkInTimeColumn" minWidth="-1.0" prefWidth="102.39996337890625" text="Check In Time" />
-                       </columns>
-                        <columnResizePolicy>
-                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                        </columnResizePolicy>
-                     </TableView>
-                     <Pagination currentPageIndex="3" maxPageIndicatorCount="5" pageCount="5" prefHeight="50.0" prefWidth="200.0" />
+                     <VBox VBox.vgrow="ALWAYS">
+                        <children>
+                           <TableView fx:id="attendanceTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" stylesheets="@../css/attendance.css" VBox.vgrow="ALWAYS">
+                             <columns>
+                               <TableColumn fx:id="nameColumn" minWidth="-1.0" prefWidth="137.99999618530273" text="Name" />
+                               <TableColumn fx:id="emailColumn" minWidth="-1.0" prefWidth="142.8000030517578" text="Email" />
+                                 <TableColumn fx:id="statusColumn" minWidth="-1.0" prefWidth="106.0" text="Status" />
+                                 <TableColumn fx:id="checkInTimeColumn" minWidth="-1.0" prefWidth="102.39996337890625" text="Check In Time" />
+                             </columns>
+                              <columnResizePolicy>
+                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                              </columnResizePolicy>
+                           </TableView>
+                           <Pagination currentPageIndex="3" maxPageIndicatorCount="5" pageCount="5" prefHeight="50.0" prefWidth="200.0" />
+                        </children>
+                     </VBox>
                   </children>
                </VBox>
             </children>

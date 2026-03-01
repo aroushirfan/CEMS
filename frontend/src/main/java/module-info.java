@@ -11,6 +11,7 @@ module com.cems.frontend {
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.datatype.jsr310;
     requires java.desktop;
+    requires jdk.jshell;
 
     opens com.cems.frontend.controllers.pages to javafx.fxml;
     opens com.cems.frontend.controllers.components to javafx.fxml;
