@@ -1,10 +1,14 @@
 package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.models.Attendance;
+import com.cems.frontend.services.LocalHttpClient;
+import com.cems.frontend.services.attendance.ApiAttendanceService;
+import com.cems.frontend.services.attendance.IAttendanceService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -16,6 +20,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 public class AttendanceController {
@@ -65,6 +70,18 @@ public class AttendanceController {
             new Attendance(UUID.randomUUID(), UUID.randomUUID(),Instant.now(),"Pending")
     );
 
+    private final IAttendanceService attendanceService = new ApiAttendanceService(LocalHttpClient.getClient(),LocalHttpClient.getMapper());
+
+    @FXML
+    public void initialize() {
+        attendanceTableView.setPlaceholder(new Label("No Attendance data available at the moment"));
+        fetchAttendanceRecords();
+        setupTableView();
+        attendanceSearchFilter();
+        sortByComboBox.getItems().addAll(SORT_BY,CHECKED_IN,PENDING);
+        handleSearchFocus();
+    }
+
     //    TODO: sort functionality: sort by status of attendance
     @FXML
     void sortByChanged(ActionEvent event) {
@@ -107,14 +124,6 @@ public class AttendanceController {
         attendanceTableView.setItems(sortedData);
     }
 
-    private void updateAttendanceRecords(){
-        totalRegisteredLabel.setText(String.valueOf(attendanceModelObservable.size()));
-        //        Filter by status to get count for checked in and pending attendees
-        attendeesCheckedInLabel.setText(String.valueOf(attendanceModelObservable.size()));
-        attendeesPendingLabel.setText(String.valueOf(attendanceModelObservable.size()));
-
-    }
-
     private void setupTableView (){
 //        Property value factory corresponds to AttendanceModel fields
 //        The table column is annotated above
@@ -127,36 +136,26 @@ public class AttendanceController {
         attendanceTableView.setItems(attendanceModelObservable);
     }
 
-//    private void fetchAttendanceRecords(){
-////        create a thread to fetch data in the background
-//        Task<List<Attendance>> fetchTask = new Task<>() {
-//            @Override
-//            protected List<Attendance> call() throws Exception {
-//                return "Not implemented";
-//            }
-//        };
-//
-//        fetchTask.setOnSucceeded(e -> {
-////            populate the observable lust
-//            attendanceModelObservable.setAll(fetchTask.getValue());
-//
-//
-//            setupTableView();
-////            Update labels
-//            updateAttendanceRecords();
-//        });
-////      run the thread to fetch attendance data in the background
-//        new Thread(fetchTask).start();
-//    }
+    private void fetchAttendanceRecords(){
+//        create a thread to fetch data in the background
+        Task<List<Attendance>> fetchTask = new Task<>() {
+            @Override
+            protected List<Attendance> call() throws Exception {
+                return attendanceService.getEventAttendance();
+            }
+        };
 
-    @FXML
-    public void initialize() {
-        attendanceTableView.setPlaceholder(new Label("No Attendance data available at the moment"));
-        setupTableView();
-//        fetchAttendanceRecords();
-        attendanceSearchFilter();
-        sortByComboBox.getItems().addAll(SORT_BY,CHECKED_IN,PENDING);
-        handleSearchFocus();
+        fetchTask.setOnSucceeded(e -> {
+//            populate the observable lust
+            attendanceModelObservable.setAll(fetchTask.getValue());
+
+//          set up the table view to display records
+            setupTableView();
+//            Update labels
+            updateAttendanceRecords();
+        });
+//      run the thread to fetch attendance data in the background
+        new Thread(fetchTask).start();
     }
 
     private void handleSearchFocus(){
@@ -167,6 +166,14 @@ public class AttendanceController {
                 searchBox.getStyleClass().remove("search-box-focused");
             }
         });
+    }
+
+    private void updateAttendanceRecords(){
+        totalRegisteredLabel.setText(String.valueOf(attendanceModelObservable.size()));
+        //        Filter by status to get count for checked in and pending attendees
+        attendeesCheckedInLabel.setText(String.valueOf(attendanceModelObservable.size()));
+        attendeesPendingLabel.setText(String.valueOf(attendanceModelObservable.size()));
+
     }
 
 }

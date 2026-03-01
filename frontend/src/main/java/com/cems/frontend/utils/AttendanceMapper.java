@@ -1,11 +1,11 @@
 package com.cems.frontend.utils;
 
 import com.cems.frontend.models.Attendance;
-import com.cems.shared.model.AttendanceDto;
+import com.cems.shared.model.AttendanceDto.AttendanceResponseDTO;
 import java.util.List;
 
 public class AttendanceMapper {
-    public static Attendance toModel(AttendanceDto.AttendanceResponseDTO attendanceResponseDTO) {
+    public static Attendance toModel(AttendanceResponseDTO attendanceResponseDTO) {
         if (attendanceResponseDTO == null) return null;
         return new Attendance(
                 attendanceResponseDTO.getUserId(),
@@ -15,7 +15,7 @@ public class AttendanceMapper {
         );
     }
 
-    public static List<Attendance> toModelList(List<AttendanceDto.AttendanceResponseDTO> attendanceResponseDTOList) {
+    public static List<Attendance> toModelList(List<AttendanceResponseDTO> attendanceResponseDTOList) {
         return attendanceResponseDTOList.stream()
                 .map(AttendanceMapper::toModel)
                 .toList();
