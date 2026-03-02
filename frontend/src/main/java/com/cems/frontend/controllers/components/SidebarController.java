@@ -1,5 +1,6 @@
 package com.cems.frontend.controllers.components;
 
+import com.cems.frontend.utils.LocalStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.ToggleButton;
@@ -53,7 +54,13 @@ public class SidebarController {
     }
 
     @FXML
+    private void goToSettings() {
+        SceneNavigator.loadPage("UserSettings.xml");
+    }
+
+    @FXML
     private void handleLogout() {
+        LocalStorage.set("token", "");
         SceneNavigator.loadPage("login-view.fxml");
     }
 }

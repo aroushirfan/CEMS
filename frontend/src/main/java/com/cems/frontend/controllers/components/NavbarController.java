@@ -7,11 +7,11 @@ public class NavbarController {
 
     @FXML
     private void handleLoginRedirect() {
-        SceneNavigator.loadPage("login-view.fxml");
+        SceneNavigator.loadPage("Login.fxml");
     }
 
     @FXML
     private void handleSignupRedirect() {
-        SceneNavigator.loadPage("signup-view.fxml");
+        SceneNavigator.loadPage("SignUp.fxml");
     }
 }
