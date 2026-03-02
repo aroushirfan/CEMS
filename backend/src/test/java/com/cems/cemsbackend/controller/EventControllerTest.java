@@ -22,7 +22,6 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class EventControllerTest {
     @Autowired
     public EventController controller;
