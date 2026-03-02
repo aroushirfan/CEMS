@@ -12,12 +12,12 @@ public class Attendance {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("userId") // References field in AttendanceId
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("eventId") // References field in AttendanceId
-    @JoinColumn(name = "event_id", insertable = false, updatable = false)
+    @JoinColumn(name = "event_id")
     private Event event;
 
     @Column(nullable = false, name = "check_in_time")

@@ -8,6 +8,9 @@ public class AttendanceMapper {
         return new AttendanceResponseDTO(
                 attendance.getUser().getId(),
                 attendance.getEvent().getId(),
+                attendance.getUser().getFirstName(),
+                attendance.getUser().getLastName(),
+                attendance.getUser().getEmail(),
                 attendance.getCheckInTime(),
                 attendance.getStatus()
         );
