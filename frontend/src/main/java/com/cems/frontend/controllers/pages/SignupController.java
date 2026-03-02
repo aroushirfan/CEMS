@@ -1,11 +1,14 @@
 package com.cems.frontend.controllers.pages;
 
+import com.cems.frontend.services.AuthService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -16,6 +19,12 @@ public class SignupController {
     @FXML private TextField firstNameField;
     @FXML private TextField lastNameField;
     @FXML private TextField emailField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private PasswordField confirmPasswordField;
+
+    private AuthService authService = AuthService.getInstance();
 
     @FXML
     public void initialize() {
@@ -26,7 +35,10 @@ public class SignupController {
     @FXML
     private void handleSignup(ActionEvent event) {
         String firstName = firstNameField.getText();
+        String lastName = lastNameField.getText();
         String email = emailField.getText();
+        String password = passwordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
 
         if (firstName.isEmpty() || email.isEmpty() ) {
             System.out.println("Required fields missing");
@@ -34,10 +46,25 @@ public class SignupController {
         }
 
         // Temporary (replace with backend later)
-        System.out.println("User registered: " + email);
+//        System.out.println("User registered: " + email);
+        try {
+            authService.signUp(firstName, lastName, email, password, confirmPassword);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(e.getLocalizedMessage());
+            alert.show();
+            clearFields();
+            return;
+        }
 
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText("Sign Up Successful. Please login.");
+        alert.show();
 
-        goToLogin(event);
+        alert.setOnCloseRequest((dialogEvent) -> {
+            goToLogin(event);
+        });
     }
 
     //  Cancel button
@@ -49,7 +76,7 @@ public class SignupController {
     //  Redirect to login page
     @FXML
     private void goToLogin(ActionEvent event) {
-        switchScene(event, "/org/cems/frontend/view/pages/Login.fxml");
+        switchScene(event, "/com/cems/frontend/view/pages/Login.fxml");
     }
 
     // Scene switcher
@@ -67,6 +94,7 @@ public class SignupController {
         firstNameField.clear();
         lastNameField.clear();
         emailField.clear();
-
+        passwordField.clear();
+        confirmPasswordField.clear();
     }
 }

@@ -25,7 +25,6 @@ public class AttendanceService {
     public Attendance createCheckIn(User user, Event event) {
         // Gatekeeper: Validate RSVP against partner's model
         List<User> registeredAttendees = event.getAttendees();
-
         if (!registeredAttendees.contains(user)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User must RSVP before checking in.");
         }
