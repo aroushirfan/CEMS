@@ -22,15 +22,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/events/**").hasAnyRole("USER", "FACULTY", "ADMIN")
+                        //rsvp endpoints are protected
+                        .requestMatchers("/rsvp/**").hasAnyRole("USER", "FACULTY", "ADMIN")
+                        //rsvp
                         .requestMatchers(HttpMethod.POST, "/events/**").hasAnyRole("FACULTY", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/events/**").hasAnyRole("FACULTY", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/events/*/approve").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/events/**").hasRole("ADMIN")
                         .requestMatchers("/events/admin/**").hasAnyRole("FACULTY", "ADMIN")
-                        .dispatcherTypeMatchers(
-                                DispatcherType.FORWARD,
-                                DispatcherType.ERROR
-                        )
+                        .dispatcherTypeMatchers( DispatcherType.FORWARD, DispatcherType.ERROR )
                         .permitAll()
                         .anyRequest()
                         .authenticated()
@@ -41,3 +41,6 @@ public class SecurityConfig {
     }
 
 }
+//{
+//    "token": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NzIyMDQ3OTEsImV4cCI6MTc3MjQ2Mzk5MSwic3ViIjoiMjYyN2Y2OTctYTE2OS00MjU4LTk0MGMtZjRlOWY1YTY4NGY3Iiwicm9sZSI6IlVTRVIifQ.sReYOppp9abm2ElWns7BD_QzjhN3BuLcJm0OLVDeLj8"
+//}
