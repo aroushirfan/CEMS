@@ -117,4 +117,5 @@ public class ApiEventService implements IEventService {
             throw new RuntimeException("Event not found: " + id);
         }
     }
+
 }

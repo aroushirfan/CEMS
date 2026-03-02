@@ -9,7 +9,12 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         SceneNavigator.setStage(stage);
         stage.setTitle("CEMS - Campus Event Management System");
-        SceneNavigator.loadPage("home-view.fxml");
+//        SceneNavigator.loadPage("home-view.fxml");
+
+        SceneNavigator.loadPage("UserSettings.fxml");
+////        SceneNavigator.loadPage("Signup.fxml");
+////        SceneNavigator.loadPage("Login.fxml");
+//        SceneNavigator.loadPage("MainHome.fxml");
     }
 
     public static void main(String[] args) {
