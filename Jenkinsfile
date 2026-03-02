@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         PATH = "/usr/local/bin:$PATH"
-
+        DOCKERHUB_REPO = "${params.DOCKERHUB_REPO}"
         DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
         DOCKER_IMAGE_TAG = 'latest'
     }
