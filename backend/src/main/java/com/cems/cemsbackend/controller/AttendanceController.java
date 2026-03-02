@@ -1,5 +1,6 @@
 package com.cems.cemsbackend.controller;
 
+import com.cems.cemsbackend.mappers.AttendanceMapper;
 import com.cems.cemsbackend.model.Attendance;
 import com.cems.cemsbackend.model.Event;
 import com.cems.cemsbackend.model.User;
@@ -10,6 +11,7 @@ import com.cems.shared.model.AttendanceDto.AttendanceRequestDTO;
 import com.cems.shared.model.AttendanceDto.AttendanceResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -33,25 +35,18 @@ public class AttendanceController {
         this.eventRepository = eventRepository;
     }
 
-    @PostMapping("/check-in")
-    public ResponseEntity<AttendanceResponseDTO> checkIn(@RequestBody AttendanceRequestDTO request) {
-        // Fetch entities to ensure they are managed by JPA
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    @PostMapping("/event/{eventId}/check-in")
+    public ResponseEntity<AttendanceResponseDTO> checkIn(@PathVariable UUID eventId) {
+        // Identity: Securely pull the UserID from the JWT
+        UUID userId = (UUID) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        Event event = eventRepository.findById(request.getEventId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+        User user = userRepository.findById(userId).orElseThrow();
+        Event event = eventRepository.findById(eventId).orElseThrow();
 
-        Attendance attendance = attendanceService.createCheckIn(user, event, request.getStatus());
+        // Service Call: No status needed from the frontend
+        Attendance attendance = attendanceService.createCheckIn(user, event);
 
-        AttendanceResponseDTO response = new AttendanceResponseDTO(
-                attendance.getUser().getId(),
-                attendance.getEvent().getId(),
-                attendance.getCheckInTime(),
-                attendance.getStatus()
-        );
-
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(AttendanceMapper.toDto(attendance), HttpStatus.CREATED);
     }
 
     @GetMapping("/event/{eventId}")
@@ -61,12 +56,7 @@ public class AttendanceController {
 
         List<AttendanceResponseDTO> response = attendanceService.getAttendanceByEvent(event)
                 .stream()
-                .map(a -> new AttendanceResponseDTO(
-                        a.getUser().getId(),
-                        a.getEvent().getId(),
-                        a.getCheckInTime(),
-                        a.getStatus()
-                ))
+                .map(AttendanceMapper::toDto)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(response);

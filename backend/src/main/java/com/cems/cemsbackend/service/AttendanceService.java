@@ -22,31 +22,25 @@ public class AttendanceService {
         this.attendanceRepository = attendanceRepository;
     }
 
-    public Attendance createCheckIn(User user, Event event, String status) {
-        // Validate RSVP
-        /*
+    public Attendance createCheckIn(User user, Event event) {
+        // Gatekeeper: Validate RSVP against partner's model
         List<User> registeredAttendees = Arrays.asList(event.getAttendees());
         if (!registeredAttendees.contains(user)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User must RSVP before checking in.");
-        }*/
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User must RSVP before checking in.");
+        }
 
         // Prevent Duplicate Check-ins
         if (attendanceRepository.findByUserAndEvent(user, event).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User is already checked in.");
         }
 
-        // Construct ID manually to satisfy Hibernate 7.x requirements
-        AttendanceId attendanceId = new AttendanceId(user.getId(), event.getId());
-
-        // Build Entity
         Attendance attendance = new Attendance();
-        attendance.setId(attendanceId);
+        attendance.setId(new AttendanceId(user.getId(), event.getId()));
         attendance.setUser(user);
         attendance.setEvent(event);
         attendance.setCheckInTime(Instant.now());
-        attendance.setStatus(status != null ? status : "PRESENT");
+        attendance.setStatus("PRESENT"); // Automatically set to PRESENT
 
-        // Use saveAndFlush to commit immediately to MariaDB
         return attendanceRepository.saveAndFlush(attendance);
     }
 
