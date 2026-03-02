@@ -1,3 +1,133 @@
+//package com.cems.cemsbackend.model;
+//
+//import com.cems.shared.model.EventDto;
+//import jakarta.persistence.*;
+//import org.hibernate.annotations.JdbcTypeCode;
+//import org.hibernate.type.SqlTypes;
+//
+//import java.time.Instant;
+//import java.util.List;
+//import java.util.UUID;
+//
+//@Entity
+//@Table(
+//        indexes = {
+//                @Index(name = "idx_event_datetime", columnList = "date_time")
+//        }
+//)
+//public class Event {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.UUID)
+//    @JdbcTypeCode(SqlTypes.BINARY)
+//    private UUID id;
+//    @Column(nullable = false)
+//    private String title;
+//    private String description;
+//    private String location;
+//    private long capacity;
+//    @Column(nullable = false, name = "date_time")
+//    private Instant dateTime;
+//    @Column(nullable = false)
+//    private boolean approved = false;
+//    @ManyToMany
+//    private List<User> attendees;
+//    @ManyToOne(optional = false)
+//    private User eventOwner;
+//
+//    public Event() {}
+//
+//    public Event(String title, String description, String location, long capacity, Instant dateTime, User eventOwner, boolean approved) {
+//        this.title = title;
+//        this.description = description;
+//        this.location = location;
+//        this.capacity = capacity;
+//        this.dateTime = dateTime;
+//        this.eventOwner = eventOwner;
+//        this.approved = approved;
+//    }
+//
+//    public Event updateFromDto(EventDto.EventRequestDTO dto) {
+//        if (dto.getTitle() != null) this.setTitle(dto.getTitle());
+//        if (dto.getDescription() != null) this.setDescription(dto.getDescription());
+//        if (dto.getLocation() != null) this.setLocation(dto.getLocation());
+//        if (dto.getCapacity() != null) this.setCapacity(dto.getCapacity());
+//        if (dto.getDateTime() != null) this.setDateTime(dto.getDateTime());
+//        return this;
+//    }
+//
+//    public User getEventOwner() {
+//        return eventOwner;
+//    }
+//
+//    public void setEventOwner(User eventOwner) {
+//        this.eventOwner = eventOwner;
+//    }
+//
+//    public UUID getId() {
+//        return id;
+//    }
+//
+//    public User[] getAttendees() {
+//        return attendees.toArray(new User[0]);
+//    }
+//
+//    public boolean addAttendee(User attendee) {
+//        return attendees.add(attendee);
+//    }
+//
+//    public boolean removeAttendee(User attendee) {
+//        return attendees.remove(attendee);
+//    }
+//
+//    public String getTitle() {
+//        return title;
+//    }
+//
+//    public void setTitle(String title) {
+//        this.title = title;
+//    }
+//
+//    public Instant getDateTime() {
+//        return dateTime;
+//    }
+//
+//    public void setDateTime(Instant dateTime) {
+//        this.dateTime = dateTime;
+//    }
+//
+//    public boolean isApproved() {
+//        return approved;
+//    }
+//
+//    public void setApproved(boolean approved) {
+//        this.approved = approved;
+//    }
+//
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
+//
+//    public String getLocation() {
+//        return location;
+//    }
+//
+//    public void setLocation(String location) {
+//        this.location = location;
+//    }
+//
+//    public long getCapacity() {
+//        return capacity;
+//    }
+//
+//    public void setCapacity(long capacity) {
+//        this.capacity = capacity;
+//    }
+//
+//}
 package com.cems.cemsbackend.model;
 
 import com.cems.shared.model.EventDto;
@@ -6,6 +136,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,17 +151,28 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.UUID)
     @JdbcTypeCode(SqlTypes.BINARY)
     private UUID id;
+
     @Column(nullable = false)
     private String title;
+
     private String description;
     private String location;
     private long capacity;
+
     @Column(nullable = false, name = "date_time")
     private Instant dateTime;
+
     @Column(nullable = false)
     private boolean approved = false;
+
     @ManyToMany
-    private List<User> attendees;
+    @JoinTable(
+            name = "event_attendees",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> attendees = new ArrayList<>();
+
     @ManyToOne(optional = false)
     private User eventOwner;
 
@@ -44,6 +186,7 @@ public class Event {
         this.dateTime = dateTime;
         this.eventOwner = eventOwner;
         this.approved = approved;
+        this.attendees = new ArrayList<>();
     }
 
     public Event updateFromDto(EventDto.EventRequestDTO dto) {
@@ -67,8 +210,8 @@ public class Event {
         return id;
     }
 
-    public User[] getAttendees() {
-        return attendees.toArray(new User[0]);
+    public List<User> getAttendees() {
+        return attendees;
     }
 
     public boolean addAttendee(User attendee) {
@@ -126,5 +269,4 @@ public class Event {
     public void setCapacity(long capacity) {
         this.capacity = capacity;
     }
-
 }
