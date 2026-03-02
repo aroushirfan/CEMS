@@ -1,6 +1,7 @@
 package com.cems.frontend.controllers.pages;
 
 
+import com.cems.frontend.services.AuthService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,19 +16,24 @@ import java.io.IOException;
 
 public class LoginController {
 
-    @FXML private TextField usernameField;
+    @FXML
+    private TextField emailField;
     @FXML private PasswordField passwordField;
+
+    private final AuthService authService = AuthService.getInstance();
 
     @FXML
     public void initialize() {
         System.out.println("Login view loaded");
 
     }
+
     @FXML
     private void handleCancel(ActionEvent event) {
         // Clear fields or close app
-        usernameField.clear();
+        emailField.clear();
         passwordField.clear();
+        goToHome(event);
     }
     @FXML
     private void handlePasswordReset(ActionEvent event) {
@@ -41,7 +47,7 @@ public class LoginController {
     //Login button
     @FXML
     private void handleLogin(ActionEvent event) {
-        String username = usernameField.getText();
+        String username = emailField.getText();
         String password = passwordField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
@@ -51,23 +57,30 @@ public class LoginController {
 
 
         // TEMP Auth(replace with backend later)
-        if (username.equals("admin") && password.equals("admin")) {
-            System.out.println("Login successful");
-            goToHome(event);
-        } else {
-            System.out.println("Invalid credentials");
+//        if (username.equals("admin") && password.equals("admin")) {
+//            System.out.println("Login successful");
+//            goToHome(event);
+//        } else {
+//            System.out.println("Invalid credentials");
+//        }
+        try {
+            if (!authService.login(username, password).isEmpty()) {
+                goToHome(event);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     //Go to signup page
     @FXML
     private void goToSignup(ActionEvent event) {
-        switchScene(event, "/org/cems/frontend/view/pages/Signup.fxml");
+        switchScene(event, "/com/cems/frontend/view/pages/Signup.fxml");
     }
 
     // Redirect to home page
     private void goToHome(ActionEvent event) {
-        switchScene(event, "/com/cems.frontend.view/pages/home-view.fxml");
+        switchScene(event, "/com/cems/frontend/view/pages/home-view.fxml");
     }
 
     //  Scene switch helper
