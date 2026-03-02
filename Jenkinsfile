@@ -28,6 +28,14 @@ pipeline {
             }
         }
 
+        stage('Print Dockerfile') {
+            steps {
+                sh 'echo "===== Dockerfile ====="'
+                sh 'cat Dockerfile'
+                sh 'echo "===== End Dockerfile ====="'
+            }
+        }
+
         stage('Build') {
             steps {
                 sh 'mvn clean install'
