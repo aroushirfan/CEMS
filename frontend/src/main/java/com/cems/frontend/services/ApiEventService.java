@@ -1,6 +1,7 @@
 package com.cems.frontend.services;
 
 import com.cems.frontend.models.Event;
+import com.cems.frontend.models.HttpClientObject;
 import com.cems.frontend.utils.EventMapper; // Assuming you put the mapper in .utils
 import com.cems.shared.model.EventDto;
 import com.cems.shared.model.EventDto.EventResponseDTO;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class ApiEventService implements IEventService {
 
-    private final HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient client;
     private final ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
@@ -26,11 +27,18 @@ public class ApiEventService implements IEventService {
 
     private final String API_URL = "http://localhost:8080/events";
 
+    private final AuthService authService = AuthService.getInstance();
+
+    public ApiEventService() {
+        this.client = HttpClientObject.getClient();
+    }
+
     @Override
     public List<Event> getAllEvents() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_URL))
                 .header("Accept", "application/json")
+                .header("Authorization", String.format("Bearer %s", authService.getToken()))
                 .GET()
                 .build();
 
