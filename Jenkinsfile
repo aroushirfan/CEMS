@@ -24,15 +24,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                url: 'https://github.com/puntawatsub/SoftwareEng_Temp_converter.git'
-            }
-        }
-
-        stage('Print Dockerfile') {
-            steps {
-                sh 'echo "===== Dockerfile ====="'
-                sh 'cat Dockerfile'
-                sh 'echo "===== End Dockerfile ====="'
+                url: '${params.GITHUB_REPO}'
             }
         }
 
