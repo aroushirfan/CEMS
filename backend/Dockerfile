@@ -1,30 +1,19 @@
-# Use a JDK image for building
+# Use Maven image to build
 FROM maven:3.9.6-amazoncorretto-21 AS builder
-
 WORKDIR /app
 
-# Copy only pom.xml first to leverage caching
-COPY pom.xml .
-
-# Resolve dependencies
-RUN mvn dependency:resolve
-
-# Copy the rest of the source code
+# Copy entire repo (root POM + modules)
 COPY . .
 
-# Build the jar
-RUN mvn clean package -DskipTests
+# Build only backend and its dependencies
+RUN mvn clean package -DskipTests -pl backend -am
 
-# --------------------------
-# Second stage: minimal runtime image
-# --------------------------
+# Use JRE image for running
 FROM eclipse-temurin:21-jre-jammy
-
 WORKDIR /app
 
-# Copy built jar from builder stage
-COPY --from=builder /app/target/backend.jar ./backend.jar
+# Copy the backend JAR from builder
+COPY --from=builder /app/backend/target/backend.jar ./backend.jar
 
 EXPOSE 8080
-
 CMD ["java", "-jar", "backend.jar"]

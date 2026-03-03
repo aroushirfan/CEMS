@@ -26,8 +26,8 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                // Explicitly specify Dockerfile path to avoid "no such file" errors
-                sh "docker build -t ${IMAGE_NAME}:latest -f backend/Dockerfile backend/"
+                // Build Docker image using root context so Maven can access all modules
+                sh "docker build -t ${IMAGE_NAME}:latest -f backend/Dockerfile ."
             }
         }
 
