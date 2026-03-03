@@ -43,5 +43,5 @@ Polishing UI/UX
 | Jiya        |  16    |
 | Puntawat    |  17    |
 | Sailesh     |  18    |
-| Ayo         |  13    |
+| Ayo         |  15    |
  
