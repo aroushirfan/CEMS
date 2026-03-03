@@ -12,6 +12,12 @@
 .table-view .column-header {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
+    -fx-padding: 8 10 8 10;
+}
+
+.table-view .column-header .label {
+    -fx-padding: 8 10 8 10;
+    -fx-alignment: CENTER-LEFT;
 }
 
 .table-view .cell {
@@ -36,30 +42,65 @@
     -fx-background-color: #f8f8f8;
 }
 
+/* Hide empty rows */
+.table-view .table-row-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view .table-row-cell:empty .table-cell {
+    -fx-border-color: transparent;
+}
+
+/* Remove column drag highlight */
+
+
+.table-view .column-drag-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Column reorder overlay */
+.table-view .column-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.05);
+}
+
+.table-view .column-header-background .nested-column-header,
+.table-view .column-header-background .nested-column-header .column-header {
+    -fx-background-color: transparent;
+}
+
+/* Hide scrollbar when not needed, style when visible */
+.table-view .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.table-view .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.table-view .scroll-bar:vertical .thumb {
+    -fx-background-color: #D9D9D9;
+    -fx-background-radius: 10px;
+}
+
+.table-view .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #bdbdbd;
+}
+
+/* Hide scroll bar arrows */
+.table-view .scroll-bar .increment-button,
+.table-view .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
 
 .node {
     -fx-border-color: transparent #D9D9D9 transparent transparent;
     -fx-border-width: 0 2px 0 0;
 }
-
-/*.profile-btn {*/
-/*    -fx-background-color: transparent;*/
-/*    -fx-background-radius: 100px;*/
-/*    -fx-border-radius: 100px;*/
-/*    -fx-border-color: transparent;*/
-/*    -fx-padding: 0;*/
-/*    -fx-cursor: hand;*/
-/*    -fx-min-width: 72px;*/
-/*    -fx-min-height: 72px;*/
-/*    -fx-max-width: 72px;*/
-/*    -fx-max-height: 72px;*/
-/*}*/
-
-/*.profile-btn:hover {*/
-/*    -fx-border-color: #0096FF;*/
-/*    -fx-border-width: 2px;*/
-/*}*/
-
-/*.profile-btn:pressed {*/
-/*    -fx-opacity: 0.8;*/
-/*}*/

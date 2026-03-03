@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -24,7 +23,7 @@
 
     <!-- Main content -->
     <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS">
-        <VBox spacing="20.0" style="-fx-padding: 40;">
+        <VBox maxHeight="1.7976931348623157E308" spacing="20.0" style="-fx-padding: 40;">
          <HBox alignment="CENTER" prefHeight="50.0" prefWidth="481.0">
             <children>
                   <!-- Page Heading -->
@@ -144,7 +143,7 @@
                            <ComboBox fx:id="sortByComboBox" maxHeight="1.7976931348623157E308" onAction="#sortByChanged" prefWidth="150.0" promptText="Status" styleClass="drop-down" stylesheets="@../css/searchbar.css" />
                         </children>
                      </HBox>
-                     <VBox VBox.vgrow="ALWAYS">
+                     <VBox maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                         <children>
                            <TableView fx:id="attendanceTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" stylesheets="@../css/attendance.css" VBox.vgrow="ALWAYS">
                              <columns>
@@ -157,7 +156,6 @@
                                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                               </columnResizePolicy>
                            </TableView>
-                           <Pagination currentPageIndex="3" maxPageIndicatorCount="5" pageCount="5" prefHeight="50.0" prefWidth="200.0" />
                         </children>
                      </VBox>
                   </children>
