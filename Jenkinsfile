@@ -4,8 +4,8 @@ pipeline {
     environment {
         PATH = "/usr/local/bin:$PATH"
         DOCKERHUB_REPO = "${params.DOCKERHUB_REPO}"
-        DOCKERHUB_CREDENTIALS_ID = '${params.DOCKERHUB_CREDENTIALS_ID}'
-        DOCKER_IMAGE_TAG = '${params.DOCKER_IMAGE_TAG}'
+        DOCKERHUB_CREDENTIALS_ID = "${params.DOCKERHUB_CREDENTIALS_ID}"
+        DOCKER_IMAGE_TAG = "${params.DOCKER_IMAGE_TAG}"
         DB_USERNAME="${params.DB_USERNAME}"
         DB_PASSWORD="${params.DB_PASSWORD}"
         PORT="${params.PORT}"
