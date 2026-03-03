@@ -193,13 +193,11 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}")
-                }
-            }
-        }
+       stage('Build Docker Image') {
+           steps {
+               sh 'docker build -t ${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} .'
+           }
+       }
 
         stage('Push Docker Image to Docker Hub') {
             steps {
