@@ -8,10 +8,13 @@ public class AttendanceMapper {
     public static Attendance toModel(AttendanceResponseDTO attendanceResponseDTO) {
         if (attendanceResponseDTO == null) return null;
         return new Attendance(
-                attendanceResponseDTO.getUserId(),
                 attendanceResponseDTO.getEventId(),
+                attendanceResponseDTO.getFirstName(),
+                attendanceResponseDTO.getLastName(),
+                attendanceResponseDTO.getEmail(),
                 attendanceResponseDTO.getCheckInTime(),
                 attendanceResponseDTO.getStatus()
+
         );
     }
 

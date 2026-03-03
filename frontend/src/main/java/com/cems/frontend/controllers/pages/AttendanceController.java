@@ -1,9 +1,8 @@
 package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.models.Attendance;
-import com.cems.frontend.services.LocalHttpClient;
-import com.cems.frontend.services.attendance.ApiAttendanceService;
-import com.cems.frontend.services.attendance.IAttendanceService;
+import com.cems.frontend.services.LocalHttpClientHelper;
+import com.cems.frontend.services.AttendanceService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -63,13 +62,22 @@ public class AttendanceController {
 
     private final ObservableList<Attendance> attendanceModelObservable = FXCollections.observableArrayList(
 //            TODO: remove dummy data
-            new Attendance(UUID.randomUUID(), UUID.randomUUID(),Instant.now(),"checked in"),
-            new Attendance(UUID.randomUUID(), UUID.randomUUID(),Instant.now(),"Pending"),
-            new Attendance(UUID.randomUUID(), UUID.randomUUID(),Instant.now(),"checked in"),
-            new Attendance(UUID.randomUUID(), UUID.randomUUID(),Instant.now(),"Pending")
-    );
+            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
+            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending"),
+            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
+            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending"),
+            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
+            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending"),
+            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
+            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending"),
+ new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
+            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending"),
+            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
+            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending")
 
-    private final IAttendanceService attendanceService = new ApiAttendanceService(LocalHttpClient.getClient(),LocalHttpClient.getMapper());
+            );
+
+    private final AttendanceService attendanceService = new AttendanceService(LocalHttpClientHelper.getClient(), LocalHttpClientHelper.getMapper());
 
     @FXML
     public void initialize() {
@@ -126,8 +134,8 @@ public class AttendanceController {
     private void setupTableView (){
 //        Property value factory corresponds to AttendanceModel fields
 //        The table column is annotated above
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
-        emailColumn.setCellValueFactory(new PropertyValueFactory<>("eventId"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         checkInTimeColumn.setCellValueFactory(new PropertyValueFactory<>("checkInTime"));
 
