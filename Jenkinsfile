@@ -11,12 +11,13 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/aroushirfan/CEMS.git'
+                // Checkout your feature branch
+                git branch: 'jiya/docker', url: 'https://github.com/aroushirfan/CEMS.git'
             }
         }
 
         stage('Build Backend with Maven') {
-            tools { maven 'Maven3' } // Must match Jenkins Maven installation
+            tools { maven 'Maven3' } // Match your Jenkins Maven installation
             steps {
                 // Build only backend and its dependencies
                 sh 'mvn clean package -DskipTests -pl backend -am'
@@ -25,8 +26,8 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                // Dockerfile should be inside backend/ folder
-                sh "docker build -t ${IMAGE_NAME}:latest backend/"
+                // Explicitly specify Dockerfile path to avoid "no such file" errors
+                sh "docker build -t ${IMAGE_NAME}:latest -f backend/Dockerfile backend/"
             }
         }
 
