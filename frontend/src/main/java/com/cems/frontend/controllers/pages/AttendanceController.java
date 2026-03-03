@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class AttendanceController {
-
     @FXML
     private TextField searchTextField;
 
@@ -60,21 +59,20 @@ public class AttendanceController {
     private final String CHECKED_IN =  "Checked In";
     private final String PENDING =  "Pending";
 
+    public void loadAttendanceForEvent(UUID eventId) {
+        fetchAttendanceRecords(eventId);
+    }
+
     private final ObservableList<Attendance> attendanceModelObservable = FXCollections.observableArrayList(
 //            TODO: remove dummy data
+            new Attendance(UUID.randomUUID(),"Tom", "Cruise","tom_cruise@metropolia.fi",Instant.now(),"checked in"),
+            new Attendance(UUID.randomUUID(),"Kevin", "Hart","Kevin@metropolia.fi",Instant.now(),"Pending"),
+            new Attendance(UUID.randomUUID(),"Dave", "Chapel","Dave@metropolia.fi",Instant.now(),"checked in"),
+            new Attendance(UUID.randomUUID(),"Tom", "Holland","Tom@metropolia.fi",Instant.now(),"Pending"),
             new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
-            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending"),
-            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
-            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending"),
-            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
-            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending"),
-            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
-            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending"),
- new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
             new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending"),
             new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
             new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending")
-
             );
 
     private final AttendanceService attendanceService = new AttendanceService(LocalHttpClientHelper.getClient(), LocalHttpClientHelper.getMapper());
@@ -82,8 +80,9 @@ public class AttendanceController {
     @FXML
     public void initialize() {
         attendanceTableView.setPlaceholder(new Label("No Attendance data available at the moment"));
-        fetchAttendanceRecords();
+        //  set up the table view to display records
         setupTableView();
+        fetchAttendanceRecords(UUID.randomUUID());
         attendanceSearchFilter();
         sortByComboBox.getItems().addAll(SORT_BY,CHECKED_IN,PENDING);
         handleSearchFocus();
@@ -121,7 +120,7 @@ public class AttendanceController {
                 String search = newValue.toLowerCase();
 
 //                TODO: update to be name or email
-                return  attendee.getStatus().toLowerCase().contains(search);
+                return  attendee.getEmail().toLowerCase().contains(search) || attendee.getName().toLowerCase().contains(search);
             });
         });
 
@@ -138,17 +137,14 @@ public class AttendanceController {
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         checkInTimeColumn.setCellValueFactory(new PropertyValueFactory<>("checkInTime"));
-
-//        populate the table rows with the attendance data
-        attendanceTableView.setItems(attendanceModelObservable);
     }
 
-    private void fetchAttendanceRecords(){
+    private void fetchAttendanceRecords(UUID eventId){
 //        create a thread to fetch data in the background
         Task<List<Attendance>> fetchTask = new Task<>() {
             @Override
             protected List<Attendance> call() throws Exception {
-                return attendanceService.getEventAttendance(UUID.randomUUID().toString());
+                return attendanceService.getEventAttendance(eventId.toString());
             }
         };
 
@@ -156,10 +152,10 @@ public class AttendanceController {
 //            populate the observable lust
             attendanceModelObservable.setAll(fetchTask.getValue());
 
-//          set up the table view to display records
-            setupTableView();
-//            Update labels
+            //            Update labels
             updateAttendanceRecords();
+            //        populate the table rows with the attendance data
+            attendanceTableView.setItems(attendanceModelObservable);
         });
 //      run the thread to fetch attendance data in the background
         new Thread(fetchTask).start();
@@ -180,7 +176,6 @@ public class AttendanceController {
         //        Filter by status to get count for checked in and pending attendees
         attendeesCheckedInLabel.setText(String.valueOf(attendanceModelObservable.size()));
         attendeesPendingLabel.setText(String.valueOf(attendanceModelObservable.size()));
-
     }
 
 }
