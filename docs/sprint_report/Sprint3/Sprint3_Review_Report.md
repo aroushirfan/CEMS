@@ -41,7 +41,7 @@ Polishing UI/UX
 |-------------|--------|
 | Aroush      |   8    |
 | Jiya        |  16    |
-| Puntawat    |  12    |
+| Puntawat    |  17    |
 | Sailesh     |  18    |
 | Ayo         |        |
  
