@@ -1,6 +1,6 @@
-# Sprint 2 Planning Report
+# Sprint 3 Planning Report
 
-### Duration: 11.02 → 03.02
+### Duration: 11.02 → 03.03
 
 ### 1. Sprint Goal
 

@@ -1,5 +1,5 @@
-# Sprint 2 Review Report
-### Duration: 27.01 → 10.02
+# Sprint 3 Review Report
+### Duration: 11.02 → 03.03
 ## Sprint Goal
 Integrate CI/CD with Jenkins, extend the functional prototype, implement automated testing with code coverage, and create a basic local Docker image for deployment
 ## Completed User Stories / Tasks
