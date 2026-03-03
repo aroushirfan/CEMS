@@ -117,18 +117,19 @@ pipeline {
     agent any
 
     // 1️⃣ Parameters block
-    parameters {
-        string(name: 'GITHUB_REPO', defaultValue: 'https://github.com/aroushirfan/CEMS.git', description: 'Git repository URL')
-        string(name: 'DOCKERHUB_REPO', defaultValue: '', description: 'Docker Hub repository')
-        string(name: 'DOCKERHUB_CREDENTIALS_ID', defaultValue: '', description: 'Docker Hub credentials ID')
-        string(name: 'DOCKER_IMAGE_TAG', defaultValue: 'latest', description: 'Docker image tag')
-        string(name: 'DB_USERNAME', defaultValue: '', description: 'Database username')
-        string(name: 'DB_PASSWORD', defaultValue: '', description: 'Database password')
-        string(name: 'PORT', defaultValue: '8080', description: 'Application port')
-        string(name: 'DB_URL', defaultValue: '', description: 'Database URL')
-        string(name: 'JWT_SECRET', defaultValue: '', description: 'JWT secret')
-        string(name: 'MAVEN', defaultValue: 'Maven3', description: 'Maven')
-    }
+    // Removed so that default values can be set manually on Jenkins, insteaad of setting parameters every time
+    // parameters {
+    //     string(name: 'GITHUB_REPO', defaultValue: 'https://github.com/aroushirfan/CEMS.git', description: 'Git repository URL')
+    //     string(name: 'DOCKERHUB_REPO', defaultValue: '', description: 'Docker Hub repository')
+    //     string(name: 'DOCKERHUB_CREDENTIALS_ID', defaultValue: '', description: 'Docker Hub credentials ID')
+    //     string(name: 'DOCKER_IMAGE_TAG', defaultValue: 'latest', description: 'Docker image tag')
+    //     string(name: 'DB_USERNAME', defaultValue: '', description: 'Database username')
+    //     string(name: 'DB_PASSWORD', defaultValue: '', description: 'Database password')
+    //     string(name: 'PORT', defaultValue: '8080', description: 'Application port')
+    //     string(name: 'DB_URL', defaultValue: '', description: 'Database URL')
+    //     string(name: 'JWT_SECRET', defaultValue: '', description: 'JWT secret')
+    //     string(name: 'MAVEN', defaultValue: 'Maven3', description: 'Maven')
+    // }
 
     // 2️⃣ Environment block
     environment {
