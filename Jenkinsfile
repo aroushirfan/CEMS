@@ -26,8 +26,8 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                // Build Docker image using root context so Maven can access all modules
-                sh "docker build -t ${IMAGE_NAME}:latest -f backend/Dockerfile ."
+                // Explicitly specify Dockerfile path to avoid "no such file" errors
+                sh "docker build -t ${IMAGE_NAME}:latest -f backend/Dockerfile backend/"
             }
         }
 
@@ -42,6 +42,7 @@ pipeline {
         }
 
         stage('Run Backend Tests') {
+            tools { maven 'Maven3' } // <--- Added this line
             steps {
                 // Run backend integration tests only
                 sh "mvn test -pl backend -Dtest=*IntegrationTest"
