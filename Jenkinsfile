@@ -127,6 +127,7 @@ pipeline {
         string(name: 'PORT', defaultValue: '8080', description: 'Application port')
         string(name: 'DB_URL', defaultValue: '', description: 'Database URL')
         string(name: 'JWT_SECRET', defaultValue: '', description: 'JWT secret')
+        string(name: 'MAVEN', defaultValue: 'Maven3', description: 'Maven')
     }
 
     // 2️⃣ Environment block
@@ -143,7 +144,7 @@ pipeline {
 
     // 3️⃣ Tools block
     tools {
-        maven 'Maven3'
+        maven "${params.MAVEN}"
     }
 
     stages {
