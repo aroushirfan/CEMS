@@ -17,7 +17,7 @@
 - **US‑6: Attendance Tracking** – Users can register for events, and faculty and admin can track attendance .
 - **US‑7: Profile management** – Users can update profile information.
 - **US‑8: CI/CD integration** – Automate builds, tests, and code coverage with Jenkins.
-- **US‑: Event Rsvp ** – Users can Rsvp to event .
+- **US‑9: Event Rsvp** – Users can Rsvp to event .
 
 ### 3. Planned tasks
 
