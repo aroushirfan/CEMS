@@ -228,7 +228,7 @@ pipeline {
     }
 
     tools {
-        maven 'Maven3'   // Make sure this matches your Jenkins Maven installation
+        maven 'Maven3'   // Make sures this matches your Jenkins Maven installation
         jdk 'Java21'     // Make sure this matches your Jenkins JDK installation
     }
 
