@@ -16,15 +16,23 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class AttendanceMapperTest {
     AttendanceResponseDTO dto;
     UUID userId;
+    String name;
+    String firstName;
+    String lastName;
+    String email;
     UUID eventId;
     Instant checkInTime;
 
     @BeforeEach
     void setUp() {
-        userId = UUID.randomUUID();
+        firstName = "Firstname";
+        lastName = "Lastname";
+        name = firstName+ " " + lastName;
+        email = "example.email@metropolia.fi";
         eventId = UUID.randomUUID();
+        userId = UUID.randomUUID();
         checkInTime = Instant.now();
-        dto = new AttendanceResponseDTO(userId, eventId, checkInTime, "Checked in");
+        dto = new AttendanceResponseDTO(userId,eventId,firstName,lastName,email, checkInTime, "Checked in");
     }
 
     @Test
@@ -32,7 +40,8 @@ class AttendanceMapperTest {
         Attendance attendanceModel = AttendanceMapper.toModel(dto);
 
         assertNotNull(attendanceModel);
-        assertEquals(userId, attendanceModel.getUserId());
+        assertEquals(name, attendanceModel.getName());
+        assertEquals(email, attendanceModel.getEmail());
         assertEquals(eventId, attendanceModel.getEventId());
         assertEquals(checkInTime, attendanceModel.getCheckInTime());
         assertEquals("Checked in", attendanceModel.getStatus());
@@ -48,7 +57,7 @@ class AttendanceMapperTest {
         Attendance attendanceModel = AttendanceMapper.toModel(dto);
 
         assertNotNull(attendanceModel);
-        assertEquals(userId, attendanceModel.getUserId());
+        assertEquals(name, attendanceModel.getName());
         assertEquals(eventId, attendanceModel.getEventId());
         assertEquals(checkInTime, attendanceModel.getCheckInTime());
         assertEquals("Checked in", attendanceModel.getStatus());
@@ -56,7 +65,7 @@ class AttendanceMapperTest {
 
     @Test
     void testMapperToModelList() {
-        AttendanceResponseDTO dto2 = new AttendanceResponseDTO(UUID.randomUUID(), eventId, checkInTime, "Pending");
+        AttendanceResponseDTO dto2 = new AttendanceResponseDTO(UUID.randomUUID(), eventId, firstName,lastName, email, checkInTime, "Pending");
         List<AttendanceResponseDTO> dtoList = List.of(dto, dto2);
 
         List<Attendance> attendanceModel = AttendanceMapper.toModelList(dtoList);
@@ -64,6 +73,6 @@ class AttendanceMapperTest {
         assertEquals("Checked in", attendanceModel.get(0).getStatus());
         assertEquals("Pending", attendanceModel.get(1).getStatus());
         assertEquals(attendanceModel.get(1).getEventId(), attendanceModel.get(0).getEventId());
-        assertNotEquals(attendanceModel.get(1).getUserId(), attendanceModel.get(0).getUserId());
+        assertNotEquals(attendanceModel.get(1).getName(), attendanceModel.get(0).getName());
     }
 }

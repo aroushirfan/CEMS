@@ -10,24 +10,31 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AttendanceTest {
     Attendance attendance;
-    private UUID userId;
+    String name;
+    String firstName;
+    String lastName;
+    String email;
     private UUID eventId;
     private Instant checkInTime;
     private String status;
 
     @BeforeEach
     void setUp() {
-        userId = UUID.randomUUID();
+        firstName = "Firstname";
+        lastName = "Lastname";
+        name = firstName+ " " + lastName;
+        email = "example.email@metropolia.fi";
         eventId = UUID.randomUUID();
         checkInTime = Instant.now();
         status = "Checked in";
-        attendance = new Attendance(userId,eventId,checkInTime,status);
+        attendance = new Attendance(eventId,firstName,lastName,email,checkInTime,status);
     }
 
     @Test
     void constructor_setsAllFieldsCorrectly() {
-        Attendance attendance = new Attendance(userId,eventId,checkInTime,status);
-        assertEquals(userId, attendance.getUserId());
+        Attendance attendance = new Attendance(eventId,firstName,lastName,email,checkInTime,status);
+        assertEquals(name, attendance.getName());
+        assertEquals(email, attendance.getEmail());
         assertEquals(eventId, attendance.getEventId());
         assertEquals(checkInTime, attendance.getCheckInTime());
         assertEquals(status, attendance.getStatus());
@@ -35,7 +42,8 @@ class AttendanceTest {
 
     @Test
     void testAttendanceModelGetters() {
-        assertEquals(userId,attendance.getUserId());
+        assertEquals(name, attendance.getName());
+        assertEquals(email, attendance.getEmail());
         assertEquals(eventId,attendance.getEventId());
         assertEquals(checkInTime,attendance.getCheckInTime());
         assertEquals(status,attendance.getStatus());
@@ -44,14 +52,14 @@ class AttendanceTest {
     @Test
     void testConstructor_withFutureCheckInTime_setsCorrectly() {
         Instant future = Instant.now().plusSeconds(3600);
-        Attendance attendance = new Attendance(userId, eventId,future, status);
+        Attendance attendance = new Attendance(eventId,firstName,lastName,email,future, status);
         assertEquals(future, attendance.getCheckInTime());
     }
 
     @Test
     void testConstructor_withPastCheckInTime_setsCorrectly() {
         Instant past = Instant.now().minusSeconds(3600);
-        Attendance attendance = new Attendance(userId, eventId,past, status);
+        Attendance attendance = new Attendance(eventId,firstName,lastName,email,past, status);
         assertEquals(past, attendance.getCheckInTime());
     }
 
