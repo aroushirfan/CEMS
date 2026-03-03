@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AuthServiceTest {
 
+    private final int PORT = Integer.parseInt(System.getenv("PORT"));
+
     @Test
     void login() throws Exception {
         AuthService authService = AuthService.getInstance();
@@ -17,7 +19,7 @@ class AuthServiceTest {
                 .setResponseCode(200)
                 .setBody("{\"token\":\"fake-token\"}"));
 
-        server.start(8080);
+        server.start(PORT);
 
         String token = authService.login("email", "password");
         assertEquals("fake-token", token);
@@ -35,8 +37,9 @@ class AuthServiceTest {
                 .setResponseCode(400)
                 .setBody("{\"error\":\"user already exists\"}"));
 
-        server.start(8080);
+        server.start(PORT);
         assertDoesNotThrow(() -> authService.signUp("asdf", "asdf", "asdf", "asdf", "asdf"));
         assertThrowsExactly(Exception.class, () -> authService.signUp("asdf", "asdf", "asdf", "asdf", "asdf"), "user already exists");
+        server.shutdown();
     }
 }
