@@ -148,46 +148,52 @@ pipeline {
 
     stages {
 
-        stage('Check Docker') {
+        stage('Declarative: Checkout SCM') {
             steps {
-                sh 'docker --version'
+                echo "Checking out code from Git..."
+                git branch: 'jiya/docker', url: 'https://github.com/aroushirfan/CEMS.git'
             }
         }
 
-        stage('Checkout') {
+        stage('Check Docker') {
             steps {
                 // Use parameterized repo
                 git branch: 'main', url: "${params.GITHUB_REPO}"
             }
         }
 
-        stage('Build') {
+        stage('Build Backend with Maven') {
             steps {
-                sh 'mvn clean install'
+                echo "Building backend with Maven..."
+                sh 'mvn clean package -DskipTests -pl backend -am'
             }
         }
 
-        stage('Test') {
+        stage('Run Unit Tests') {
             steps {
-                sh 'mvn test'
+                echo "Running unit tests..."
+                sh "mvn test -pl backend -Dtest=*Test"
             }
         }
 
         stage('Code Coverage') {
             steps {
-                sh 'mvn jacoco:report'
+                echo "Generating code coverage report..."
+                sh "mvn jacoco:report -pl backend"
             }
         }
 
         stage('Publish Test Results') {
             steps {
-                junit '**/**/target/surefire-reports/*.xml'
+                junit 'backend/target/surefire-reports/*.xml'
+                jacoco execPattern: 'backend/target/jacoco.exec', classPattern: 'backend/target/classes', sourcePattern: 'backend/src/main/java'
             }
         }
 
-        stage('Publish Coverage Report') {
+        stage('Build Docker Image') {
             steps {
-                jacoco()
+                echo "Building Docker image..."
+                sh "docker build -t ${IMAGE_NAME}:latest -f backend/Dockerfile backend/"
             }
         }
 
