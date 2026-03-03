@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    environment {
+        // Docker daemon on macOS (adjust if using a Jenkins agent)
+        DOCKER_HOST = "unix:///var/run/docker.sock"
+        IMAGE_NAME = "cems-backend"
+        CONTAINER_NAME = "cems-backend"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/aroushirfan/CEMS.git'
+            }
+        }
+
+        stage('Build with Maven') {
+            tools { maven 'Maven3' }  // Make sure this matches your Jenkins Maven install
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t ${IMAGE_NAME}:latest backend/"
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                // Stop & remove existing container if any
+                sh """
+                docker rm -f ${CONTAINER_NAME} || true
+                docker run -d -p 8080:8080 --name ${CONTAINER_NAME} ${IMAGE_NAME}:latest
+                """
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                // Run integration tests against the container
+                sh "mvn test -Dtest=*IntegrationTest"
+            }
+        }
+    }
+
+    post {
+        always {
+            // Cleanup container after the pipeline
+            sh "docker rm -f ${CONTAINER_NAME} || true"
+        }
+    }
+}
