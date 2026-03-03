@@ -112,11 +112,11 @@
 //            }
 //    }
 //}
+
 pipeline {
     agent any
 
     environment {
-        PATH = "/usr/local/bin:$PATH"
         DOCKERHUB_REPO = "${params.DOCKERHUB_REPO}"
         DOCKERHUB_CREDENTIALS_ID = "${params.DOCKERHUB_CREDENTIALS_ID}"
         DOCKER_IMAGE_TAG = "${params.DOCKER_IMAGE_TAG}"
@@ -128,7 +128,7 @@ pipeline {
     }
 
     tools {
-        maven 'Maven3'   // Must match name in Jenkins Global Tool Configuration
+        maven 'Maven3'
     }
 
     stages {
