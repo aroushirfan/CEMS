@@ -10,13 +10,12 @@ module com.cems.frontend {
     requires java.net.http;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.datatype.jsr310;
-    requires java.desktop;
-    requires jdk.jshell;
+    requires java.prefs;
 
     opens com.cems.frontend.controllers.pages to javafx.fxml;
     opens com.cems.frontend.controllers.components to javafx.fxml;
     opens com.cems.frontend to javafx.fxml;
-    opens com.cems.frontend.models to javafx.base;
+    opens com.cems.frontend.models to javafx.base, com.fasterxml.jackson.databind;
 
     exports com.cems.frontend;
 }
