@@ -4,8 +4,13 @@ pipeline {
     environment {
         PATH = "/usr/local/bin:$PATH"
         DOCKERHUB_REPO = "${params.DOCKERHUB_REPO}"
-        DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
-        DOCKER_IMAGE_TAG = 'latest'
+        DOCKERHUB_CREDENTIALS_ID = '${params.DOCKERHUB_CREDENTIALS_ID}'
+        DOCKER_IMAGE_TAG = '${params.DOCKER_IMAGE_TAG}'
+        DB_USERNAME="${params.DB_USERNAME}"
+        DB_PASSWORD="${params.DB_PASSWORD}"
+        PORT="${params.PORT}"
+        DB_URL="${params.DB_URL}"
+        JWT_SECRET="${params.JWT_SECRET}"
     }
 
     tools {
@@ -24,7 +29,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                url: 'https://github.com/puntawatsub/SoftwareEng_Temp_converter.git'
+                url: "${params.GITHUB_REPO}"
             }
         }
 
