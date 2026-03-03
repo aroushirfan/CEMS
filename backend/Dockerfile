@@ -1,22 +1,30 @@
-# Stage 1: Build the backend jar
-FROM maven:3.9.6-amazoncorretto-21 AS build
+# Use a JDK image for building
+FROM maven:3.9.6-amazoncorretto-21 AS builder
+
 WORKDIR /app
 
-# Copy only backend pom.xml first to cache dependencies
-COPY backend/pom.xml backend/
-RUN mvn dependency:resolve -f backend/pom.xml
+# Copy only pom.xml first to leverage caching
+COPY pom.xml .
 
-# Copy backend source code
-COPY backend/ backend/
+# Resolve dependencies
+RUN mvn dependency:resolve
 
-# Build the backend jar
-RUN mvn package -DskipTests -f backend/pom.xml
+# Copy the rest of the source code
+COPY . .
 
-# Stage 2: Run the backend jar
+# Build the jar
+RUN mvn clean package -DskipTests
+
+# --------------------------
+# Second stage: minimal runtime image
+# --------------------------
 FROM eclipse-temurin:21-jre-jammy
+
 WORKDIR /app
 
-COPY --from=build /app/backend/target/backend.jar backend.jar
+# Copy built jar from builder stage
+COPY --from=builder /app/target/backend.jar ./backend.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "backend.jar"]
+
+CMD ["java", "-jar", "backend.jar"]
