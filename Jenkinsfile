@@ -7,6 +7,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS_ID = '${params.DOCKERHUB_CREDENTIALS_ID}'
         DOCKER_IMAGE_TAG = '${params.DOCKER_IMAGE_TAG}'
         DB_USERNAME="${params.DB_USERNAME}"
+        DB_PASSWORD="${params.DB_PASSWORD}"
         PORT="${params.PORT}"
         DB_URL="${params.DB_URL}"
         JWT_SECRET="${params.JWT_SECRET}"
