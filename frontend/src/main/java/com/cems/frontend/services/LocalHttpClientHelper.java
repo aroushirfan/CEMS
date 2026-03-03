@@ -12,7 +12,7 @@ import java.net.http.HttpClient;
 public class LocalHttpClientHelper {
     private static final String BASE_URL = "http://localhost";
     private static String PORT = "8080"; // default port
-    private static final HttpClient httpClient = HttpClient.newHttpClient();;
+    private static final HttpClient httpClient = HttpClient.newHttpClient();
 
     public static HttpClient getClient() {
        return httpClient;

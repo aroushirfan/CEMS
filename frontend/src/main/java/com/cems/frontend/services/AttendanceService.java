@@ -29,7 +29,7 @@ public class AttendanceService {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
-            List<AttendanceResponseDTO> attendanceResponseDTOS = objectMapper.readValue(response.body(),  new TypeReference<List<AttendanceResponseDTO>>() {});
+            List<AttendanceResponseDTO> attendanceResponseDTOS = objectMapper.readValue(response.body(),  new TypeReference<>() {});
             return AttendanceMapper.toModelList(attendanceResponseDTOS);
         }else {
             throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
