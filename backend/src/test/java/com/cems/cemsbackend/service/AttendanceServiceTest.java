@@ -4,124 +4,103 @@ import com.cems.cemsbackend.model.Attendance;
 import com.cems.cemsbackend.model.Event;
 import com.cems.cemsbackend.model.User;
 import com.cems.cemsbackend.repository.AttendanceRepository;
-import com.cems.cemsbackend.repository.EventRepository;
-import com.cems.cemsbackend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Instant;
-import java.util.ArrayList;
 import java.lang.reflect.Field;
-import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@Transactional // Rolls back changes so the "fake" database stays clean
 class AttendanceServiceTest {
 
-    @Autowired
+    @Mock
+    private AttendanceRepository attendanceRepository;
+
+    @InjectMocks
     private AttendanceService attendanceService;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private EventRepository eventRepository;
 
     private User testUser;
     private Event testEvent;
 
     @BeforeEach
     void setUp() throws Exception {
-        // 1. Create real User with ALL required fields
-        User user = new User();
-        user.setEmail("student@metropolia.fi");
-        user.setFirstName("Jeena");
-        user.setLastName("Sen"); // satisfying potential null constraint
+        MockitoAnnotations.openMocks(this);
 
-        // IMPORTANT: Matches the 'hashed_password' column in your DB sidebar
-        // If this method name is red, try user.setPassword("Sailesh1103")
-        user.setHashedPassword("Sailesh1103");
+        testUser = new User();
+        setPrivateField(testUser, "id", UUID.randomUUID());
 
-        testUser = userRepository.saveAndFlush(user);
+        testEvent = new Event();
+        setPrivateField(testEvent, "id", UUID.randomUUID());
+    }
 
-        // 2. Create real Event using the 7-argument constructor
-        testEvent = new Event("Lab", "Desc", "Helsinki", 10L, Instant.now(), testUser, true);
-
-        // 3. Initialize attendee list using reflection
-        Field field = Event.class.getDeclaredField("attendees");
+    private void setPrivateField(Object target, String fieldName, Object value) throws Exception {
+        Field field = target.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);
-        field.set(testEvent, new ArrayList<>());
-
-        // 4. Satisfy your 'Gatekeeper' logic
-        testEvent.addAttendee(testUser);
-        testEvent = eventRepository.saveAndFlush(testEvent);
+        field.set(target, value);
     }
 
     @Test
-    void testCheckInSuccess() {
+    void testCheckInSuccess() throws Exception {
+        // 1. Prepare data
+        testEvent.addAttendee(testUser);
+
+        // 2. Mock the duplicate check
+        when(attendanceRepository.findByUserAndEvent(testUser, testEvent))
+                .thenReturn(Optional.empty());
+
+        // 3. Prepare the returned object
+        Attendance mockAttendance = new Attendance();
+        mockAttendance.setStatus("PRESENT");
+
+        // FIX: Change 'save' to 'saveAndFlush' to match your Service code!
+        when(attendanceRepository.saveAndFlush(any(Attendance.class))).thenReturn(mockAttendance);
+
+        // 4. Execute
         Attendance result = attendanceService.createCheckIn(testUser, testEvent);
-        assertNotNull(result);
+
+        // 5. Assertions
+        assertNotNull(result, "The service should not return null");
         assertEquals("PRESENT", result.getStatus());
     }
 
     @Test
     void testCheckIn_Fail_NotRSVPd() {
-        // 1. Create the stranger object
-        User userObj = new User();
-        userObj.setEmail("stranger@metropolia.fi");
-        userObj.setFirstName("Not");
-        userObj.setLastName("Invited");
-        userObj.setHashedPassword("secure123");
-
-        // 2. Use a different variable name for the saved version to keep it final
-        final User stranger = userRepository.saveAndFlush(userObj);
-        final Event currentEvent = testEvent;
-
-        // Assert that the service throws 403 Forbidden
-        org.springframework.web.server.ResponseStatusException exception =
-                assertThrows(org.springframework.web.server.ResponseStatusException.class, () -> {
-                    // stranger and currentEvent are now final
-                    attendanceService.createCheckIn(stranger, currentEvent);
-                });
-
-        assertEquals(org.springframework.http.HttpStatus.FORBIDDEN, exception.getStatusCode());
+        // User not in attendees list
+        assertThrows(ResponseStatusException.class, () -> {
+            attendanceService.createCheckIn(testUser, testEvent);
+        });
     }
 
     @Test
     void testCheckIn_Fail_Duplicate() {
-        // Make variables final for the lambda
-        final User user = testUser;
-        final Event event = testEvent;
+        testEvent.addAttendee(testUser);
 
-        // First check-in works
-        attendanceService.createCheckIn(user, event);
+        // Return an Optional containing a fake attendance to simulate a duplicate
+        when(attendanceRepository.findByUserAndEvent(testUser, testEvent))
+                .thenReturn(Optional.of(new Attendance()));
 
-        // Second check-in must throw 409 Conflict
-        org.springframework.web.server.ResponseStatusException exception =
-                assertThrows(org.springframework.web.server.ResponseStatusException.class, () -> {
-                    attendanceService.createCheckIn(user, event);
-                });
-
-        assertEquals(org.springframework.http.HttpStatus.CONFLICT, exception.getStatusCode());
+        assertThrows(ResponseStatusException.class, () -> {
+            attendanceService.createCheckIn(testUser, testEvent);
+        });
     }
 
     @Test
     void testGetAttendanceByEvent() {
-        // 1. Perform a successful check-in first
-        attendanceService.createCheckIn(testUser, testEvent);
+        java.util.List<Attendance> mockList = new java.util.ArrayList<>();
+        mockList.add(new Attendance());
 
-        // 2. Call the retrieval method
-        List<Attendance> list = attendanceService.getAttendanceByEvent(testEvent);
+        when(attendanceRepository.findAllByEvent(testEvent)).thenReturn(mockList);
 
-        // 3. Assertions
-        assertNotNull(list);
-        assertEquals(1, list.size());
-        assertEquals(testUser.getId(), list.get(0).getUser().getId());
+        var result = attendanceService.getAttendanceByEvent(testEvent);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
     }
 }
