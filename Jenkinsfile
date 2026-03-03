@@ -25,14 +25,13 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                        url: 'https://github.com/puntawatsub/SoftwareEng_Temp_converter.git'
+                        url: 'https://github.com/aroushirfan/CEMS.git'
             }
         }
 
         stage('Build with Maven') {
             steps {
-                // Only build backend for Docker; skip tests here
-                sh 'mvn clean package -DskipTests -pl backend -am'
+                sh 'mvn clean package -DskipTests'
             }
         }
 
@@ -63,7 +62,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image from root (where Dockerfile is)
+                    // Use root directory as context if Dockerfile is in repo root
                     docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}", ".")
                 }
             }
@@ -84,6 +83,27 @@ pipeline {
                         docker logout
                     '''
                 }
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // Stop container if it already exists
+                    sh 'docker rm -f cems-backend || true'
+
+                    // Run the new container
+                    sh "docker run -d --name cems-backend -p 8080:8080 ${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                // Clean up container after pipeline
+                sh 'docker rm -f cems-backend || true'
             }
         }
     }
