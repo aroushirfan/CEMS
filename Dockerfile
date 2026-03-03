@@ -3,8 +3,8 @@ LABEL authors="cems"
 
 WORKDIR /app
 
-COPY pom.xml .
-COPY . /app
+COPY ../pom.xml .
+COPY .. /app
 
 RUN mvn package -DskipTests -pl backend -am
 
