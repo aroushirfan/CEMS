@@ -39,9 +39,9 @@ Polishing UI/UX
 
 | Team Member | Hours Spent |
 |-------------|--------|
-| Aroush      |        |
-| Jiya        | 12     |
-| Puntawat    |        |
-| Sailesh     |        |
+| Aroush      |  12    |
+| Jiya        |  16    |
+| Puntawat    |  12    |
+| Sailesh     |  18    |
 | Ayo         |        |
  
