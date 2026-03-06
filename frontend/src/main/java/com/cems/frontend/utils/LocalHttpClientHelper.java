@@ -1,4 +1,4 @@
-package com.cems.frontend.services;
+package com.cems.frontend.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -11,7 +11,7 @@ import java.net.http.HttpClient;
 
 public class LocalHttpClientHelper {
     private static final String BASE_URL = "http://localhost";
-    private static String PORT = "8080"; // default port
+    private static String PORT = "8081"; // default port
     private static final HttpClient httpClient = HttpClient.newHttpClient();
 
     public static HttpClient getClient() {
@@ -29,10 +29,11 @@ public class LocalHttpClientHelper {
         PORT = port;
     }
 
-    public static HttpRequest buildGetRequest (String uri) {
+    public static HttpRequest buildGetRequest (String uri,String token) {
         return HttpRequest.newBuilder()
                 .uri(URI.create(String.format("%s:%s/%s", BASE_URL,PORT, uri)))
                 .header("Accept", "application/json")
+                .header("Authorization", String.format("Bearer %s", token))
                 .GET()
                 .build();
     }
