@@ -12,12 +12,14 @@ import java.net.URL;
 
 public class SceneNavigator {
     private static Stage mainStage;
+    public static String lastLoadedPage; //adding it here for helping with the tests
 
     public static void setStage(Stage stage) {
         mainStage = stage;
     }
 
     public static void loadPage(String fxmlPath) {
+        lastLoadedPage = fxmlPath;
         try {
             URL resource = SceneNavigator.class.getResource("/com/cems/frontend/view/pages/" + fxmlPath);
 

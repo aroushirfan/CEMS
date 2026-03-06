@@ -24,7 +24,7 @@ public class ApiEventService implements IEventService {
             .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
-    private final String API_URL = "http://localhost:8080/events";
+    private final String API_URL = "http://localhost:8081/events";
 
     @Override
     public List<Event> getAllEvents() throws Exception {

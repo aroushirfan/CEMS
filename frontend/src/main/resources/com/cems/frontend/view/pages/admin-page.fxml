@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<HBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.cems.frontend.controllers.pages.AdminPageController">
+    <fx:include source="../components/admin-sidebar.fxml"/>
+
+    <VBox spacing="20" HBox.hgrow="ALWAYS">
+        <fx:include source="../components/admin-navbar.fxml"/>
+
+        <VBox spacing="20" style="-fx-padding: 20;">
+
+            <HBox spacing="10">
+                <Button text="Create Event" onAction="#handleCreateEvent"
+                        style="-fx-background-color: #f3eeee; -fx-text-fill: black; -fx-padding: 8 20;"/>
+
+                <TextField fx:id="searchField" promptText="Search events..."
+                           style="-fx-padding: 8; -fx-background-radius: 5;"/>
+            </HBox>
+
+            <TableView fx:id="eventTable" maxWidth="1100">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="200"/>
+                    <TableColumn fx:id="titleColumn" text="Title" prefWidth="150"/>
+                    <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="200"/>
+                    <TableColumn fx:id="locationColumn" text="Location" prefWidth="150"/>
+                    <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="100"/>
+                    <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
+                    <TableColumn fx:id="approvedColumn" text="Approved" prefWidth="100"/>
+                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="200"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</HBox>
