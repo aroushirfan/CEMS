@@ -2,6 +2,7 @@ package com.cems.frontend.services;
 
 import com.cems.frontend.models.Attendance;
 import com.cems.frontend.utils.AttendanceMapper;
+import com.cems.frontend.utils.LocalHttpClientHelper;
 import com.cems.shared.model.AttendanceDto.AttendanceResponseDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +26,7 @@ public class AttendanceService {
      * @return List<Attendance>
      */
     public List<Attendance> getEventAttendance(String eventId) throws Exception {
-        HttpRequest request = LocalHttpClientHelper.buildGetRequest("attendance/event/" + eventId);
+        HttpRequest request = LocalHttpClientHelper.buildGetRequest("attendance/event/" + eventId,AuthService.getInstance().getToken());
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
