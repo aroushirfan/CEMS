@@ -37,4 +37,22 @@ public class LocalHttpClientHelper {
                 .GET()
                 .build();
     }
+
+    public static HttpRequest buildPostRequest (String uri,String token) {
+        return HttpRequest.newBuilder()
+                .uri(URI.create(String.format("%s:%s/%s", BASE_URL,PORT, uri)))
+                .header("Accept", "application/json")
+                .header("Authorization", String.format("Bearer %s", token))
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+    }
+
+    public static HttpRequest buildDeleteRequest (String uri,String token) {
+        return HttpRequest.newBuilder()
+                .uri(URI.create(String.format("%s:%s/%s", BASE_URL,PORT, uri)))
+                .header("Accept", "application/json")
+                .header("Authorization", String.format("Bearer %s", token))
+                .DELETE()
+                .build();
+    }
 }

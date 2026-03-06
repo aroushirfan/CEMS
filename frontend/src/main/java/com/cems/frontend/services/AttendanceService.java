@@ -36,4 +36,20 @@ public class AttendanceService {
             throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
         }
     }
+
+    /**
+     * Returns attendance list
+     * @return List<Attendance>
+     */
+    public String checkInEvent(String eventId) throws Exception {
+        String requestUrl = String.format("attendance/event/%s/check-in", eventId);
+        HttpRequest request = LocalHttpClientHelper.buildPostRequest(requestUrl,AuthService.getInstance().getToken());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            return response.body();
+        }else {
+            throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
+        }
+    }
 }

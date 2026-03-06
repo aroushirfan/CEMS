@@ -5,6 +5,7 @@ import com.cems.frontend.models.Event;
 import com.cems.frontend.utils.LocalHttpClientHelper;
 import com.cems.frontend.services.AttendanceService;
 import com.cems.frontend.view.SceneNavigator;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -162,12 +163,15 @@ public class AttendanceController {
         };
 
         fetchTask.setOnSucceeded(e -> {
-//            populate the observable lust
-            attendanceModelObservable.setAll(fetchTask.getValue());
-            //  Update labels
-            updateAttendanceRecords();
-            //  populate the table rows with the attendance data
-            attendanceTableView.setItems(attendanceModelObservable);
+            Platform.runLater(() -> {
+                //  populate the observable lust
+                attendanceModelObservable.setAll(fetchTask.getValue());
+                //  Update labels
+                updateAttendanceRecords();
+                //  populate the table rows with the attendance data
+                attendanceTableView.setItems(attendanceModelObservable);
+            });
+
         });
 //      run the thread to fetch attendance data in the background
         new Thread(fetchTask).start();
