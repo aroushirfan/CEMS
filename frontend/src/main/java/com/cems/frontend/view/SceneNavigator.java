@@ -102,7 +102,7 @@ public class SceneNavigator {
             FXMLLoader loader = new FXMLLoader(resource);
             Scene scene = new Scene(loader.load(), width, height);
 
-            // ⭐ ADD YOUR CSS HERE ⭐
+
             scene.getStylesheets().add(
                     SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
             );
@@ -120,7 +120,7 @@ public class SceneNavigator {
             FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/com/cems/frontend/view/pages/event-detail-view.fxml"));
             Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
 
-            // ⭐ ALSO ADD CSS HERE ⭐
+
             scene.getStylesheets().add(
                     SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
             );
@@ -141,7 +141,7 @@ public class SceneNavigator {
             FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/com/cems/frontend/view/pages/edit-event-view.fxml"));
             Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
 
-            // ⭐ AND HERE ⭐
+
             scene.getStylesheets().add(
                     SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
             );
@@ -168,7 +168,6 @@ public class SceneNavigator {
                     SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
             );
 
-            // Get controller and initialize with Event
             AttendanceController controller = loader.getController();
             controller.loadAttendanceForEvent(event);
 
