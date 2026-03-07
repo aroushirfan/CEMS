@@ -7,4 +7,4 @@ target/
 # IntelliJ settings
 .idea/
 *.iml
-.env
+.envfrontend/src/main/java/com/cems/frontend/services/MockEventService.java
