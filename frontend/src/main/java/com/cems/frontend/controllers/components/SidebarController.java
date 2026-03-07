@@ -196,7 +196,6 @@ import com.cems.frontend.models.NavigationObserver;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.utils.LocalStorage;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -243,22 +242,9 @@ public class SidebarController implements NavigationObserver {
     @FXML
     private void initialize() {
         NavigationNotifier.getInstance().addObserver(this);
-        currentHighlighted = allEventsButton;
-        allEventsButton.getStyleClass().add("selected");
-    }
-
-    @FXML private Button homeBtn;
-    @FXML private Button allEventsBtn;
-    @FXML private Button createEventBtn;
-    @FXML private Button usersBtn;
-    @FXML private Button settingsBtn;
-    @FXML private Button languageBtn;
-    @FXML private Button logoutButton;
-
-    @FXML
-    public void initialize() {
-
-        SideBarState.set(this);
+        currentHighlighted = homeButton;
+        homeButton.getStyleClass().removeAll("regular");
+        homeButton.getStyleClass().add("select");
     }
     @FXML
     private void handleDarkMode() {
@@ -291,21 +277,19 @@ public class SidebarController implements NavigationObserver {
 
         scene.getStylesheets().remove(darkTheme);
     }
-
-
-
     // Navigation
 
 
     @FXML
     private void goToHome() {
 //        SceneNavigator.loadPage("home-view.fxml");
+        NavigationNotifier.getInstance().notifyAllObservers(Paths.HOME);
     }
 
     @FXML
     private void goToAllEvents() {
 //        SceneNavigator.loadPage("home-view.fxml");
-        NavigationNotifier.getInstance().notifyAllObservers(Paths.HOME);
+        NavigationNotifier.getInstance().notifyAllObservers(Paths.ALL_EVENTS);
     }
 
     @FXML
@@ -331,7 +315,7 @@ public class SidebarController implements NavigationObserver {
 
     public void setSidebarSelected(Paths path) {
         Platform.runLater(() -> {
-            if (path.equals(Paths.HOME)) {
+            if (path.equals(Paths.ALL_EVENTS)) {
                 clearSelected();
                 allEventsButton.getStyleClass().removeAll("regular");
                 allEventsButton.getStyleClass().add("select");
@@ -341,13 +325,18 @@ public class SidebarController implements NavigationObserver {
                 settingsButton.getStyleClass().removeAll("regular");
                 settingsButton.getStyleClass().add("select");
                 currentHighlighted = settingsButton;
+            } else if (path.equals(Paths.HOME)) {
+                clearSelected();
+                homeButton.getStyleClass().removeAll("regular");
+                homeButton.getStyleClass().add("select");
+                currentHighlighted = homeButton;
             }
         });
     }
 
     private void clearSelected() {
         if (currentHighlighted != null) {
-            currentHighlighted.getStyleClass().removeAll("selected");
+            currentHighlighted.getStyleClass().removeAll("select");
             currentHighlighted.getStyleClass().add("regular");
         }
     }

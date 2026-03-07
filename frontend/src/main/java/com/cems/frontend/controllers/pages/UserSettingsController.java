@@ -48,7 +48,6 @@ public class UserSettingsController {
 
     @FXML
     public void initialize() {
-        SideBarState.get().setActive("settings");
         // Load default profile image
         loadDefaultProfileImage();
 

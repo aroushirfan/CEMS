@@ -80,7 +80,7 @@ public class LoginController {
 
     // Redirect to home page
     private void goToHome(ActionEvent event) {
-        switchScene(event, "/com/cems/frontend/view/pages/home-view.fxml");
+        switchScene(event, "/com/cems/frontend/view/pages/navigation.fxml");
     }
 
     //  Scene switch helper

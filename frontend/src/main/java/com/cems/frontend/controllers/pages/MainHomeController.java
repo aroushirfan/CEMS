@@ -25,7 +25,6 @@ public class MainHomeController {
 
     @FXML
     public void initialize() {
-        SideBarState.get().setActive("home");
         loadEvents();
     }
 
