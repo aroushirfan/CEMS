@@ -1,5 +1,6 @@
 package com.cems.frontend.controllers.pages;
 
+import com.cems.frontend.utils.SideBarState;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -44,19 +45,18 @@ public class UserSettingsController {
     @FXML
     private Button saveButton;
 
-    /**
-     * Called automatically after FXML is loaded
-     */
+
     @FXML
     public void initialize() {
+        SideBarState.get().setActive("settings");
         // Load default profile image
         loadDefaultProfileImage();
 
-        // Populate language dropdown
+
         languageComboBox.getItems().addAll(
                 "English",
-                "Finnish",
-                "Spanish"
+                "Finnish"
+
         );
 
         // Mock user data (temporary)
