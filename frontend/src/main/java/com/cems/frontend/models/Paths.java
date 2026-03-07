@@ -1,0 +1,13 @@
+package com.cems.frontend.models;
+
+public enum Paths {
+    HOME("pages/home-view.fxml"),
+    USER_SETTINGS("pages/UserSettings.fxml"),
+    SIDEBAR("components/sidebar.fxml");
+
+    public final String path;
+
+    private Paths(String path) {
+        this.path = String.format("/com/cems/frontend/view/%s", path);
+    }
+}
