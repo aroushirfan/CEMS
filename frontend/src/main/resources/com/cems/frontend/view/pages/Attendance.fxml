@@ -19,7 +19,7 @@
 <HBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.pages.AttendanceController">
 
     <!-- Sidebar -->
-    <fx:include source="../components/sidebar_settings.fxml" />
+    <fx:include source="../components/sidebar.fxml" />
 
     <!-- Main content -->
     <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS">

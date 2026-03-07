@@ -1,0 +1,95 @@
+/* ================================
+   SIDEBAR BASE
+   ================================ */
+
+#sidebarRoot {
+    -fx-background-color: white;
+    -fx-padding: 20 20 20 20;
+}
+
+/* ================================
+   SIDEBAR BUTTONS (DEFAULT)
+   ================================ */
+
+.sidebar-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #1A1A1A;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20 10 20;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-max-width: Infinity;
+}
+
+/* Hover for NON-ACTIVE buttons */
+.sidebar-btn:hover {
+    -fx-background-color: #F5F5F5;
+}
+
+/* Remove grey when pressed */
+.sidebar-btn:pressed,
+.sidebar-btn:armed {
+    -fx-background-color: transparent;
+}
+
+/* Remove default focus ring */
+.sidebar-btn:focused {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-effect: none;
+}
+
+/* ================================
+   ACTIVE / HIGHLIGHTED BUTTON
+   ================================ */
+
+.sidebar-btn.active {
+    -fx-background-color: #F0E6FF;
+    -fx-text-fill: #6200EE;
+    -fx-font-weight: bold;
+}
+
+/* Keep violet on hover, focus, press, armed */
+.sidebar-btn.active:hover,
+.sidebar-btn.active:focused,
+.sidebar-btn.active:pressed,
+.sidebar-btn.active:armed {
+    -fx-background-color: #F0E6FF;
+    -fx-text-fill: #6200EE;
+}
+
+/* ================================
+   DARK MODE TOGGLE
+   ================================ */
+
+#darkModeToggle {
+    -fx-background-radius: 15;
+    -fx-cursor: hand;
+}
+
+#darkModeToggle:focused {
+    -fx-background-color: transparent;
+    -fx-effect: none;
+}
+
+/* ================================
+   LOGOUT BUTTON
+   ================================ */
+
+#logoutButton {
+    -fx-background-color: #546E7A;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+}
+
+#logoutButton:hover {
+    -fx-background-color: #455A64;
+}
+
+#logoutButton:pressed {
+    -fx-background-color: #37474F;
+}
