@@ -11,9 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cems.frontend.controllers.pages.HomeController">
+<HBox xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.cems.frontend.controllers.pages.MainHomeController">
 
-    <fx:include source="../components/sidebar_home.fxml" />
+    <fx:include source="../components/sidebar.fxml" />
 
     <VBox HBox.hgrow="ALWAYS">
 
@@ -78,7 +80,11 @@
                             <font><Font size="28" /></font>
                         </Label>
                         <Region HBox.hgrow="ALWAYS" />
-                        <Label style="-fx-text-fill: #1B336F; -fx-font-size:16" text="see all events" />
+                        <Label fx:id="seeAllEventsLink"
+                               text="see all events"
+                               style="-fx-text-fill: #1B336F; -fx-font-size:16; -fx-underline: true; -fx-cursor: hand;"
+                               onMouseClicked="#goToAllEvents" />
+
                     </HBox>
 
                     <FlowPane fx:id="eventGrid" hgap="25" vgap="25" />
