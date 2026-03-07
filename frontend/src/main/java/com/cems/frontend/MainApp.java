@@ -36,17 +36,7 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         SceneNavigator.setStage(stage);
         stage.setTitle("CEMS - Campus Event Management System");
-
-        // Load your initial page
-        SceneNavigator.loadPage("MainHome.fxml");
-
-        // Add the sidebar CSS to the stage's scene
-        Scene scene = stage.getScene();
-        if (scene != null) {
-            scene.getStylesheets().add(
-                    getClass().getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
-            );
-        }
+        SceneNavigator.loadPage("navigation.fxml");
     }
 
     public static void main(String[] args) {

@@ -28,7 +28,6 @@ public class HomeController {
 
     @FXML
     public void initialize() {
-        SideBarState.get().setActive("events");
         setupSearchFilter();
         fetchEvents();
     }
