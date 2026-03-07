@@ -70,6 +70,7 @@
 
 package com.cems.frontend.view;
 
+import com.cems.frontend.controllers.pages.AttendanceController;
 import com.cems.frontend.controllers.pages.EditEventController;
 import com.cems.frontend.controllers.pages.EventDetailController;
 import com.cems.frontend.models.Event;
@@ -147,6 +148,29 @@ public class SceneNavigator {
 
             EditEventController controller = loader.getController();
             controller.initData(event);
+
+            mainStage.setScene(scene);
+            mainStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void loadAttendancePage(Event event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    SceneNavigator.class.getResource("/com/cems/frontend/view/pages/attendance-view.fxml")
+            );
+            Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
+
+            // Apply CSS
+            scene.getStylesheets().add(
+                    SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
+            );
+
+            // Get controller and initialize with Event
+            AttendanceController controller = loader.getController();
+            controller.loadAttendanceForEvent(event);
 
             mainStage.setScene(scene);
             mainStage.show();
