@@ -1,5 +1,6 @@
 package com.cems.frontend.view;
 
+import com.cems.frontend.controllers.pages.AttendanceController;
 import com.cems.frontend.controllers.pages.EditEventController;
 import com.cems.frontend.controllers.pages.EventDetailController;
 
@@ -9,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.UUID;
 
 public class SceneNavigator {
     private static Stage mainStage;
@@ -58,6 +60,20 @@ public class SceneNavigator {
 
             EditEventController controller = loader.getController();
             controller.initData(event);
+            mainStage.setScene(scene);
+            mainStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadAttendancePage(Event event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/com/cems/frontend/view/pages/attendance-view.fxml"));
+            Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
+
+            AttendanceController controller = loader.getController();
+            controller.loadAttendanceForEvent(event);
             mainStage.setScene(scene);
             mainStage.show();
         } catch (IOException e) {
