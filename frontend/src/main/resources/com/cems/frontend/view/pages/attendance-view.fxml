@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -14,31 +14,36 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<HBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.pages.AttendanceController">
-
-    <!-- Sidebar -->
-    <fx:include source="../components/sidebar.fxml" />
-
-    <!-- Main content -->
-    <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS">
-        <VBox maxHeight="1.7976931348623157E308" spacing="20.0" style="-fx-padding: 40;">
-         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="481.0">
+<VBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.pages.AttendanceController">
+   <children>
+        <VBox maxHeight="1.7976931348623157E308" spacing="20.0" style="-fx-padding: 40;" stylesheets="@../css/attendance.css">
+         <VBox spacing="5.0">
             <children>
-                  <!-- Page Heading -->
-                  <Label maxHeight="1.7976931348623157E308" style="-fx-font-size: 24; -fx-font-weight: bold;" text="Attendance" />
-               <Pane prefHeight="200.0" prefWidth="200.0" styleClass="node" stylesheets="@../css/attendance.css" HBox.hgrow="ALWAYS">
-                  <HBox.margin>
-                     <Insets right="10.0" />
-                  </HBox.margin></Pane>
-               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../assets/icons/profile.png" />
-                  </image>
-               </ImageView>
+               <HBox>
+                  <children>
+                     <Button fx:id="homeButton" mnemonicParsing="false" onAction="#handleGoHome" styleClass="nav-button" stylesheets="@../css/attendance.css" text="← Back to Home" />
+                  </children>
+               </HBox>
+               <HBox alignment="CENTER" prefHeight="50.0" prefWidth="481.0">
+                  <children>
+                        <!-- Page Heading -->
+                        <Label maxHeight="1.7976931348623157E308" style="-fx-font-size: 24; -fx-font-weight: bold;" text="Attendance" />
+                     <Pane prefHeight="200.0" prefWidth="200.0" styleClass="node" stylesheets="@../css/attendance.css" HBox.hgrow="ALWAYS">
+                        <HBox.margin>
+                           <Insets right="10.0" />
+                        </HBox.margin>
+                     </Pane>
+
+                        <!--  Navbar -->
+                     <fx:include source="../components/navbar.fxml" />
+
+                  </children>
+               </HBox>
             </children>
-         </HBox>
+         </VBox>
          <VBox maxHeight="1.7976931348623157E308" prefHeight="550.0" prefWidth="485.0" spacing="30.0" VBox.vgrow="ALWAYS">
             <children>
                <HBox minWidth="400.0" prefHeight="50.0" prefWidth="400.0" style="-fx-background-color: white; -fx-background-radius: 5;">
@@ -47,37 +52,45 @@
                         <children>
                            <VBox maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="221.0" spacing="10.0" HBox.hgrow="ALWAYS">
                               <children>
-                                 <Label prefHeight="18.0" prefWidth="210.0" text="Career Fair 2026">
-                                    <font>
-                                       <Font name="System Bold" size="18.0" />
-                                    </font>
-                                 </Label>
+                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <children>
+                                       <Label fx:id="eventName" prefHeight="18.0" prefWidth="250.0" text="Career Fair 2026">
+                                          <font>
+                                             <Font name="System Bold" size="18.0" />
+                                          </font>
+                                       </Label>
+                                       <Line endY="20.0" stroke="#d9d9d9" />
+                                       <Label fx:id="eventOrganizer" prefHeight="18.0" prefWidth="210.0" text="Organized by Career Services" />
+                                    </children>
+                                 </HBox>
                                  <HBox maxWidth="350.0" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                     <children>
-                                       <HBox alignment="CENTER" spacing="3.0">
+                                       <HBox alignment="CENTER_LEFT" spacing="5.0">
                                           <children>
                                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                                 <image>
                                                    <Image url="@../assets/icons/calender.png" />
                                                 </image>
                                              </ImageView>
-                                             <Label maxWidth="1.7976931348623157E308" text="Friday, February 10, 2026" />
+                                             <Label fx:id="eventDate" maxWidth="1.7976931348623157E308" text="Friday, February 10, 2026" />
                                           </children>
                                        </HBox>
-                                       <HBox alignment="CENTER" spacing="3.0">
+                                       <HBox alignment="CENTER_LEFT" spacing="5.0">
                                           <children>
                                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                                 <image>
                                                    <Image url="@../assets/icons/location.png" />
                                                 </image>
                                              </ImageView>
-                                             <Label maxWidth="1.7976931348623157E308" text="Auditorium Myllypurontie 1" />
+                                             <Label fx:id="eventLocation" maxWidth="1.7976931348623157E308" text="Auditorium Myllypurontie 1" />
                                           </children>
                                        </HBox>
                                     </children>
                                  </HBox>
-                              </children></VBox>
-                        </children></HBox>
+                              </children>
+                           </VBox>
+                        </children>
+                     </HBox>
                      <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                      <HBox maxWidth="350.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0" HBox.hgrow="ALWAYS">
                         <children>
@@ -87,7 +100,8 @@
                                  <Label fx:id="totalRegisteredLabel" text="100">
                                     <font>
                                        <Font name="System Bold" size="14.0" />
-                                    </font></Label>
+                                    </font>
+                                 </Label>
                               </children>
                            </VBox>
                            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
@@ -96,16 +110,20 @@
                                  <Label fx:id="attendeesCheckedInLabel" text="80">
                                     <font>
                                        <Font name="System Bold" size="14.0" />
-                                    </font></Label>
-                              </children></VBox>
+                                    </font>
+                                 </Label>
+                              </children>
+                           </VBox>
                            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                               <children>
                                  <Label text="REMAINING" />
                                  <Label fx:id="attendeesPendingLabel" text="20">
                                     <font>
                                        <Font name="System Bold" size="14.0" />
-                                    </font></Label>
-                              </children></VBox>
+                                    </font>
+                                 </Label>
+                              </children>
+                           </VBox>
                         </children>
                      </HBox>
                   </children>
@@ -121,7 +139,8 @@
                   </effect>
                   <padding>
                      <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-                  </padding></HBox>
+                  </padding>
+               </HBox>
                <VBox maxHeight="1.7976931348623157E308" spacing="20.0" VBox.vgrow="ALWAYS">
                   <children>
                      <HBox minHeight="11.0" prefWidth="486.0" spacing="30.0">
@@ -163,7 +182,6 @@
             </children>
          </VBox>
 
-        </VBox>
-    </ScrollPane>
-
-</HBox>
+              </VBox>
+   </children>
+</VBox>

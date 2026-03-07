@@ -101,6 +101,20 @@
 }
 
 .node {
-    -fx-border-color: transparent #D9D9D9 transparent transparent;
-    -fx-border-width: 0 2px 0 0;
+    -fx-border-color: transparent transparent transparent transparent;
+    /*-fx-border-width: 0 2px 0 0;*/
+}
+
+.divider {
+    -fx-border-color: transparent transparent #D9D9D9 transparent;
+    -fx-border-width: 0 0 2px 0;
+}
+
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-font-weight:bold;
+    -fx-cursor:hand;
+    -fx-text-fill: #4F46E5;
 }
