@@ -62,6 +62,7 @@ public class ApiEventService implements IEventService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_URL))
                 .header("Content-Type", "application/json")
+                .header("Authorization", String.format("Bearer %s", authService.getToken()))
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 
@@ -82,6 +83,7 @@ public class ApiEventService implements IEventService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_URL + "/" + id))
                 .header("Content-Type", "application/json")
+                .header("Authorization", String.format("Bearer %s", authService.getToken()))
                 .PUT(HttpRequest.BodyPublishers.ofString(json))
                 .build();
 
@@ -99,6 +101,7 @@ public class ApiEventService implements IEventService {
     public void deleteEvent(String id) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_URL + "/" + id))
+                .header("Authorization", String.format("Bearer %s", authService.getToken()))
                 .DELETE()
                 .build();
 
@@ -113,6 +116,7 @@ public class ApiEventService implements IEventService {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_URL + "/" + id))
                 .header("Accept", "application/json")
+                .header("Authorization", String.format("Bearer %s", authService.getToken()))
                 .GET()
                 .build();
 

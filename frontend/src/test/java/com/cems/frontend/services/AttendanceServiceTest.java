@@ -1,6 +1,7 @@
 package com.cems.frontend.services;
 
 import com.cems.frontend.models.Attendance;
+import com.cems.frontend.utils.LocalHttpClientHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;

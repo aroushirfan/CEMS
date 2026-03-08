@@ -1,12 +1,80 @@
+//package com.cems.frontend.view;
+//
+//import com.cems.frontend.controllers.pages.EditEventController;
+//import com.cems.frontend.controllers.pages.EventDetailController;
+//
+//import com.cems.frontend.models.Event; // Import your property-based model
+//import javafx.fxml.FXMLLoader;
+//import javafx.scene.Scene;
+//import javafx.stage.Stage;
+//import java.io.IOException;
+//import java.net.URL;
+//
+//public class SceneNavigator {
+//    private static Stage mainStage;
+//
+//    public static void setStage(Stage stage) {
+//        mainStage = stage;
+//    }
+//
+//    public static void loadPage(String fxmlPath) {
+//        try {
+//            URL resource = SceneNavigator.class.getResource("/com/cems/frontend/view/pages/" + fxmlPath);
+//
+//            if (resource == null) {
+//                System.err.println("Error: Could not find FXML file at: /com/cems/frontend/view/pages/" + fxmlPath);
+//                return;
+//            }
+//            double width = mainStage.getWidth();
+//            double height = mainStage.getHeight();
+//
+//            FXMLLoader loader = new FXMLLoader(resource);
+//            Scene scene = new Scene(loader.load(), width, height);
+//            mainStage.setScene(scene);
+//            mainStage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//
+//        }
+//    }
+//
+//    public static void loadEventDetail(Event event) {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/com/cems/frontend/view/pages/event-detail-view.fxml"));
+//            Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
+//            EventDetailController controller = loader.getController();
+//            controller.initData(event);
+//            mainStage.setScene(scene);
+//            mainStage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public static void loadEditPage(Event event) {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/com/cems/frontend/view/pages/edit-event-view.fxml"));
+//
+//            Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
+//
+//            EditEventController controller = loader.getController();
+//            controller.initData(event);
+//            mainStage.setScene(scene);
+//            mainStage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//}
+
 package com.cems.frontend.view;
 
 import com.cems.frontend.controllers.pages.AttendanceController;
 import com.cems.frontend.controllers.pages.EditEventController;
 import com.cems.frontend.controllers.pages.EventDetailController;
-
-import com.cems.frontend.models.Event; // Import your property-based model
+import com.cems.frontend.models.Event;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -14,14 +82,12 @@ import java.net.URL;
 
 public class SceneNavigator {
     private static Stage mainStage;
-    public static String lastLoadedPage; //adding it here for helping with the tests
 
     public static void setStage(Stage stage) {
         mainStage = stage;
     }
 
     public static void loadPage(String fxmlPath) {
-        lastLoadedPage = fxmlPath;
         try {
             URL resource = SceneNavigator.class.getResource("/com/cems/frontend/view/pages/" + fxmlPath);
 
@@ -29,13 +95,21 @@ public class SceneNavigator {
                 System.err.println("Error: Could not find FXML file at: /com/cems/frontend/view/pages/" + fxmlPath);
                 return;
             }
+
             double width = mainStage.getWidth();
             double height = mainStage.getHeight();
 
             FXMLLoader loader = new FXMLLoader(resource);
             Scene scene = new Scene(loader.load(), width, height);
+
+
+            scene.getStylesheets().add(
+                    SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
+            );
+
             mainStage.setScene(scene);
             mainStage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -45,10 +119,18 @@ public class SceneNavigator {
         try {
             FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/com/cems/frontend/view/pages/event-detail-view.fxml"));
             Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
+
+
+            scene.getStylesheets().add(
+                    SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
+            );
+
             EventDetailController controller = loader.getController();
             controller.initData(event);
+
             mainStage.setScene(scene);
             mainStage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,31 +139,45 @@ public class SceneNavigator {
     public static void loadEditPage(Event event) {
         try {
             FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/com/cems/frontend/view/pages/edit-event-view.fxml"));
-
             Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
+
+
+            scene.getStylesheets().add(
+                    SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
+            );
 
             EditEventController controller = loader.getController();
             controller.initData(event);
+
             mainStage.setScene(scene);
             mainStage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     public static void loadAttendancePage(Event event) {
         try {
-            FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/com/cems/frontend/view/pages/attendance.fxml"));
-            Parent root = loader.load();
+            FXMLLoader loader = new FXMLLoader(
+                    SceneNavigator.class.getResource("/com/cems/frontend/view/pages/attendance-view.fxml")
+            );
+            Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
+
+            // Apply CSS
+            scene.getStylesheets().add(
+                    SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
+            );
 
             AttendanceController controller = loader.getController();
-            controller.loadAttendanceForEvent(event.getId());
+            controller.loadAttendanceForEvent(event);
 
-            Scene scene = new Scene(root, mainStage.getWidth(), mainStage.getHeight());
             mainStage.setScene(scene);
             mainStage.show();
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 }
+
+
