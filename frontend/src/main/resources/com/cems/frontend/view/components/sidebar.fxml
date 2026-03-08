@@ -33,9 +33,22 @@
                 alignment="BASELINE_LEFT"
                 style="-fx-background-color: transparent;"
                 text="Create Event" />
-        <Button maxWidth="Infinity" alignment="BASELINE_LEFT" style="-fx-background-color: transparent;" text="Users" />
+
         <Button maxWidth="Infinity" alignment="BASELINE_LEFT" style="-fx-background-color: transparent;" text="Settings" />
         <Button maxWidth="Infinity" alignment="BASELINE_LEFT" style="-fx-background-color: transparent;" text="English" />
+        <Button fx:id="adminEventBtn"
+                alignment="BASELINE_LEFT"
+                text="Event Management"
+                onAction="#handleEvents"
+                style="-fx-background-color: transparent;"
+                maxWidth="Infinity" />
+
+        <Button fx:id="adminUserBtn"
+                alignment="BASELINE_LEFT"
+                text="User Management"
+                onAction="#handleUsers"
+                style="-fx-background-color: transparent;"
+                maxWidth="Infinity" />
     </VBox>
 
     <Region VBox.vgrow="ALWAYS" />

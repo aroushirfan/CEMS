@@ -125,5 +125,23 @@ public class ApiEventService implements IEventService {
             throw new RuntimeException("Event not found: " + id);
         }
     }
+    @Override
+    public Event approveEvent(String id) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL + "/" + id + "/approve"))
+                .header("Authorization", "Bearer " + authService.getToken())
+                .PUT(HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
+            return EventMapper.toModel(dto);
+        } else {
+            throw new RuntimeException("Approve failed: " + response.body());
+        }
+    }
+
 
 }

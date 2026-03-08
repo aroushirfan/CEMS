@@ -3,6 +3,7 @@ package com.cems.frontend.controllers.components;
 import com.cems.frontend.utils.LocalStorage;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
 import com.cems.frontend.view.SceneNavigator;
@@ -11,6 +12,28 @@ public class SidebarController {
 
     @FXML private VBox sidebarRoot;
     @FXML private ToggleButton darkModeToggle;
+    @FXML private Button adminEventBtn;
+    @FXML private Button adminUserBtn;
+    @FXML private Button logoutButton;
+    public static SidebarController instance;
+
+    @FXML
+    public void initialize() {
+        instance=this;
+        refreshVisibility();
+    }
+
+    public void refreshVisibility() {
+        String role = LocalStorage.get("role");
+        String token = LocalStorage.get("token");
+
+        boolean isLoggedIn = token != null && !token.isBlank();
+        boolean isAdmin = "ADMIN".equals(role);
+
+        adminEventBtn.setVisible(isLoggedIn && isAdmin);
+        adminUserBtn.setVisible(isLoggedIn && isAdmin);
+        logoutButton.setVisible(isLoggedIn);
+    }
 
     @FXML
     private void handleDarkMode() {
@@ -55,12 +78,25 @@ public class SidebarController {
 
     @FXML
     private void goToSettings() {
-        SceneNavigator.loadPage("UserSettings.xml");
+        SceneNavigator.loadPage("UserSettings.fxml");
+    }
+    @FXML
+    private void handleEvents() {
+        SceneNavigator.loadPage("admin-page.fxml");
     }
 
     @FXML
+    private void handleUsers() {
+        SceneNavigator.loadPage("user-management.fxml");
+    }
+    @FXML
     private void handleLogout() {
         LocalStorage.set("token", "");
-        SceneNavigator.loadPage("login-view.fxml");
+        LocalStorage.set("role", "");
+        refreshVisibility();
+        if (NavbarController.instance != null) {
+            NavbarController.instance.refreshVisibility();
+        }
+        SceneNavigator.loadPage("home-view.fxml");
     }
 }

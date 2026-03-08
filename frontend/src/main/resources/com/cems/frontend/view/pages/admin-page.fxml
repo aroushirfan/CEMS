@@ -5,16 +5,14 @@
 
 <HBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.cems.frontend.controllers.pages.AdminPageController">
-    <fx:include source="../components/admin-sidebar.fxml"/>
+    <fx:include source="../components/sidebar.fxml"/>
 
     <VBox spacing="20" HBox.hgrow="ALWAYS">
-        <fx:include source="../components/admin-navbar.fxml"/>
+        <fx:include source="../components/navbar.fxml"/>
 
         <VBox spacing="20" style="-fx-padding: 20;">
 
             <HBox spacing="10">
-                <Button text="Create Event" onAction="#handleCreateEvent"
-                        style="-fx-background-color: #f3eeee; -fx-text-fill: black; -fx-padding: 8 20;"/>
 
                 <TextField fx:id="searchField" promptText="Search events..."
                            style="-fx-padding: 8; -fx-background-radius: 5;"/>
@@ -29,7 +27,9 @@
                     <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="100"/>
                     <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
                     <TableColumn fx:id="approvedColumn" text="Approved" prefWidth="100"/>
-                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="200"/>
+                    <TableColumn fx:id="attendanceColumn" text="Attendance" prefWidth="80"/>
+                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="300"/>
+
                 </columns>
             </TableView>
         </VBox>

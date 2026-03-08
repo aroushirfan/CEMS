@@ -6,15 +6,16 @@ import javafx.collections.ObservableList;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
-import java.util.List;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AdminPageControllerLogicTest {
+class AdminPageControllerTest {
 
     @Test
-    void testSearchFiltering() {
+    void searchFiltering() {
         ObservableList<Event> events = FXCollections.observableArrayList(
                 new Event(UUID.randomUUID(), "Metropolia Gala", "Desc", "Helsinki", 100, Instant.now(), true, null),
                 new Event(UUID.randomUUID(), "Java Workshop", "Desc", "Espoo", 50, Instant.now(), false, null)
@@ -22,7 +23,7 @@ class AdminPageControllerLogicTest {
 
         String filter = "helsinki";
 
-        List<Event> filtered = events.filtered(e ->
+        var filtered = events.filtered(e ->
                 e.getTitle().toLowerCase().contains(filter) ||
                         e.getLocation().toLowerCase().contains(filter) ||
                         e.getDescription().toLowerCase().contains(filter)
@@ -33,7 +34,7 @@ class AdminPageControllerLogicTest {
     }
 
     @Test
-    void testEventModelProperties() {
+    void eventProps() {
         UUID id = UUID.randomUUID();
         Instant now = Instant.now();
 
@@ -45,5 +46,16 @@ class AdminPageControllerLogicTest {
         assertEquals(10, e.getCapacity());
         assertEquals(now, e.getDateTime());
         assertTrue(e.isApproved());
+    }
+
+    @Test
+    void dateFormat() {
+        Instant now = Instant.parse("2024-01-01T10:00:00Z");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formatted = formatter.format(now.atZone(ZoneId.systemDefault()));
+
+        assertNotNull(formatted);
+        assertTrue(formatted.contains("2024"));
     }
 }

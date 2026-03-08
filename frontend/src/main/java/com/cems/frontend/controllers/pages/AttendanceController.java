@@ -65,14 +65,14 @@ public class AttendanceController {
 
     private final ObservableList<Attendance> attendanceModelObservable = FXCollections.observableArrayList(
 //            TODO: remove dummy data
-            new Attendance(UUID.randomUUID(),"Tom", "Cruise","tom_cruise@metropolia.fi",Instant.now(),"checked in"),
-            new Attendance(UUID.randomUUID(),"Kevin", "Hart","Kevin@metropolia.fi",Instant.now(),"Pending"),
-            new Attendance(UUID.randomUUID(),"Dave", "Chapel","Dave@metropolia.fi",Instant.now(),"checked in"),
-            new Attendance(UUID.randomUUID(),"Tom", "Holland","Tom@metropolia.fi",Instant.now(),"Pending"),
-            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
-            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending"),
-            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
-            new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending")
+            //new Attendance(UUID.randomUUID(),"Tom", "Cruise","tom_cruise@metropolia.fi",Instant.now(),"checked in"),
+            //new Attendance(UUID.randomUUID(),"Kevin", "Hart","Kevin@metropolia.fi",Instant.now(),"Pending"),
+            //new Attendance(UUID.randomUUID(),"Dave", "Chapel","Dave@metropolia.fi",Instant.now(),"checked in"),
+            //new Attendance(UUID.randomUUID(),"Tom", "Holland","Tom@metropolia.fi",Instant.now(),"Pending"),
+            //new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
+            // new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending"),
+            //new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"checked in"),
+            //new Attendance(UUID.randomUUID(),"Firstname", "Lastname","email@metropolia.fi",Instant.now(),"Pending")
             );
 
     private final AttendanceService attendanceService = new AttendanceService(LocalHttpClientHelper.getClient(), LocalHttpClientHelper.getMapper());
@@ -82,7 +82,7 @@ public class AttendanceController {
         attendanceTableView.setPlaceholder(new Label("No Attendance data available at the moment"));
         //  set up the table view to display records
         setupTableView();
-        fetchAttendanceRecords(UUID.randomUUID());
+        //fetchAttendanceRecords(UUID.randomUUID());
         attendanceSearchFilter();
         sortByComboBox.getItems().addAll(SORT_BY,CHECKED_IN,PENDING);
         handleSearchFocus();

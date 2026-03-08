@@ -2,6 +2,7 @@ package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.models.Event;
 import com.cems.frontend.services.ApiEventService;
+import com.cems.frontend.utils.LocalStorage;
 import com.cems.frontend.view.AlertHelper;
 import com.cems.frontend.view.SceneNavigator;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,7 +12,6 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -22,14 +22,24 @@ public class AdminPageController {
     @FXML
     private TableView<Event> eventTable;
 
-    @FXML private TableColumn<Event, UUID> idColumn;
-    @FXML private TableColumn<Event, String> titleColumn;
-    @FXML private TableColumn<Event, String> descriptionColumn;
-    @FXML private TableColumn<Event, String> locationColumn;
-    @FXML private TableColumn<Event, Long> capacityColumn;
-    @FXML private TableColumn<Event, String> dateColumn;
-    @FXML private TableColumn<Event, Boolean> approvedColumn;
-    @FXML private TableColumn<Event, Void> actionsColumn;
+    @FXML
+    private TableColumn<Event, UUID> idColumn;
+    @FXML
+    private TableColumn<Event, String> titleColumn;
+    @FXML
+    private TableColumn<Event, String> descriptionColumn;
+    @FXML
+    private TableColumn<Event, String> locationColumn;
+    @FXML
+    private TableColumn<Event, Long> capacityColumn;
+    @FXML
+    private TableColumn<Event, String> dateColumn;
+    @FXML
+    private TableColumn<Event, Boolean> approvedColumn;
+    @FXML
+    private TableColumn<Event, Void> attendanceColumn;
+    @FXML
+    private TableColumn<Event, Void> actionsColumn;
 
     @FXML
     private TextField searchField;
@@ -39,6 +49,11 @@ public class AdminPageController {
 
     @FXML
     public void initialize() {
+        String role = LocalStorage.get("role");
+        if (!"ADMIN".equals(role)) {
+            SceneNavigator.loadPage("home-view.fxml");
+            return;
+        }
         setupColumns();
         setupSearch();
         loadEvents();
@@ -70,13 +85,36 @@ public class AdminPageController {
         capacityColumn.setPrefWidth(80);
         dateColumn.setPrefWidth(140);
         approvedColumn.setPrefWidth(80);
+        attendanceColumn.setCellFactory(col -> new TableCell<>() {
+
+            private final Button attendanceBtn = new Button("View");
+
+            {
+                attendanceBtn.setOnAction(e -> {
+                    Event event = getTableView().getItems().get(getIndex());
+                    SceneNavigator.loadAttendancePage(event);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) setGraphic(null);
+                else setGraphic(attendanceBtn);
+            }
+        });
         actionsColumn.setPrefWidth(150);
 
         actionsColumn.setCellFactory(col -> new TableCell<>() {
+            private final Button approveBtn = new Button("Approve");
             private final Button editBtn = new Button("Edit");
             private final Button deleteBtn = new Button("Delete");
 
             {
+                approveBtn.setOnAction(e -> {
+                    Event event = getTableView().getItems().get(getIndex());
+                    handleApprove(event);
+                });
                 editBtn.setOnAction(e -> {
                     Event event = getTableView().getItems().get(getIndex());
                     SceneNavigator.loadEditPage(event);
@@ -91,11 +129,19 @@ public class AdminPageController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
+
                 if (empty) {
                     setGraphic(null);
-                } else {
-                    setGraphic(new HBox(10, editBtn, deleteBtn));
+                    return;
                 }
+
+                Event event = getTableView().getItems().get(getIndex());
+                HBox box = new HBox(10);
+                if (!event.isApproved()) {
+                    box.getChildren().add(approveBtn);
+                }
+                box.getChildren().addAll(editBtn, deleteBtn);
+                setGraphic(box);
             }
         });
     }
@@ -150,13 +196,20 @@ public class AdminPageController {
             }
         });
     }
+
     public void setTestData(List<Event> events) {
         masterData.setAll(events);
         eventTable.setItems(masterData);
     }
 
-    @FXML
-    private void handleCreateEvent() {
-        SceneNavigator.loadPage("create-event-view.fxml");
+    private void handleApprove(Event event) {
+        try {
+            Event updated = eventService.approveEvent(event.getId().toString());
+            event.setApproved(true); // update UI model
+            eventTable.refresh();
+            AlertHelper.showInfo("Approved", "Event approved successfully.");
+        } catch (Exception ex) {
+            AlertHelper.showError("Error", ex.getMessage());
+        }
     }
 }

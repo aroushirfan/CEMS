@@ -140,7 +140,7 @@ public class User {
     private String hashedPassword;
 
     @Column(nullable = false)
-    private int accessLevel = AccessLevel.USER;
+    private int accessLevel;
 
     @Column(nullable = false)
     private String firstName;

@@ -1,10 +1,12 @@
 package com.cems.frontend.view;
 
+import com.cems.frontend.controllers.pages.AttendanceController;
 import com.cems.frontend.controllers.pages.EditEventController;
 import com.cems.frontend.controllers.pages.EventDetailController;
 
 import com.cems.frontend.models.Event; // Import your property-based model
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -63,6 +65,22 @@ public class SceneNavigator {
             mainStage.setScene(scene);
             mainStage.show();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void loadAttendancePage(Event event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/com/cems/frontend/view/pages/attendance.fxml"));
+            Parent root = loader.load();
+
+            AttendanceController controller = loader.getController();
+            controller.loadAttendanceForEvent(event.getId());
+
+            Scene scene = new Scene(root, mainStage.getWidth(), mainStage.getHeight());
+            mainStage.setScene(scene);
+            mainStage.show();
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

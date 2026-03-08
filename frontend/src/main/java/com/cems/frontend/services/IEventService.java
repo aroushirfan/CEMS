@@ -15,4 +15,5 @@ public interface IEventService {
     void deleteEvent(String id) throws Exception;
 
     Event getEventById(String id) throws Exception;
+    Event approveEvent(String id) throws Exception;
 }
