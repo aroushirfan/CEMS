@@ -11,5 +11,5 @@
 
     <Label fx:id="loginLabel" onMouseClicked="#handleLoginRedirect" style="-fx-font-size: 18; -fx-cursor: hand;" text="Login" />
 
-    <Button onAction="#handleSignupRedirect" style="-fx-background-color: #212121; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 8 25; -fx-font-size: 16; -fx-cursor: hand;" text="Sign up" />
+    <Button fx:id="signupBtn" onAction="#handleSignupRedirect" style="-fx-background-color: #212121; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 8 25; -fx-font-size: 16; -fx-cursor: hand;" text="Sign up" />
 </HBox>

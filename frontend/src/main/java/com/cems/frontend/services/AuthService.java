@@ -94,7 +94,7 @@ public class AuthService {
 
     public String getToken() {
         String token = LocalStorage.get("token");
-        if (token.isEmpty()) {
+        if (token == null ||token.isEmpty()) {
             return "";
         } else {
             return token;
@@ -102,7 +102,8 @@ public class AuthService {
     }
 
     public void logout() {
-        LocalStorage.set("token", "");
+        LocalStorage.remove("token");
+        LocalStorage.remove("role");
     }
 
     public void setPort(String port) {

@@ -25,8 +25,8 @@ public class NavigationController implements NavigationObserver {
         sidebarController = loader.getController();
 
         borderPane.setLeft(sidebar);
-        FXMLLoader navbarLoader = new FXMLLoader(getClass().getResource("/com/cems/frontend/view/components/navbar.fxml"));
-        borderPane.setTop(navbarLoader.load());
+//        FXMLLoader navbarLoader = new FXMLLoader(getClass().getResource("/com/cems/frontend/view/components/navbar.fxml"));
+//        borderPane.setTop(navbarLoader.load());
         FXMLLoader contentLoader = new FXMLLoader(getClass().getResource(Paths.HOME.path));
         borderPane.setCenter(contentLoader.load());
 

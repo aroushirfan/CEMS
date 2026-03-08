@@ -37,8 +37,6 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         SceneNavigator.setStage(stage);
         stage.setTitle("CEMS - Campus Event Management System");
-        LocalStorage.remove("token");
-        LocalStorage.remove("role");
         SceneNavigator.loadPage("navigation.fxml");
     }
 
