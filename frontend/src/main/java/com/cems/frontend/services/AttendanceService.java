@@ -11,6 +11,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.UUID;
 
 public class AttendanceService {
     private final HttpClient httpClient;
@@ -41,8 +42,8 @@ public class AttendanceService {
      * Returns attendance list
      * @return List<Attendance>
      */
-    public String checkInEvent(String eventId) throws Exception {
-        String requestUrl = String.format("attendance/event/%s/check-in", eventId);
+    public String checkInEvent(UUID eventId) throws Exception {
+        String requestUrl = String.format("attendance/event/%s/check-in", eventId.toString());
         HttpRequest request = LocalHttpClientHelper.buildPostRequest(requestUrl,AuthService.getInstance().getToken());
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
