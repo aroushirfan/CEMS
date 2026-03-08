@@ -3,6 +3,7 @@ package com.cems.frontend.services;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.HttpClientObject;
 import com.cems.frontend.utils.EventMapper; // Assuming you put the mapper in .utils
+import com.cems.frontend.utils.LocalStorage;
 import com.cems.shared.model.EventDto;
 import com.cems.shared.model.EventDto.EventResponseDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -32,13 +33,12 @@ public class ApiEventService implements IEventService {
     public ApiEventService() {
         this.client = HttpClientObject.getClient();
     }
-
     @Override
     public List<Event> getAllEvents() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_URL))
                 .header("Accept", "application/json")
-                .header("Authorization", String.format("Bearer %s", authService.getToken()))
+                //.header("Authorization", String.format("Bearer %s", authService.getToken()))
                 .GET()
                 .build();
 
@@ -54,7 +54,26 @@ public class ApiEventService implements IEventService {
             throw new RuntimeException("Fetch failed: " + response.statusCode());
         }
     }
+    @Override
+    public List<Event> getApprovedEvents() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL + "/approved"))
+                .header("Accept", "application/json")
+                //.header("Authorization", String.format("Bearer %s", authService.getToken()))
+                .GET()
+                .build();
 
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            List<EventResponseDTO> dtos = mapper.readValue(response.body(), new TypeReference<List<EventResponseDTO>>() {});
+            return EventMapper.toModelList(dtos);
+        } else if (response.statusCode() == 204) {
+            return List.of();
+        } else {
+            throw new RuntimeException("Fetch failed: " + response.statusCode());
+        }
+    }
     @Override
     public Event createEvent(EventDto.EventRequestDTO data) throws Exception {
         String json = mapper.writeValueAsString(data);
@@ -129,5 +148,23 @@ public class ApiEventService implements IEventService {
             throw new RuntimeException("Event not found: " + id);
         }
     }
+    @Override
+    public Event approveEvent(String id) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL + "/" + id + "/approve"))
+                .header("Authorization", "Bearer " + authService.getToken())
+                .PUT(HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
+            return EventMapper.toModel(dto);
+        } else {
+            throw new RuntimeException("Approve failed: " + response.body());
+        }
+    }
+
 
 }

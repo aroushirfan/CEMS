@@ -4,7 +4,9 @@ public enum Paths {
     ALL_EVENTS("pages/home-view.fxml"),
     USER_SETTINGS("pages/UserSettings.fxml"),
     HOME("pages/MainHome.fxml"),
-    SIDEBAR("components/sidebar.fxml");
+    SIDEBAR("components/sidebar.fxml"),
+    EVENT_MANAGEMENT("pages/admin-page.fxml"),
+    USER_MANAGEMENT("pages/user-management.fxml");
 
     public final String path;
 

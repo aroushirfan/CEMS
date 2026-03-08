@@ -41,7 +41,7 @@
 //    @FXML
 //    private void goToHome() {
 //        SceneNavigator.loadPage("MainHome.fxml");
-////        SceneNavigator.loadPage("home-view.fxml");
+/// /        SceneNavigator.loadPage("home-view.fxml");
 //    }
 //
 //    @FXML
@@ -218,9 +218,6 @@ public class SidebarController implements NavigationObserver {
     private ToggleButton darkModeToggle;
 
     @FXML
-    private Button englishButton;
-
-    @FXML
     private Button homeButton;
 
     @FXML
@@ -231,9 +228,10 @@ public class SidebarController implements NavigationObserver {
 
     @FXML
     private VBox sidebarRoot;
-
     @FXML
-    private Button usersButton;
+    private Button eventManagementBtn;
+    @FXML
+    private Button userManagementBtn;
 
     private Button currentHighlighted = null;
 
@@ -242,10 +240,50 @@ public class SidebarController implements NavigationObserver {
     @FXML
     private void initialize() {
         NavigationNotifier.getInstance().addObserver(this);
+        refreshVisibility();
         currentHighlighted = homeButton;
         homeButton.getStyleClass().removeAll("regular");
         homeButton.getStyleClass().add("select");
     }
+
+    public void refreshVisibility() {
+        String role = LocalStorage.get("role");
+        boolean loggedIn = role != null && !role.isBlank();
+
+        createEventBtn.setVisible(false);
+        createEventBtn.setManaged(false);
+
+        settingsButton.setVisible(false);
+        settingsButton.setManaged(false);
+
+        eventManagementBtn.setVisible(false);
+        eventManagementBtn.setManaged(false);
+
+        userManagementBtn.setVisible(false);
+        userManagementBtn.setManaged(false);
+
+        logoutButton.setVisible(false);
+        logoutButton.setManaged(false);
+        if (loggedIn) {
+            settingsButton.setVisible(true);
+            settingsButton.setManaged(true);
+
+            logoutButton.setVisible(true);
+            logoutButton.setManaged(true);
+        }
+        if ("FACULTY".equals(role) || "ADMIN".equals(role)) {
+            createEventBtn.setVisible(true);
+            createEventBtn.setManaged(true);
+        }
+
+        if ("ADMIN".equals(role)) {
+            eventManagementBtn.setVisible(true);
+            eventManagementBtn.setManaged(true);
+            userManagementBtn.setVisible(true);
+            userManagementBtn.setManaged(true);
+        }
+    }
+
     @FXML
     private void handleDarkMode() {
         Scene scene = sidebarRoot.getScene();
@@ -305,8 +343,10 @@ public class SidebarController implements NavigationObserver {
 
     @FXML
     private void handleLogout() {
-        LocalStorage.set("token", "");
-        SceneNavigator.loadPage("login-view.fxml");
+        LocalStorage.remove("role");
+        LocalStorage.remove("token");
+        SceneNavigator.loadPage("navigation.fxml");
+        NavigationNotifier.getInstance().notifyAllObservers(Paths.ALL_EVENTS);
     }
 
     public void removeAllNavigationObservers() {
@@ -331,6 +371,18 @@ public class SidebarController implements NavigationObserver {
                 homeButton.getStyleClass().add("select");
                 currentHighlighted = homeButton;
             }
+            else if (path.equals(Paths.EVENT_MANAGEMENT)) {
+                clearSelected();
+                eventManagementBtn.getStyleClass().removeAll("regular");
+                eventManagementBtn.getStyleClass().add("select");
+                currentHighlighted = eventManagementBtn;
+
+            } else if (path.equals(Paths.USER_MANAGEMENT)) {
+                clearSelected();
+                userManagementBtn.getStyleClass().removeAll("regular");
+                userManagementBtn.getStyleClass().add("select");
+                currentHighlighted = userManagementBtn;
+            }
         });
     }
 
@@ -341,8 +393,20 @@ public class SidebarController implements NavigationObserver {
         }
     }
 
+    @FXML
+    private void goToEventManagement() {
+        NavigationNotifier.getInstance().notifyAllObservers(Paths.EVENT_MANAGEMENT);
+    }
+
+    @FXML
+    private void goToUserManagement() {
+        NavigationNotifier.getInstance().notifyAllObservers(Paths.USER_MANAGEMENT);
+    }
+
+
     @Override
     public void setPage(Paths page) {
+        refreshVisibility();
         setSidebarSelected(page);
     }
 }
