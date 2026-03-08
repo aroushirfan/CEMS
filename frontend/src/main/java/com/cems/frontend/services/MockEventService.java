@@ -16,14 +16,7 @@ public class MockEventService {
      */
     public List<Event> getAllEvents() {
         // Dummy user as event owner
-        User dummyOwner = new User(
-                UUID.randomUUID(),
-                "owner@example.com",
-                0,
-                "John",
-                "M.",
-                "Doe"
-        );
+        User dummyOwner = new User(UUID.randomUUID(), "owner@example.com", 0);
 
         return List.of(
                 new Event(

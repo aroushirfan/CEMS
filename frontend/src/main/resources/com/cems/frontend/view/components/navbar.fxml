@@ -9,7 +9,7 @@
 
     <Line endY="30.0" stroke="#E0E0E0" strokeWidth="2.0" />
 
-    <Label fx:id="loginLabel" onMouseClicked="#handleLoginRedirect" style="-fx-font-size: 18; -fx-cursor: hand;" text="Login" />
+    <Label onMouseClicked="#handleLoginRedirect" style="-fx-font-size: 18; -fx-cursor: hand;" text="Login" />
 
     <Button onAction="#handleSignupRedirect" style="-fx-background-color: #212121; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 8 25; -fx-font-size: 16; -fx-cursor: hand;" text="Sign up" />
 </HBox>

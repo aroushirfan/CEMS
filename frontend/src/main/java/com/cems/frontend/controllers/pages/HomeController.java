@@ -51,7 +51,7 @@ public class HomeController {
         Task<List<Event>> task = new Task<>() {
             @Override
             protected List<Event> call() throws Exception {
-                return eventService.getApprovedEvents();
+                return eventService.getAllEvents();
             }
         };
 

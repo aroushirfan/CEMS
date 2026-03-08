@@ -1,9 +1,6 @@
 package com.cems.frontend.controllers.pages;
 
-import com.cems.frontend.models.NavigationNotifier;
-import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.AuthService;
-import com.cems.frontend.view.SceneNavigator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,12 +16,9 @@ import java.io.IOException;
 
 public class SignupController {
 
-    @FXML
-    private TextField firstNameField;
-    @FXML
-    private TextField lastNameField;
-    @FXML
-    private TextField emailField;
+    @FXML private TextField firstNameField;
+    @FXML private TextField lastNameField;
+    @FXML private TextField emailField;
     @FXML
     private PasswordField passwordField;
     @FXML
@@ -37,7 +31,7 @@ public class SignupController {
         System.out.println("Signup view loaded");
     }
 
-    /// signup button
+/// signup button
     @FXML
     private void handleSignup(ActionEvent event) {
         String firstName = firstNameField.getText();
@@ -71,7 +65,7 @@ public class SignupController {
         alert.show();
 
         alert.setOnCloseRequest((dialogEvent) -> {
-            SceneNavigator.loadPage("Login.fxml");
+            goToLogin(event);
         });
     }
 
@@ -84,19 +78,19 @@ public class SignupController {
     //  Redirect to login page
     @FXML
     private void goToLogin(ActionEvent event) {
-        SceneNavigator.loadPage("Login.fxml");
+        switchScene(event, "/com/cems/frontend/view/pages/Login.fxml");
     }
 
     // Scene switcher
-   // private void switchScene(ActionEvent event, String fxmlPath) {
-     //   try {
-       //     Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-         //   Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-           // stage.setScene(new Scene(root));
-        //} catch (IOException e) {
-          //  e.printStackTrace();
-        //}
-    //}
+    private void switchScene(ActionEvent event, String fxmlPath) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void clearFields() {
         firstNameField.clear();

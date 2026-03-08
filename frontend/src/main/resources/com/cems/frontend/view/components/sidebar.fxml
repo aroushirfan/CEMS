@@ -29,12 +29,9 @@
         <Button fx:id="homeButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToHome" styleClass="regular" text="Home" />
         <Button fx:id="allEventsButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToAllEvents" styleClass="regular" text="All Events" />
         <Button fx:id="createEventBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToCreateEvent" styleClass="regular" text="Create Event" />
+        <Button fx:id="usersButton" alignment="BASELINE_LEFT" maxWidth="Infinity" styleClass="regular" text="Users" />
         <Button fx:id="settingsButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToSettings" styleClass="regular" text="Settings" />
-        <Button fx:id="eventManagementBtn" alignment="BASELINE_LEFT" maxWidth="Infinity"
-                onAction="#goToEventManagement" styleClass="regular" text="Event Management" />
-
-        <Button fx:id="userManagementBtn" alignment="BASELINE_LEFT" maxWidth="Infinity"
-                onAction="#goToUserManagement" styleClass="regular" text="User Management" />
+        <Button fx:id="englishButton" alignment="BASELINE_LEFT" maxWidth="Infinity" styleClass="regular" text="English" />
     </VBox>
 
     <Region VBox.vgrow="ALWAYS"/>

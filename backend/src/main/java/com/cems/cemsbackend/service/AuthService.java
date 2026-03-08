@@ -63,14 +63,6 @@ public class AuthService {
             throw new AuthException("Email or Password is incorrect");
         }
         String token = jwtService.generateToken(user);
-        String role;
-        if (user.getAccessLevel() == AccessLevel.ADMIN) {
-            role = "ADMIN";
-        } else if (user.getAccessLevel() == AccessLevel.FACULTY) {
-            role = "FACULTY";
-        } else {
-            role = "USER";
-        }
-        return new AuthResponseDTO(token, role);
+        return new AuthResponseDTO(token);
     }
 }

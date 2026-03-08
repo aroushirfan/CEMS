@@ -26,7 +26,6 @@
 //
 package com.cems.frontend;
 
-import com.cems.frontend.utils.LocalStorage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -37,8 +36,6 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         SceneNavigator.setStage(stage);
         stage.setTitle("CEMS - Campus Event Management System");
-        LocalStorage.remove("token");
-        LocalStorage.remove("role");
         SceneNavigator.loadPage("navigation.fxml");
     }
 

@@ -1,11 +1,7 @@
 package com.cems.frontend.controllers.pages;
 
-import com.cems.frontend.models.NavigationNotifier;
-import com.cems.frontend.models.Paths;
+
 import com.cems.frontend.services.AuthService;
-import com.cems.frontend.utils.LocalStorage;
-import com.cems.frontend.view.SceneNavigator;
-import com.cems.shared.model.AuthDTO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,8 +18,7 @@ public class LoginController {
 
     @FXML
     private TextField emailField;
-    @FXML
-    private PasswordField passwordField;
+    @FXML private PasswordField passwordField;
 
     private final AuthService authService = AuthService.getInstance();
 
@@ -38,14 +33,15 @@ public class LoginController {
         // Clear fields or close app
         emailField.clear();
         passwordField.clear();
-        NavigationNotifier.getInstance().notifyAllObservers(Paths.HOME);
+        goToHome(event);
     }
-
     @FXML
     private void handlePasswordReset(ActionEvent event) {
         System.out.println("Password reset clicked");
         //  redirect to reset-password page later
     }
+
+
 
 
     //Login button
@@ -68,30 +64,8 @@ public class LoginController {
 //            System.out.println("Invalid credentials");
 //        }
         try {
-            AuthDTO.AuthResponseDTO response = authService.login(username, password);
-
-            if (response != null) {
-                LocalStorage.set("token", response.getToken());
-                LocalStorage.set("role", response.getRole());
-                String role = response.getRole();
-                //if ("ADMIN".equals(role)) {
-                SceneNavigator.loadPage("navigation.fxml");
-                NavigationNotifier.getInstance().notifyAllObservers(Paths.HOME);
-                //} else {
-                  //  NavigationNotifier.getInstance().notifyAllObservers(Paths.ALL_EVENTS);
-                //}
-                //if (NavbarController.instance != null) {
-                    //NavbarController.instance.refreshVisibility();
-                //}
-
-                //if ("ADMIN".equals(role)) {
-                  //  SceneNavigator.loadPage("admin-page.fxml");
-                //} else {
-                  //  SceneNavigator.loadPage("home-view.fxml");
-                //}
-
-            } else {
-                System.out.println("Invalid credentials");
+            if (!authService.login(username, password).isEmpty()) {
+                goToHome(event);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,7 +75,7 @@ public class LoginController {
     //Go to signup page
     @FXML
     private void goToSignup(ActionEvent event) {
-        SceneNavigator.loadPage("Signup.fxml");
+        switchScene(event, "/com/cems/frontend/view/pages/Signup.fxml");
     }
 
     // Redirect to home page

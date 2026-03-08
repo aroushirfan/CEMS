@@ -56,8 +56,7 @@
       <HBox alignment="CENTER_LEFT" spacing="15.0" stylesheets="@../css/event-detail.css">
          <children>
             <Button fx:id="registerNowButton" mnemonicParsing="false" onAction="#handleRegisterNow" styleClass="enroll" text="Register Now" />
-            <Button fx:id="checkInButton" mnemonicParsing="false" onAction="#handleCheckIn" styleClass="view-attendance" text="Check In" />
-            <Button fx:id="viewAttendanceButton" mnemonicParsing="false" onAction="#handleViewAttendance" styleClass="view-attendance" text="View Attendance" />
+            <Button mnemonicParsing="false" onAction="#handleViewAttendance" styleClass="view-attendance" text="View Attendance" />
          </children>
       </HBox>
 

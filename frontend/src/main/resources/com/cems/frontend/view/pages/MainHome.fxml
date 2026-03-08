@@ -13,6 +13,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.pages.MainHomeController">
    <children>
+      <fx:include source="../components/navbar.fxml" />
       <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
          <content>
             <VBox spacing="0">

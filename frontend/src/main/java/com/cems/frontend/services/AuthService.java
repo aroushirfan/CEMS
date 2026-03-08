@@ -68,7 +68,7 @@ public class AuthService {
      * @return token
      * @throws Exception
      */
-    public AuthDTO.AuthResponseDTO login(String email, String password) throws Exception {
+    public String login(String email, String password) throws Exception {
         AuthDTO.LoginRequestDTO loginRequestDTO = new AuthDTO.LoginRequestDTO(email, password);
 
         String requestBody = mapper.writeValueAsString(loginRequestDTO);
@@ -84,9 +84,8 @@ public class AuthService {
         if (httpResponse.statusCode() == 200) {
             AuthDTO.AuthResponseDTO authResponseDTO = mapper.readValue(httpResponse.body(), AuthDTO.AuthResponseDTO.class);
             LocalStorage.set("token", authResponseDTO.getToken());
-            LocalStorage.set("role", authResponseDTO.getRole());
             System.out.println(authResponseDTO.getToken());
-            return authResponseDTO;
+            return authResponseDTO.getToken();
         } else {
             return null;
         }

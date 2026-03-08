@@ -37,7 +37,7 @@ public class MainHomeController {
     private void loadEvents() {
         try {
 //          List<Event> events = mockService.getAllEvents();
-            List<Event> events = eventService.getApprovedEvents();
+            List<Event> events = eventService.getAllEvents();
 
             for (Event event : events) {
                 FXMLLoader loader = new FXMLLoader(

@@ -11,6 +11,8 @@ public class LocalStorage {
     public static void set(String key, String value) {
         PREF.put(key, value);
     }
-    public static String get(String key) {return PREF.get(key, null);}
-    public static void remove(String key) {PREF.remove(key);}
+
+    public static String get(String key) {
+        return PREF.get(key, "");
+    }
 }

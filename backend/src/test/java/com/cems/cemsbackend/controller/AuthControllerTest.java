@@ -12,6 +12,8 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AuthControllerTest {
+
+
     @Test
     void loginShouldReturnToken() throws AuthService.AuthException {
 
@@ -23,13 +25,12 @@ public class AuthControllerTest {
         request.setEmail("test@test.com");
         request.setPassword("password");
 
-        AuthResponseDTO response = new AuthResponseDTO("token123", "ADMIN");
+        AuthResponseDTO response = new AuthResponseDTO("token123");
 
         Mockito.when(authService.login(request)).thenReturn(response);
 
         AuthResponseDTO result = controller.login(request);
 
         assertEquals("token123", result.getToken());
-        assertEquals("ADMIN", result.getRole());
     }
 }
