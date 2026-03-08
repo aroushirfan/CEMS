@@ -194,6 +194,7 @@ package com.cems.frontend.controllers.components;
 import com.cems.frontend.models.NavigationNotifier;
 import com.cems.frontend.models.NavigationObserver;
 import com.cems.frontend.models.Paths;
+import com.cems.frontend.services.AuthService;
 import com.cems.frontend.utils.LocalStorage;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -245,6 +246,8 @@ public class SidebarController implements NavigationObserver {
         currentHighlighted = homeButton;
         homeButton.getStyleClass().removeAll("regular");
         homeButton.getStyleClass().add("select");
+
+        logoutButton.setVisible(!AuthService.getInstance().getToken().isEmpty());
     }
     @FXML
     private void handleDarkMode() {
@@ -305,8 +308,8 @@ public class SidebarController implements NavigationObserver {
 
     @FXML
     private void handleLogout() {
-        LocalStorage.set("token", "");
-        SceneNavigator.loadPage("login-view.fxml");
+        AuthService.getInstance().logout();
+        SceneNavigator.loadPage("Login.fxml");
     }
 
     public void removeAllNavigationObservers() {
@@ -314,24 +317,25 @@ public class SidebarController implements NavigationObserver {
     }
 
     public void setSidebarSelected(Paths path) {
-        Platform.runLater(() -> {
-            if (path.equals(Paths.ALL_EVENTS)) {
-                clearSelected();
-                allEventsButton.getStyleClass().removeAll("regular");
-                allEventsButton.getStyleClass().add("select");
-                currentHighlighted = allEventsButton;
-            } else if (path.equals(Paths.USER_SETTINGS)) {
-                clearSelected();
-                settingsButton.getStyleClass().removeAll("regular");
-                settingsButton.getStyleClass().add("select");
-                currentHighlighted = settingsButton;
-            } else if (path.equals(Paths.HOME)) {
+        switch (path) {
+            case HOME:
                 clearSelected();
                 homeButton.getStyleClass().removeAll("regular");
                 homeButton.getStyleClass().add("select");
                 currentHighlighted = homeButton;
-            }
-        });
+                break;
+            case ALL_EVENTS:
+                clearSelected();
+                allEventsButton.getStyleClass().removeAll("regular");
+                allEventsButton.getStyleClass().add("select");
+                currentHighlighted = allEventsButton;
+                break;
+            case USER_SETTINGS:
+                clearSelected();
+                settingsButton.getStyleClass().removeAll("regular");
+                settingsButton.getStyleClass().add("select");
+                currentHighlighted = settingsButton;
+        }
     }
 
     private void clearSelected() {

@@ -1,9 +1,11 @@
 package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.controllers.components.SidebarController;
+import com.cems.frontend.models.Event;
 import com.cems.frontend.models.NavigationNotifier;
 import com.cems.frontend.models.NavigationObserver;
 import com.cems.frontend.models.Paths;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
@@ -30,13 +32,24 @@ public class NavigationController implements NavigationObserver {
     }
 
     @Override
+    @Deprecated
     public void setPage(Paths page) {
-        System.out.println("Loading page");
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource(page.path));
+//            borderPane.setCenter(loader.load());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    public Object setPageReturnController(Paths page) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(page.path));
             borderPane.setCenter(loader.load());
+            return loader.getController();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 }

@@ -41,7 +41,9 @@ public class SignupController {
         String confirmPassword = confirmPasswordField.getText();
 
         if (firstName.isEmpty() || email.isEmpty() ) {
-            System.out.println("Required fields missing");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Required fields missing");
+            alert.show();
             return;
         }
 

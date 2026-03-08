@@ -100,6 +100,10 @@ public class AuthService {
         }
     }
 
+    public void logout() {
+        LocalStorage.set("token", "");
+    }
+
     public void setPort(String port) {
         this.port = port;
         API_URL = String.format("http://localhost:%s/auth", port);

@@ -2,6 +2,8 @@ package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.controllers.components.EventFormController;
 import com.cems.frontend.models.Event; // Using the frontend model
+import com.cems.frontend.models.NavigationNotifier;
+import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.ApiEventService;
 import com.cems.frontend.view.AlertHelper;
 import com.cems.frontend.view.SceneNavigator;
@@ -26,7 +28,7 @@ public class EditEventController {
             EventRequestDTO updatedDto = eventFormController.getFormData();
             eventService.updateEvent(eventModel.getId().toString(), updatedDto);
             AlertHelper.showInfo("Success", "Event updated successfully!");
-            SceneNavigator.loadPage("home-view.fxml");
+            NavigationNotifier.getInstance().notifyAllObservers(Paths.ALL_EVENTS);
         } catch (Exception e) {
             AlertHelper.showError("Update Failed", e.getMessage());
         }

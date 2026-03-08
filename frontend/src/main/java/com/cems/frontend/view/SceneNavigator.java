@@ -74,6 +74,8 @@ import com.cems.frontend.controllers.pages.AttendanceController;
 import com.cems.frontend.controllers.pages.EditEventController;
 import com.cems.frontend.controllers.pages.EventDetailController;
 import com.cems.frontend.models.Event;
+import com.cems.frontend.models.NavigationNotifier;
+import com.cems.frontend.models.Paths;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -116,67 +118,37 @@ public class SceneNavigator {
     }
 
     public static void loadEventDetail(Event event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/com/cems/frontend/view/pages/event-detail-view.fxml"));
-            Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
-
-
-            scene.getStylesheets().add(
-                    SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
-            );
-
-            EventDetailController controller = loader.getController();
-            controller.initData(event);
-
-            mainStage.setScene(scene);
-            mainStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        EventDetailController controller = (EventDetailController) NavigationNotifier.getInstance().notifyAllObservers(Paths.EVENT_DETAIL_VIEW);
+        controller.initData(event);
     }
 
     public static void loadEditPage(Event event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(SceneNavigator.class.getResource("/com/cems/frontend/view/pages/edit-event-view.fxml"));
-            Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
-
-
-            scene.getStylesheets().add(
-                    SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
-            );
-
-            EditEventController controller = loader.getController();
-            controller.initData(event);
-
-            mainStage.setScene(scene);
-            mainStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        EditEventController controller = (EditEventController) NavigationNotifier.getInstance().notifyAllObservers(Paths.EDIT_VIEW);
+        controller.initData(event);
     }
     public static void loadAttendancePage(Event event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    SceneNavigator.class.getResource("/com/cems/frontend/view/pages/attendance-view.fxml")
-            );
-            Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
-
-            // Apply CSS
-            scene.getStylesheets().add(
-                    SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
-            );
-
-            AttendanceController controller = loader.getController();
-            controller.loadAttendanceForEvent(event);
-
-            mainStage.setScene(scene);
-            mainStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            FXMLLoader loader = new FXMLLoader(
+//                    SceneNavigator.class.getResource("/com/cems/frontend/view/pages/attendance-view.fxml")
+//            );
+//            Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
+//
+//            // Apply CSS
+//            scene.getStylesheets().add(
+//                    SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
+//            );
+//
+//            AttendanceController controller = loader.getController();
+//            controller.loadAttendanceForEvent(event);
+//
+//            mainStage.setScene(scene);
+//            mainStage.show();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        AttendanceController controller = (AttendanceController) NavigationNotifier.getInstance().notifyAllObservers(Paths.ATTENDANCE_VIEW);
+        controller.loadAttendanceForEvent(event);
     }
 }
 
