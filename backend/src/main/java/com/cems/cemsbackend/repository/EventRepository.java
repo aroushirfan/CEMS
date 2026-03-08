@@ -13,4 +13,5 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     Optional<Event> deleteEventById(UUID id);
     List<Event> getEventsByEventOwner(User eventOwner);
     Optional<Event> getEventByEventOwnerAndId(User eventOwner, UUID id);
+    List<Event> findByApprovedTrue();
 }
