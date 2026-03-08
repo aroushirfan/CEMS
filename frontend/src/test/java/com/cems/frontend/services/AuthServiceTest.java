@@ -33,10 +33,12 @@ class AuthServiceTest {
     void login() throws Exception {
         server.enqueue(new MockResponse()
                 .setResponseCode(200)
-                .setBody("{\"token\":\"fake-token\"}"));
+                .setBody("{\"token\":\"fake-token\", \"role\":\"ADMIN\"}"));
 
-        String token = authService.login("email", "password");
-        assertEquals("fake-token", token);
+        var response = authService.login("email", "password");
+
+        assertEquals("fake-token", response.getToken());
+        assertEquals("ADMIN", response.getRole());
     }
 
     @Test
