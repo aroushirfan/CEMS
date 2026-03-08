@@ -51,7 +51,7 @@ public class EventDetailController {
                         .map(isRegistered -> isRegistered ? "Cancel Registration" : "Register Now")
         );
 
-        //  Set all buttons to not show
+//          Set all buttons to not show
         registerNowButton.setVisible(false);
         registerNowButton.setManaged(false);
 
@@ -74,16 +74,18 @@ public class EventDetailController {
 
         boolean isUser = RbacUtil.isUser();
         boolean eventPending = Instant.now().isBefore(currentEvent.getDateTime());
+        boolean canCheckIn = isUser && !eventPending;
+        boolean canRegister = isUser && eventPending;
 
         //  Display button only if it is a user and the event has not started
-        registerNowButton.setVisible(isUser && eventPending);
-        registerNowButton.setManaged(isUser && eventPending);
+        registerNowButton.setVisible(canRegister);
+        registerNowButton.setManaged(canRegister);
         //  Display button if user is not normal user
         viewAttendanceButton.setVisible(!isUser);
         viewAttendanceButton.setManaged(!isUser);
         //  Display button if event has started and is normal user
-        checkInButton.setVisible(isUser && !eventPending);
-        checkInButton.setManaged(isUser && !eventPending);
+        checkInButton.setVisible(canCheckIn);
+        checkInButton.setManaged(canCheckIn);
     }
 
     private void refreshEventFromServer() {

@@ -47,7 +47,7 @@ public class AttendanceService {
         HttpRequest request = LocalHttpClientHelper.buildPostRequest(requestUrl,AuthService.getInstance().getToken());
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
+        if (response.statusCode() == 200 || response.statusCode() == 201) {
             return response.body();
         }else {
             throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
