@@ -27,7 +27,6 @@
 
     <VBox spacing="8.0">
         <Button fx:id="homeButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToHome" styleClass="regular" text="Home" />
-        <Button fx:id="allEventsButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToAllEvents" styleClass="regular" text="All Events" />
         <Button fx:id="createEventBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToCreateEvent" styleClass="regular" text="Create Event" />
         <Button fx:id="usersButton" alignment="BASELINE_LEFT" maxWidth="Infinity" styleClass="regular" text="Users" />
         <Button fx:id="settingsButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToSettings" styleClass="regular" text="Settings" />
