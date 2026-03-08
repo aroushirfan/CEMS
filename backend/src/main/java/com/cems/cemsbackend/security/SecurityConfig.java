@@ -23,6 +23,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/users/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/events/**").permitAll()//hasAnyRole("USER", "FACULTY", "ADMIN")
+                        .requestMatchers("/events/approved").permitAll()
                         .requestMatchers(HttpMethod.POST, "/events/**").hasAnyRole("FACULTY", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/events/**").hasAnyRole("FACULTY", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/events/*/approve").hasRole("ADMIN")

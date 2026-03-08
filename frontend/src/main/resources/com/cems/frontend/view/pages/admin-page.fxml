@@ -5,10 +5,8 @@
 
 <HBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.cems.frontend.controllers.pages.AdminPageController">
-    <fx:include source="../components/sidebar.fxml"/>
 
     <VBox spacing="20" HBox.hgrow="ALWAYS">
-        <fx:include source="../components/navbar.fxml"/>
 
         <VBox spacing="20" style="-fx-padding: 20;">
 

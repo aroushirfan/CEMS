@@ -199,6 +199,21 @@ public class EventController {
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
+    @GetMapping("/approved")
+    public ResponseEntity<List<EventResponseDTO>> getApprovedEvents() {
+        try {
+            List<Event> events = eventRepository.findByApprovedTrue();
+            if (events.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            }
+            List<EventResponseDTO> response = events.stream()
+                    .map(EventMapper::toDto)
+                    .toList();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to fetch approved events");
+        }
+    }
 
     // get event by owner
     // GET /events/admin

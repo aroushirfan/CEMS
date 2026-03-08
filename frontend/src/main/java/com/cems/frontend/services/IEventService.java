@@ -7,6 +7,7 @@ import java.util.List;
 public interface IEventService {
 
     List<Event> getAllEvents() throws Exception;
+    List<Event> getApprovedEvents() throws Exception;
 
     Event createEvent(EventRequestDTO data) throws Exception;
 
@@ -16,4 +17,5 @@ public interface IEventService {
 
     Event getEventById(String id) throws Exception;
     Event approveEvent(String id) throws Exception;
+
 }
