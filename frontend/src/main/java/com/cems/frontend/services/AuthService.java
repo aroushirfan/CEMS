@@ -94,11 +94,16 @@ public class AuthService {
 
     public String getToken() {
         String token = LocalStorage.get("token");
-        if (token.isEmpty()) {
+        if (token == null ||token.isEmpty()) {
             return "";
         } else {
             return token;
         }
+    }
+
+    public void logout() {
+        LocalStorage.remove("token");
+        LocalStorage.remove("role");
     }
 
     public void setPort(String port) {

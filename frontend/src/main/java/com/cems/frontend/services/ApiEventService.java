@@ -3,6 +3,7 @@ package com.cems.frontend.services;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.HttpClientObject;
 import com.cems.frontend.utils.EventMapper; // Assuming you put the mapper in .utils
+import com.cems.frontend.view.SceneNavigator;
 import com.cems.frontend.utils.LocalStorage;
 import com.cems.shared.model.EventDto;
 import com.cems.shared.model.EventDto.EventResponseDTO;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import javafx.application.Platform;
 
 import java.net.URI;
 import java.net.http.HttpClient;

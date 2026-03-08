@@ -1,10 +1,12 @@
 package com.cems.frontend.controllers.components;
 
+import com.cems.frontend.services.AuthService;
 import com.cems.frontend.utils.LocalStorage;
 import javafx.fxml.FXML;
 import com.cems.frontend.view.SceneNavigator;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 
 public class NavbarController {
     public static NavbarController instance;
@@ -27,6 +29,9 @@ public class NavbarController {
         signupBtn.setVisible(!isLoggedIn);
         signupBtn.setManaged(!isLoggedIn);
     }
+
+    @FXML
+    private HBox navBarHBox;
 
     @FXML
     private void handleLoginRedirect() {

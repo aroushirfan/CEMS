@@ -16,6 +16,7 @@
       <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
          <content>
             <VBox spacing="0">
+               <fx:include source="../components/navbar.fxml" />
                <children>
                   <StackPane HBox.hgrow="ALWAYS">
                      <children>

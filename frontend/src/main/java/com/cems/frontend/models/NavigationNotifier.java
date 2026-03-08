@@ -1,7 +1,11 @@
 package com.cems.frontend.models;
 
+import com.cems.frontend.controllers.pages.NavigationController;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class NavigationNotifier {
     private List<NavigationObserver> observers = new ArrayList<>();
@@ -16,10 +20,15 @@ public class NavigationNotifier {
         return instance;
     }
 
-    public void notifyAllObservers(Paths path) {
+    public Object notifyAllObservers(Paths path) {
+        Object[] val = new Object[] {null};
         for (var observer: observers) {
+            if (observer instanceof NavigationController) {
+                val[0] = ((NavigationController) observer).setPageReturnController(path);
+            }
             observer.setPage(path);
         }
+        return val[0];
     }
 
     public void addObserver(NavigationObserver observer) {

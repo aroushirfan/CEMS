@@ -194,8 +194,10 @@ package com.cems.frontend.controllers.components;
 import com.cems.frontend.models.NavigationNotifier;
 import com.cems.frontend.models.NavigationObserver;
 import com.cems.frontend.models.Paths;
+import com.cems.frontend.services.AuthService;
 import com.cems.frontend.utils.LocalStorage;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -244,6 +246,8 @@ public class SidebarController implements NavigationObserver {
         currentHighlighted = homeButton;
         homeButton.getStyleClass().removeAll("regular");
         homeButton.getStyleClass().add("select");
+
+        logoutButton.setVisible(!AuthService.getInstance().getToken().isEmpty());
     }
 
     public void refreshVisibility() {
@@ -354,36 +358,25 @@ public class SidebarController implements NavigationObserver {
     }
 
     public void setSidebarSelected(Paths path) {
-        Platform.runLater(() -> {
-            if (path.equals(Paths.ALL_EVENTS)) {
-                clearSelected();
-                allEventsButton.getStyleClass().removeAll("regular");
-                allEventsButton.getStyleClass().add("select");
-                currentHighlighted = allEventsButton;
-            } else if (path.equals(Paths.USER_SETTINGS)) {
-                clearSelected();
-                settingsButton.getStyleClass().removeAll("regular");
-                settingsButton.getStyleClass().add("select");
-                currentHighlighted = settingsButton;
-            } else if (path.equals(Paths.HOME)) {
+        switch (path) {
+            case HOME:
                 clearSelected();
                 homeButton.getStyleClass().removeAll("regular");
                 homeButton.getStyleClass().add("select");
                 currentHighlighted = homeButton;
-            }
-            else if (path.equals(Paths.EVENT_MANAGEMENT)) {
+                break;
+            case ALL_EVENTS:
                 clearSelected();
-                eventManagementBtn.getStyleClass().removeAll("regular");
-                eventManagementBtn.getStyleClass().add("select");
-                currentHighlighted = eventManagementBtn;
-
-            } else if (path.equals(Paths.USER_MANAGEMENT)) {
+                allEventsButton.getStyleClass().removeAll("regular");
+                allEventsButton.getStyleClass().add("select");
+                currentHighlighted = allEventsButton;
+                break;
+            case USER_SETTINGS:
                 clearSelected();
-                userManagementBtn.getStyleClass().removeAll("regular");
-                userManagementBtn.getStyleClass().add("select");
-                currentHighlighted = userManagementBtn;
-            }
-        });
+                settingsButton.getStyleClass().removeAll("regular");
+                settingsButton.getStyleClass().add("select");
+                currentHighlighted = settingsButton;
+        }
     }
 
     private void clearSelected() {
