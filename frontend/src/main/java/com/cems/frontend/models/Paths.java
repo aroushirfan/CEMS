@@ -9,6 +9,7 @@ public enum Paths {
     ATTENDANCE_VIEW("pages/attendance-view.fxml"),
     SIDEBAR("components/sidebar.fxml"),
     EVENT_MANAGEMENT("pages/admin-page.fxml"),
+    CREATE_EVENT("pages/create-event-view.fxml"),
     USER_MANAGEMENT("pages/user-management.fxml");
 
     public final String path;
