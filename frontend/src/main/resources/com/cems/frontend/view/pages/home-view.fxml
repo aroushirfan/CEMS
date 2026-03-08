@@ -31,9 +31,14 @@
             <Label text="Events"
                    style="-fx-font-size: 24; -fx-font-weight: bold;" />
 
+
             <FlowPane fx:id="eventGrid"
+                      alignment="CENTER"
+                      columnHalignment="CENTER"
+                      rowValignment="CENTER"
                       hgap="25"
-                      vgap="25" />
+                      vgap="25"
+                      prefWidth="Infinity" />
 
         </VBox>
     </content>
