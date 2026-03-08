@@ -337,6 +337,7 @@ public class SidebarController implements NavigationObserver {
     @FXML
     private void goToCreateEvent() {
 //        SceneNavigator.loadPage("create-event-view.fxml");
+        NavigationNotifier.getInstance().notifyAllObservers(Paths.CREATE_EVENT);
     }
 
     @FXML
@@ -360,22 +361,23 @@ public class SidebarController implements NavigationObserver {
     public void setSidebarSelected(Paths path) {
         switch (path) {
             case HOME:
-                clearSelected();
-                homeButton.getStyleClass().removeAll("regular");
-                homeButton.getStyleClass().add("select");
-                currentHighlighted = homeButton;
+                selectButton(homeButton);
                 break;
             case ALL_EVENTS:
-                clearSelected();
-                allEventsButton.getStyleClass().removeAll("regular");
-                allEventsButton.getStyleClass().add("select");
-                currentHighlighted = allEventsButton;
+                selectButton(allEventsButton);
                 break;
             case USER_SETTINGS:
-                clearSelected();
-                settingsButton.getStyleClass().removeAll("regular");
-                settingsButton.getStyleClass().add("select");
-                currentHighlighted = settingsButton;
+                selectButton(settingsButton);
+                break;
+            case USER_MANAGEMENT:
+                selectButton(userManagementBtn);
+                break;
+            case EVENT_MANAGEMENT:
+                selectButton(eventManagementBtn);
+                break;
+            case CREATE_EVENT:
+                selectButton(createEventBtn);
+                break;
         }
     }
 
@@ -384,6 +386,13 @@ public class SidebarController implements NavigationObserver {
             currentHighlighted.getStyleClass().removeAll("select");
             currentHighlighted.getStyleClass().add("regular");
         }
+    }
+
+    private void selectButton(Button button) {
+        clearSelected();
+        button.getStyleClass().removeAll("regular");
+        button.getStyleClass().add("select");
+        currentHighlighted = button;
     }
 
     @FXML
