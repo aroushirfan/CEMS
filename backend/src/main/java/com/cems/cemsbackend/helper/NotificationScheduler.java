@@ -25,9 +25,8 @@ public class NotificationScheduler {
     }
 
     /**
-     * Runs every day at 8:00 AM (server time).
+     * Runs every day at 7:00 AM (server time).
      * Finds all events scheduled for today and emails every registered user.
-     * Cron format: second minute hour day-of-month month day-of-week
      */
     @Transactional
     @Scheduled(cron = "0 0 7 * * *")
