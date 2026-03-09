@@ -1,16 +1,16 @@
 package com.cems.frontend.utils;
 
 
-import com.cems.frontend.controllers.components.SidebarController;
+import com.cems.frontend.controllers.components.SidebarUserController;
 
 public class SideBarState {
-    private static SidebarController controller;
+    private static SidebarUserController controller;
 
-    public static void set(SidebarController c) {
+    public static void set(SidebarUserController c) {
         controller = c;
     }
 
-    public static SidebarController get() {
+    public static SidebarUserController get() {
         return controller;
     }
 }
