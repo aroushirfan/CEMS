@@ -12,18 +12,16 @@ import java.util.List;
 
 @Service
 public class EventNotificationService {
-
     private final JavaMailSender mailSender;
 
     public EventNotificationService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
-
     /**
-     * Sends bulk reminder email for an event.
-     * All registered users are BCC'd — no recipient can see the others.
+     * Send bulk reminder email for an event.
+     * All registered users are BCC'd.
      */
-    public void sendReminderEmail(Event event) {
+    public void sendNotificationEmail(Event event) {
 //        Get email of all registered users of the event
         List<User> registeredUsers = event.getAttendees();
         String[] attendeesEmails = registeredUsers.stream()
@@ -32,7 +30,7 @@ public class EventNotificationService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setTo("Test@gmail.com");
+            helper.setTo(System.getenv("admin_email"));
             helper.setBcc(attendeesEmails);
             helper.setSubject("Reminder: " + event.getTitle() + " is today!");
             helper.setText(buildEmailBody(event));
