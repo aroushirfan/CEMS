@@ -21,7 +21,7 @@
         <Label fx:id="spotsLabel" style="-fx-font-size: 11;" text="55 spots left(145/200)" />
 
         <Region prefHeight="5.0" />
-      <HBox fx:id="buttonLayout" spacing="10.0">
+      <HBox spacing="5.0">
          <children>
             <Button fx:id="registerButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleRegister" style="-fx-background-color: transparent; -fx-text-fill: #424242; -fx-background-radius: 5; -fx-cursor: hand; -fx-border-width: 1; -fx-border-color: #424242; -fx-border-radius: 5;" text="Register" HBox.hgrow="ALWAYS" />
       
