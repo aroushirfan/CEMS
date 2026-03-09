@@ -78,9 +78,9 @@ public class EventDetailController {
             buttonLayout.getChildren().add(registerNowButton);
         }
         //  Display button if user is not normal user
-//        if (RbacUtil.isFaculty() || RbacUtil.isAdmin()) {
+        if (RbacUtil.isFaculty() || RbacUtil.isAdmin()) {
             buttonLayout.getChildren().add(viewAttendanceButton);
-//        }
+        }
         //  Display button if event has started and is normal user
         if (canCheckIn) {
             buttonLayout.getChildren().add(checkInButton);
