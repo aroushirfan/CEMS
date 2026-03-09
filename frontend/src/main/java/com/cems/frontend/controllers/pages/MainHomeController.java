@@ -1,5 +1,7 @@
 package com.cems.frontend.controllers.pages;
 
+import com.cems.frontend.models.NavigationNotifier;
+import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.ApiEventService;
 import com.cems.frontend.services.IEventService;
 import com.cems.frontend.models.Event;
@@ -8,6 +10,8 @@ import com.cems.frontend.view.SceneNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
@@ -16,11 +20,10 @@ import java.util.List;
 
 public class MainHomeController {
 
-    @FXML
-    private FlowPane eventGrid;
-
-    @FXML
-    private Label viewMoreLabel;
+    @FXML private FlowPane eventGrid;
+    @FXML private Label viewMoreLabel;
+    @FXML private ImageView heroImage;
+    @FXML private ScrollPane scrollPane;
 
     private final IEventService eventService = new ApiEventService();
 
@@ -30,6 +33,12 @@ public class MainHomeController {
 
     @FXML
     public void initialize() {
+
+        // ⭐ FIX: Bind hero image width to ScrollPane viewport (removes scrollbar)
+        scrollPane.viewportBoundsProperty().addListener((obs, oldVal, newVal) -> {
+            heroImage.setFitWidth(newVal.getWidth());
+        });
+
         loadAllEvents();
         loadNextPage();
         setupViewMoreButton();
@@ -37,7 +46,8 @@ public class MainHomeController {
 
     @FXML
     private void goToAllEvents() {
-        SceneNavigator.loadPage("home-view.fxml");
+        NavigationNotifier.getInstance().notifyAllObservers(Paths.ALL_EVENTS);
+
     }
 
     private void loadAllEvents() {
@@ -67,10 +77,10 @@ public class MainHomeController {
                 EventCardController controller = loader.getController();
                 controller.setEventModel(event);
 
-                // ⭐ MAKE CARD CLICKABLE
+                // ⭐ Make card clickable
                 card.setOnMouseClicked(e -> SceneNavigator.loadEventDetail(event));
 
-                // ⭐ MAKE "LEARN MORE" BUTTON CLICKABLE
+                // ⭐ Make Learn More button clickable
                 controller.getLearnMoreButton().setOnAction(e -> SceneNavigator.loadEventDetail(event));
 
                 eventGrid.getChildren().add(card);
