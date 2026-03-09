@@ -17,7 +17,7 @@ sequenceDiagram
   Auth -->> Back: Return validation result
 
   alt Token valid
-    Back -->> Client: Return requested value
+    Back -->> Client: Return requested data
   else Token invalid
     Back -->> Client: 401 Unauthorized
   end
