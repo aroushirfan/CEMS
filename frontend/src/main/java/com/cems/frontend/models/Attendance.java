@@ -10,7 +10,7 @@ public class Attendance {
     private final String  name;
     private final String  email;
     private final UUID eventId;
-    private final LocalTime checkInTime;
+    private final Instant checkInTime;
     private final String status;
 
     public Attendance(UUID eventId,String firstName, String lastName, String email, Instant checkInTime, String status) {
@@ -18,7 +18,7 @@ public class Attendance {
         this.name = firstName + " " + lastName;
         this.email = email;
         this.eventId = eventId;
-        this.checkInTime = checkInTime.atZone(ZoneId.systemDefault()).toLocalTime();
+        this.checkInTime = checkInTime;
         this.status = status;
     }
 
@@ -34,7 +34,7 @@ public class Attendance {
         return eventId;
     }
 
-    public LocalTime getCheckInTime() {
+    public Instant getCheckInTime() {
         return checkInTime;
     }
 

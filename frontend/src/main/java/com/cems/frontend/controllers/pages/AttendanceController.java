@@ -125,6 +125,13 @@ public class AttendanceController {
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         checkInTimeColumn.setCellValueFactory(new PropertyValueFactory<>("checkInTime"));
+        checkInTimeColumn.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(Instant time, boolean empty) {
+                super.updateItem(time, empty);
+                setText(empty || time == null ? null : time.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm")));
+            }
+        });
     }
 
     private void fetchAttendanceRecords(UUID eventId){
