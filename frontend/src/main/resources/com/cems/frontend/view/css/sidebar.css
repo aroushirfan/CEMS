@@ -1,0 +1,13 @@
+.select {
+    -fx-background-color: #F0E6FF;
+    -fx-text-fill: #6200EE;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+}
+
+.regular {
+    -fx-background-color: transparent;
+    -fx-text-fill: regular;
+    -fx-font-weight: normal;
+    -fx-background-radius: 5;
+}

@@ -1,32 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<HBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.cems.frontend.controllers.pages.HomeController">
-    <fx:include source="../components/sidebar.fxml" />
+<ScrollPane fitToWidth="true"
+            xmlns="http://javafx.com/javafx/24.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.cems.frontend.controllers.pages.HomeController">
 
-    <VBox HBox.hgrow="ALWAYS">
-        <fx:include source="../components/navbar.fxml" />
+    <content>
+        <VBox spacing="30" style="-fx-padding: 40;">
 
-        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
-            <VBox spacing="30" style="-fx-padding: 0 40 40 40;">
+            <Label text="All Available Events"
+                   style="-fx-font-size: 24; -fx-font-weight: bold;" />
 
-                <VBox spacing="15">
-                    <Label text="All Available Events" style="-fx-font-size: 32; -fx-font-weight: bold;" />
+            <HBox spacing="20" maxWidth="500">
+                <children>
+                    <TextField fx:id="searchField"
+                               prefHeight="45"
+                               promptText="Search by title or location..."
+                               style="-fx-background-radius: 10; -fx-padding: 0 15; -fx-font-size: 14;"
+                               HBox.hgrow="ALWAYS" />
+                </children>
+            </HBox>
 
-                    <HBox alignment="CENTER_LEFT" maxWidth="500">
-                        <TextField fx:id="searchField"
-                                   promptText="Search by title or location..."
-                                   prefHeight="45"
-                                   HBox.hgrow="ALWAYS"
-                                   style="-fx-background-radius: 10; -fx-padding: 0 15; -fx-font-size: 14;" />
-                    </HBox>
-                </VBox>
+            <Label text="Events"
+                   style="-fx-font-size: 24; -fx-font-weight: bold;" />
 
-                <FlowPane fx:id="eventGrid" hgap="25" vgap="25">
-                </FlowPane>
-            </VBox>
-        </ScrollPane>
-    </VBox>
-</HBox>
+            <FlowPane fx:id="eventGrid"
+                      hgap="25"
+                      vgap="25" />
+
+        </VBox>
+    </content>
+
+</ScrollPane>

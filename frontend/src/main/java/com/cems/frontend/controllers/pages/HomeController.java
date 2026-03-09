@@ -1,6 +1,7 @@
 package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.models.Event;
+import com.cems.frontend.utils.SideBarState;
 import com.cems.frontend.view.SceneNavigator;
 import com.cems.frontend.controllers.components.EventCardController;
 import com.cems.frontend.services.ApiEventService;
@@ -31,6 +32,7 @@ public class HomeController {
         fetchEvents();
     }
 
+
     private void setupSearchFilter() {
         FilteredList<Event> filteredData = new FilteredList<>(masterData, p -> true);
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -49,7 +51,7 @@ public class HomeController {
         Task<List<Event>> task = new Task<>() {
             @Override
             protected List<Event> call() throws Exception {
-                return eventService.getAllEvents();
+                return eventService.getApprovedEvents();
             }
         };
 
