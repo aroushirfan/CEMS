@@ -28,6 +28,7 @@
 ### **3.2 Database Design and Entity Relationship Diagram (ERD)**
 
 ### **3.3 UI/UX Design Specifications (Figma Wireframes)**
+#### **3.3.1 Role-Based Access Control (RBAC) in JavaFX**
 
 ### **3.4 Security Framework (JWT and Stateless Authentication)**
 
@@ -89,11 +90,11 @@ Students, faculty, and event organizers face difficulties keeping track of campu
 
 ### **1.3 Scrum Team Composition and Agile Roles**
 
-| Sprint         | Scrum Master           | Frontend Team                                                                  | Backend Team                          |
-|:---------------|:-----------------------|:-------------------------------------------------------------------------------|:--------------------------------------|
-| **Sprint 1**   | Puntawat Subhamani     | Jiya Kanhirathan Poyil , [Sailesh Karki                                        | Aroush Irfan, Puntawat Subhamani      |
-| **Sprint 2**   | Aroush Irfan           | Jiya Kanhirathan Poyil , Sailesh Karki                                         | Aroush Irfan, Puntawat Subhamani      | 
-| **Sprint 3**   | Jiya Kanhirathan Poyil | Aroush Irfan, Puntawat Subhamani, Ayo Williams                                 | Jiya Kanhirathan Poyil, Sailesh Karki |
+| Sprint         | Scrum Master           | Frontend Team                                                                       | Backend Team                          |
+|:---------------|:-----------------------|:------------------------------------------------------------------------------------|:--------------------------------------|
+| **Sprint 1**   | Puntawat Subhamani     | Jiya Kanhirathan Poyil , Sailesh Karki                                              | Aroush Irfan, Puntawat Subhamani      |
+| **Sprint 2**   | Aroush Irfan           | Jiya Kanhirathan Poyil , Sailesh Karki                                              | Aroush Irfan, Puntawat Subhamani      | 
+| **Sprint 3**   | Jiya Kanhirathan Poyil | Aroush Irfan, Puntawat Subhamani, Ayo Williams                                      | Jiya Kanhirathan Poyil, Sailesh Karki |
 | **Sprint 4**   | Sailesh Karki          | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh | Ayo Williams, Sailesh                 |
 
 ## **2. Project Lifecycle and Iterative Development**
@@ -134,7 +135,7 @@ Objective: Establish the collaborative environment and project baseline.
 
 ## **3. System Architecture and Design**
 
-![cems_sys_arch.png](diagrams/cems_sys_arch.png)
+![system-architecture.png](diagrams/system-architecture.png)
 
 ### **3.1 High-Level Software Architecture (JavaFX & Spring Boot)**
 
@@ -160,7 +161,7 @@ Objective: Establish the collaborative environment and project baseline.
 
 - - **User Flow**: The following diagram illustrates the interaction between Students, Faculty, and the System.
 
-- ![usecase.png](diagrams/usecase.png)  
+- **![usecase.png](diagrams/usecase.png)** 
 
 - User Experience: The UI is designed for intuitive event discovery, RSVP management, and attendance tracking.
 
@@ -169,6 +170,14 @@ Objective: Establish the collaborative environment and project baseline.
 - Visual Reference: High-fidelity design mockups are located in diagrams/figma.png.
 
 ![figma.png](diagrams/figma.png)
+
+#### **3.3.1 Role-Based Access Control (RBAC) in JavaFX**
+
+The CEMS application uses **State-Based View Switching** to render the correct dashboard for the authenticated user's role:
+
+* **Student View**: Centered on event discovery and simplified participation.
+* **Faculty View**: Elevated access to the event management modal and the attendance dashboard.
+* **Admin View**: Restricted dashboard for oversight, log review, and final event approval.
 
 ### **3.4 Security Framework (JWT and Stateless Authentication)**
 
