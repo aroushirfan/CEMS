@@ -53,7 +53,7 @@
             <Label style="-fx-text-fill: #6B7280; -fx-font-weight: bold;" text="ABOUT THIS EVENT" />
             <Label fx:id="descriptionLabel" style="-fx-font-size: 15; -fx-line-spacing: 5; -fx-text-fill: #374151;" wrapText="true" />
         </VBox>
-      <HBox alignment="CENTER_LEFT" spacing="15.0" stylesheets="@../css/event-detail.css">
+      <HBox fx:id="buttonLayout" alignment="CENTER_LEFT" spacing="15.0" stylesheets="@../css/event-detail.css">
          <children>
             <Button fx:id="registerNowButton" mnemonicParsing="false" onAction="#handleRegisterNow" styleClass="enroll" text="Register Now" />
             <Button fx:id="checkInButton" mnemonicParsing="false" onAction="#handleCheckIn" styleClass="view-attendance" text="Check In" />
