@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -25,7 +24,6 @@ public class EventCardController {
     @FXML private Label locationLabel;
     @FXML private Label spotsLabel;
     @FXML private Button registerButton;
-    @FXML private HBox buttonLayout;
 
     private Event currentEvent;
     private final BooleanProperty registered = new SimpleBooleanProperty(false);
@@ -35,7 +33,7 @@ public class EventCardController {
 
     @FXML
     private void initialize() {
-        buttonLayout.getChildren().remove(registerButton);
+        registerButton.setDisable(true);
     }
 
     public void setEventModel(Event event) {
@@ -54,7 +52,7 @@ public class EventCardController {
         );
         getRegisteredEvents();
         if (Instant.now().isBefore(currentEvent.getDateTime()) && RbacUtil.isUser()) {
-            buttonLayout.getChildren().add(registerButton);
+            registerButton.setDisable(false);
         }
     }
 
