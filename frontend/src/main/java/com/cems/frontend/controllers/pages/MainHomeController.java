@@ -1,5 +1,7 @@
 package com.cems.frontend.controllers.pages;
 
+import com.cems.frontend.models.NavigationNotifier;
+import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.ApiEventService;
 import com.cems.frontend.services.IEventService;
 import com.cems.frontend.models.Event;
@@ -37,7 +39,8 @@ public class MainHomeController {
 
     @FXML
     private void goToAllEvents() {
-        SceneNavigator.loadPage("home-view.fxml");
+        NavigationNotifier.getInstance().notifyAllObservers(Paths.ALL_EVENTS);
+
     }
 
     private void loadAllEvents() {
