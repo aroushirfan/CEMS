@@ -11,11 +11,13 @@ import com.cems.shared.model.AttendanceDto.AttendanceRequestDTO;
 import com.cems.shared.model.AttendanceDto.AttendanceResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -60,5 +62,20 @@ public class AttendanceController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/event/{eventId}/checked-in")
+    public ResponseEntity<?> hasCheckedIn(
+            @PathVariable UUID eventId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
+        UUID userId = (UUID) auth.getPrincipal();
+        User user = userRepository.getUserById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("checkedIn", attendanceService.hasCheckedIn(user,event)));
     }
 }

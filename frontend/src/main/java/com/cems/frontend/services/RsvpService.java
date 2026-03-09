@@ -60,9 +60,8 @@ public class RsvpService {
     public String register(UUID eventId) throws Exception {
         HttpRequest request = LocalHttpClientHelper.buildPostRequest("rsvp/" + eventId.toString(),AuthService.getInstance().getToken());
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
         if (response.statusCode() == 201) {
-            return response.body();
+            return objectMapper.readTree(response.body()).get("message").asText();
         }else {
             throw new RuntimeException("Post request failed with status code: " + response.statusCode());
         }

@@ -47,4 +47,8 @@ public class AttendanceService {
     public List<Attendance> getAttendanceByEvent(Event event) {
         return attendanceRepository.findAllByEvent(event);
     }
+
+    public boolean hasCheckedIn(User user, Event event) {
+        return attendanceRepository.findByUserAndEvent(user, event).isPresent();
+    }
 }
