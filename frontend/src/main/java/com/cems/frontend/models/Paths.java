@@ -7,7 +7,7 @@ public enum Paths {
     EVENT_DETAIL_VIEW("pages/event-detail-view.fxml"),
     EDIT_VIEW("pages/edit-event-view.fxml"),
     ATTENDANCE_VIEW("pages/attendance-view.fxml"),
-    SIDEBAR("components/sidebar.fxml"),
+    SIDEBAR("components/sidebar_user.fxml"),
     EVENT_MANAGEMENT("pages/admin-page.fxml"),
     CREATE_EVENT("pages/create-event-view.fxml"),
     USER_MANAGEMENT("pages/user-management.fxml");

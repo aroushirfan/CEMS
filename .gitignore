@@ -1,11 +1,32 @@
+# macOS
 .DS_Store
-.idea
-# IntelliJ build folder
-out/
-# Maven build folder
-target/
-# IntelliJ settings
+
+# IntelliJ IDEA
 .idea/
 *.iml
-*.env
-frontend/src/main/java/com/cems/frontend/services/MockEventService.java
+*.iws
+*.ipr
+out/
+
+# Maven build output
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Compiled files
+*.class
+*.log
+
+
+# Environment variables
+.env
+.env.*
+backend/.env
+frontend/.env

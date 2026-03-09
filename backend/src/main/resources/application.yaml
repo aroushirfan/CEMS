@@ -16,3 +16,4 @@ jwt:
   secret: ${JWT_SECRET}
 server:
   port: ${PORT}
+
