@@ -48,7 +48,24 @@ public class AttendanceService {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200 || response.statusCode() == 201) {
-            return response.body();
+//            "Check in Successful. Thank you for your attendance."
+            return objectMapper.readTree(response.body()).get("message").asText();
+        }else {
+            throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
+        }
+    }
+
+    /**
+     * Returns True or false if a user has marked attendance
+     * @return boolean
+     */
+    public boolean hasCheckedIn(UUID eventId) throws Exception {
+        String requestUrl = String.format("attendance/event/%s/checked-in", eventId.toString());
+        HttpRequest request = LocalHttpClientHelper.buildGetRequest(requestUrl,AuthService.getInstance().getToken());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            return objectMapper.readTree(response.body()).get("checkedIn").asBoolean();
         }else {
             throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
         }
