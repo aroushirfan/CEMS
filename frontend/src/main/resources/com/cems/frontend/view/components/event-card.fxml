@@ -23,7 +23,7 @@
         <Region prefHeight="5.0" />
       <HBox spacing="5.0">
          <children>
-            <Button fx:id="registerButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleRegister" style="-fx-background-color: transparent; -fx-text-fill: #424242; -fx-background-radius: 5; -fx-cursor: hand; -fx-border-width: 1; -fx-border-color: #424242; -fx-border-radius: 5;" text="Register" HBox.hgrow="ALWAYS" />
+            <Button fx:id="registerButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleRegister" style="-fx-background-color: transparent; -fx-text-fill: #424242; -fx-background-radius: 5; -fx-cursor: hand; -fx-border-width: 1; -fx-border-color: #424242; -fx-border-radius: 5;" text="Register" HBox.hgrow="ALWAYS" />
       
               <Button fx:id="learnMoreButton" maxWidth="Infinity" style="-fx-background-color: #424242; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Learn More" HBox.hgrow="ALWAYS" />
          </children>

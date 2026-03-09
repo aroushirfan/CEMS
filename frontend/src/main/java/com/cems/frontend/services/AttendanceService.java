@@ -34,6 +34,7 @@ public class AttendanceService {
             List<AttendanceResponseDTO> attendanceResponseDTOS = objectMapper.readValue(response.body(),  new TypeReference<>() {});
             return AttendanceMapper.toModelList(attendanceResponseDTOS);
         }else {
+            System.out.println(response.body());
             throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
         }
     }
@@ -51,6 +52,7 @@ public class AttendanceService {
 //            "Check in Successful. Thank you for your attendance."
             return objectMapper.readTree(response.body()).get("message").asText();
         }else {
+            System.out.println(response.body());
             throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
         }
     }

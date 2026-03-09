@@ -53,7 +53,8 @@ public class EventDetailController {
                 registered
                         .map(isRegistered -> isRegistered ? "Cancel Registration" : "Register Now")
         );
-        buttonLayout.getChildren().clear();
+        buttonLayout.getChildren().remove(checkInButton);
+        buttonLayout.getChildren().remove(viewAttendanceButton);
     }
 
     public void initData(Event event) {
@@ -69,22 +70,19 @@ public class EventDetailController {
 
         boolean isUser = RbacUtil.isUser();
         boolean eventPending = Instant.now().isBefore(currentEvent.getDateTime());
-        boolean canCheckIn = isUser && !eventPending;
+//        boolean canCheckIn = isUser && !eventPending;
         boolean canRegister = isUser && eventPending;
-
 
         //  Display button only if it is a user and the event has not started
         if (canRegister) {
-            buttonLayout.getChildren().add(registerNowButton);
+            registerNowButton.setDisable(false);
         }
         //  Display button if user is not normal user
         if (RbacUtil.isFaculty() || RbacUtil.isAdmin()) {
             buttonLayout.getChildren().add(viewAttendanceButton);
         }
         //  Display button if event has started and is normal user
-        if (canCheckIn) {
-            buttonLayout.getChildren().add(checkInButton);
-        }
+        buttonLayout.getChildren().add(checkInButton);
     }
 
     private void refreshEventFromServer() {
