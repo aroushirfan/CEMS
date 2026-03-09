@@ -31,8 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-# Environment variables
-.env
-.env.*
-backend/.env
-frontend/.env

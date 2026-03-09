@@ -7,35 +7,27 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToWidth="true"
-            xmlns="http://javafx.com/javafx/24.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.cems.frontend.controllers.pages.HomeController">
-
-    <content>
-        <VBox spacing="30" style="-fx-padding: 40;">
-
-            <Label text="All Available Events"
-                   style="-fx-font-size: 24; -fx-font-weight: bold;" />
-
-            <HBox spacing="20" maxWidth="500">
-                <children>
-                    <TextField fx:id="searchField"
-                               prefHeight="45"
-                               promptText="Search by title or location..."
-                               style="-fx-background-radius: 10; -fx-padding: 0 15; -fx-font-size: 14;"
-                               HBox.hgrow="ALWAYS" />
-                </children>
-            </HBox>
-
-            <Label text="Events"
-                   style="-fx-font-size: 24; -fx-font-weight: bold;" />
-
-            <FlowPane fx:id="eventGrid"
-                      hgap="25"
-                      vgap="25" />
-
-        </VBox>
-    </content>
-
-</ScrollPane>
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.pages.HomeController">
+   <children>
+      <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+         <content>
+            <VBox spacing="30" style="-fx-padding: 0 40 40 40;">
+               <fx:include source="../components/navbar.fxml" />
+               <children>
+                  <VBox spacing="15">
+                     <children>
+                        <Label style="-fx-font-size: 32; -fx-font-weight: bold;" text="All Available Events" />
+                        <HBox alignment="CENTER_LEFT" maxWidth="500">
+                           <children>
+                              <TextField fx:id="searchField" prefHeight="45" promptText="Search by title or location..." style="-fx-background-radius: 10; -fx-padding: 0 15; -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <FlowPane fx:id="eventGrid" hgap="25" vgap="25" />
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </children>
+</VBox>
