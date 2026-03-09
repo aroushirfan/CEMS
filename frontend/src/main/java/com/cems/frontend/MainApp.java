@@ -26,6 +26,7 @@
 //
 package com.cems.frontend;
 
+import com.cems.frontend.utils.LocalStorage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;

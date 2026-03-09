@@ -1,9 +1,13 @@
 package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.models.Event;
+import com.cems.frontend.models.NavigationNotifier;
+import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.ApiEventService;
+import com.cems.frontend.services.AttendanceService;
 import com.cems.frontend.services.RsvpService;
 import com.cems.frontend.utils.LocalHttpClientHelper;
+import com.cems.frontend.utils.RbacUtil;
 import com.cems.frontend.view.AlertHelper;
 import com.cems.frontend.view.SceneNavigator;
 import javafx.application.Platform;
@@ -15,6 +19,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -28,6 +34,8 @@ public class EventDetailController {
     @FXML private Label descriptionLabel;
     @FXML private Label capacityLabel;
     @FXML private Button registerNowButton;
+    @FXML private Button viewAttendanceButton;
+    @FXML private Button checkInButton;
 
     private final BooleanProperty registered = new SimpleBooleanProperty(false);
 
@@ -35,6 +43,7 @@ public class EventDetailController {
     private Event currentEvent; // The property-based Frontend Model
 
     private final RsvpService rsvpService = new RsvpService(LocalHttpClientHelper.getClient(),LocalHttpClientHelper.getMapper());
+    private final AttendanceService attendanceService = new AttendanceService(LocalHttpClientHelper.getClient(),LocalHttpClientHelper.getMapper());
 
     @FXML
     public void initialize() {
@@ -43,6 +52,16 @@ public class EventDetailController {
                 registered
                         .map(isRegistered -> isRegistered ? "Cancel Registration" : "Register Now")
         );
+
+//          Set all buttons to not show
+        registerNowButton.setVisible(false);
+        registerNowButton.setManaged(false);
+
+        viewAttendanceButton.setVisible(false);
+        viewAttendanceButton.setManaged(false);
+
+        checkInButton.setVisible(false);
+        checkInButton.setManaged(false);
     }
 
     public void initData(Event event) {
@@ -54,6 +73,21 @@ public class EventDetailController {
         getRegisteredEvents();
         updateStaticLabels();
         refreshEventFromServer();
+
+        boolean isUser = RbacUtil.isUser();
+        boolean eventPending = Instant.now().isBefore(currentEvent.getDateTime());
+        boolean canCheckIn = isUser && !eventPending;
+        boolean canRegister = isUser && eventPending;
+
+        //  Display button only if it is a user and the event has not started
+        registerNowButton.setVisible(canRegister);
+        registerNowButton.setManaged(canRegister);
+        //  Display button if user is not normal user
+        viewAttendanceButton.setVisible(!isUser);
+        viewAttendanceButton.setManaged(!isUser);
+        //  Display button if event has started and is normal user
+        checkInButton.setVisible(canCheckIn);
+        checkInButton.setManaged(canCheckIn);
     }
 
     private void refreshEventFromServer() {
@@ -101,6 +135,34 @@ public class EventDetailController {
 
         //      run the thread to check rsvp in the background
         new Thread(rsvpTask).start();
+    }
+
+    @FXML
+    private void handleCheckIn(){
+        Task<String> checkInTask = new Task<>() {
+            @Override
+            protected String call() throws Exception {
+                return attendanceService.checkInEvent(currentEvent.getId());
+            }
+        };
+
+        checkInTask.setOnSucceeded(e -> {
+            Platform.runLater(this::checkInSuccess);
+        });
+
+        checkInTask.setOnFailed(e -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Check In Failed. Try again.");
+            alert.show();
+        });
+        //      run the thread to send check in the background
+        new Thread(checkInTask).start();
+    }
+
+    private void checkInSuccess(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText("Check in Successful. Thank you for your attendance.");
+        alert.showAndWait();
     }
 
     @FXML
@@ -163,7 +225,8 @@ public class EventDetailController {
             try {
                 eventService.deleteEvent(currentEvent.getId().toString());
                 AlertHelper.showInfo("Deleted", "Event removed successfully.");
-                SceneNavigator.loadPage("home-view.fxml");
+//                SceneNavigator.loadPage("home-view.fxml");
+                NavigationNotifier.getInstance().notifyAllObservers(Paths.HOME);
             } catch (Exception e) {
                 AlertHelper.showError("Error", "Could not delete: " + e.getMessage());
             }
@@ -172,6 +235,6 @@ public class EventDetailController {
 
     @FXML
     private void handleBack() {
-        SceneNavigator.loadPage("home-view.fxml");
+        NavigationNotifier.getInstance().notifyAllObservers(Paths.ALL_EVENTS);
     }
 }

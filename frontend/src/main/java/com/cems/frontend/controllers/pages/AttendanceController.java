@@ -36,7 +36,7 @@ public class AttendanceController {
     public Label eventLocation;
 
     @FXML
-    public Button homeButton;
+    public Button backButton;
 
     @FXML
     private TextField searchTextField;
@@ -75,7 +75,10 @@ public class AttendanceController {
     private final String CHECKED_IN =  "Checked In";
     private final String PENDING =  "Pending";
 
+    private Event loadedEvent;
+
     public void loadAttendanceForEvent(Event event) {
+        loadedEvent = event;
         eventName.setText(event.getTitle());
         eventOrganizer.setText(event.getTitle());
         eventLocation.setText(event.getLocation() != null ? event.getLocation() : "TBD");
@@ -196,8 +199,9 @@ public class AttendanceController {
     }
 
     @FXML
-    private void handleGoHome() {
-        SceneNavigator.loadPage("home-view.fxml");
+    private void handleGoBack() {
+//        SceneNavigator.loadPage("home-view.fxml");
+        SceneNavigator.loadEventDetail(loadedEvent);
     }
 
 }

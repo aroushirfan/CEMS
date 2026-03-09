@@ -68,7 +68,7 @@ public class AuthService {
      * @return token
      * @throws Exception
      */
-    public String login(String email, String password) throws Exception {
+    public AuthDTO.AuthResponseDTO login(String email, String password) throws Exception {
         AuthDTO.LoginRequestDTO loginRequestDTO = new AuthDTO.LoginRequestDTO(email, password);
 
         String requestBody = mapper.writeValueAsString(loginRequestDTO);
@@ -84,8 +84,9 @@ public class AuthService {
         if (httpResponse.statusCode() == 200) {
             AuthDTO.AuthResponseDTO authResponseDTO = mapper.readValue(httpResponse.body(), AuthDTO.AuthResponseDTO.class);
             LocalStorage.set("token", authResponseDTO.getToken());
+            LocalStorage.set("role", authResponseDTO.getRole());
             System.out.println(authResponseDTO.getToken());
-            return authResponseDTO.getToken();
+            return authResponseDTO;
         } else {
             return null;
         }
@@ -93,11 +94,16 @@ public class AuthService {
 
     public String getToken() {
         String token = LocalStorage.get("token");
-        if (token.isEmpty()) {
+        if (token == null ||token.isEmpty()) {
             return "";
         } else {
             return token;
         }
+    }
+
+    public void logout() {
+        LocalStorage.remove("token");
+        LocalStorage.remove("role");
     }
 
     public void setPort(String port) {
