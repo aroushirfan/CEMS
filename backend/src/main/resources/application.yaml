@@ -12,6 +12,17 @@ spring:
     show-sql: true
   jackson:
     property-naming-strategy: SNAKE_CASE
+  mail:
+    host: smtp.gmail.com
+    port: ${email_port:587}
+    username: ${admin_email:admin@gmail.com}
+    password: ${email_password:password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 jwt:
   secret: ${JWT_SECRET}
 server:
