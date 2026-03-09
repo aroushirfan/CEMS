@@ -30,7 +30,7 @@ public class EventNotificationService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setTo(System.getenv("admin_email"));
+            helper.setTo(System.getenv().getOrDefault("admin_email","test@gmail.com"));
             helper.setBcc(attendeesEmails);
             helper.setSubject("Reminder: " + event.getTitle() + " is today!");
             helper.setText(buildEmailBody(event));
