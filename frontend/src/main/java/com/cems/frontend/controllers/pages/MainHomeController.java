@@ -2,44 +2,63 @@ package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.services.ApiEventService;
 import com.cems.frontend.services.IEventService;
-import com.cems.frontend.services.MockEventService;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.controllers.components.EventCardController;
-import com.cems.frontend.utils.SideBarState;
 import com.cems.frontend.view.SceneNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
 import java.util.List;
-
 
 public class MainHomeController {
 
     @FXML
     private FlowPane eventGrid;
 
-    private IEventService eventService = new ApiEventService(); // real API
-//    private final MockEventService mockService = new MockEventService();
+    @FXML
+    private Label viewMoreLabel;
+
+    private final IEventService eventService = new ApiEventService();
+
+    private List<Event> allEvents = new ArrayList<>();
+    private int currentIndex = 0;
+    private final int pageSize = 4; // number of events per page
 
     @FXML
     public void initialize() {
-        loadEvents();
+        loadAllEvents();
+        loadNextPage();
+        setupViewMoreButton();
     }
-
 
     @FXML
     private void goToAllEvents() {
         SceneNavigator.loadPage("home-view.fxml");
     }
 
-    private void loadEvents() {
+    private void loadAllEvents() {
         try {
-//          List<Event> events = mockService.getAllEvents();
-            List<Event> events = eventService.getApprovedEvents();
+            allEvents = eventService.getApprovedEvents();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            for (Event event : events) {
+    private void loadNextPage() {
+        if (allEvents == null || allEvents.isEmpty()) {
+            viewMoreLabel.setVisible(false);
+            return;
+        }
+
+        int end = Math.min(currentIndex + pageSize, allEvents.size());
+        List<Event> page = allEvents.subList(currentIndex, end);
+
+        for (Event event : page) {
+            try {
                 FXMLLoader loader = new FXMLLoader(
                         getClass().getResource("/com/cems/frontend/view/components/event-card.fxml")
                 );
@@ -48,11 +67,27 @@ public class MainHomeController {
                 EventCardController controller = loader.getController();
                 controller.setEventModel(event);
 
-                eventGrid.getChildren().add(card);
-            }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+                card.setOnMouseClicked(e -> SceneNavigator.loadEventDetail(event));
+
+
+                controller.getLearnMoreButton().setOnAction(e -> SceneNavigator.loadEventDetail(event));
+
+                eventGrid.getChildren().add(card);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
+        currentIndex = end;
+
+        if (currentIndex >= allEvents.size()) {
+            viewMoreLabel.setVisible(false);
+        }
+    }
+
+    private void setupViewMoreButton() {
+        viewMoreLabel.setOnMouseClicked(event -> loadNextPage());
     }
 }

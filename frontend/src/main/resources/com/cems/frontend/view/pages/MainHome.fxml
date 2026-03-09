@@ -12,79 +12,99 @@
 <?import javafx.scene.text.Font?>
 
 <VBox xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.pages.MainHomeController">
-   <children>
-      <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
-         <content>
-            <VBox spacing="0">
-               <fx:include source="../components/navbar.fxml" />
-               <children>
-                  <StackPane HBox.hgrow="ALWAYS">
-                     <children>
-                        <VBox spacing="0" HBox.hgrow="ALWAYS">
-                           <children>
-                              <ImageView fx:id="heroImage" fitHeight="260" preserveRatio="true" HBox.hgrow="ALWAYS">
-                                 <image>
-                                    <Image url="@../assets/hero.jpg" />
-                                 </image>
-                              </ImageView>
-                              <HBox style="-fx-background-color: #E5E5E5;                                      -fx-padding: 55 0 55 0;" HBox.hgrow="ALWAYS" />
-                           </children>
+    <children>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+            <content>
+                <VBox spacing="0">
+                    <fx:include source="../components/navbar.fxml" />
+                    <children>
+                        <StackPane HBox.hgrow="ALWAYS">
+                            <children>
+                                <VBox spacing="0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <ImageView fx:id="heroImage" fitHeight="260" preserveRatio="true" HBox.hgrow="ALWAYS">
+
+                                        <image>
+                                                <Image url="@../assets/hero.jpg" />
+                                            </image>
+                                        </ImageView>
+                                        <HBox style="-fx-background-color: #E5E5E5;                                      -fx-padding: 55 0 55 0;" HBox.hgrow="ALWAYS" />
+                                    </children>
+                                </VBox>
+                                <HBox alignment="CENTER" prefHeight="303.0" prefWidth="960.0" spacing="120" style="-fx-translate-y: 85;" StackPane.alignment="BOTTOM_CENTER">
+                                    <children>
+                                        <VBox alignment="CENTER" spacing="10">
+                                            <children>
+                                                <ImageView fitHeight="45" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../assets/icons/search.png" />
+                                                    </image>
+                                                </ImageView>
+                                                <Label text="Discover campus events" />
+                                            </children>
+                                        </VBox>
+                                        <VBox alignment="CENTER" spacing="10">
+                                            <children>
+                                                <ImageView fitHeight="45" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../assets/icons/list.png" />
+                                                    </image>
+                                                </ImageView>
+                                                <Label text="Track Attendance" />
+                                            </children>
+                                        </VBox>
+                                        <VBox alignment="CENTER" spacing="10">
+                                            <children>
+                                                <ImageView fitHeight="45" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@../assets/icons/bell.png" />
+                                                    </image>
+                                                </ImageView>
+                                                <Label text="Event Alerts" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </StackPane>
+                        <VBox spacing="30" style="-fx-padding: 20 40 40 40;">
+                            <children>
+                                <HBox alignment="CENTER_LEFT">
+                                    <children>
+                                        <Label text="Events">
+                                            <font>
+                                                <Font size="28" />
+                                            </font>
+                                        </Label>
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Label fx:id="seeAllEventsLink" onMouseClicked="#goToAllEvents" style="-fx-text-fill: #1B336F; -fx-font-size:16; -fx-underline: true; -fx-cursor: hand;" text="see all events" />
+                                    </children>
+                                </HBox>
+                                <FlowPane fx:id="eventGrid" hgap="25" vgap="25" />
+                            </children>
+                            <!-- VIEW MORE -->
+                            <HBox alignment="CENTER">
+                                <children>
+                                    <Label fx:id="viewMoreLabel"
+                                           text="View more"
+                                           style="
+                                               -fx-background-color: #F9F5FF;
+                                               -fx-text-fill: #1B336F;
+                                               -fx-font-size: 15;
+                                               -fx-font-weight: bold;
+                                               -fx-padding: 12 28;
+                                               -fx-background-radius: 8;
+                                               -fx-border-color: #E8E0FF;
+                                               -fx-border-radius: 8;
+                                               -fx-border-width: 1;
+                                               -fx-cursor: hand;
+                                           " />
+                                </children>
+                            </HBox>
                         </VBox>
-                        <HBox alignment="CENTER" prefHeight="303.0" prefWidth="960.0" spacing="120" style="-fx-translate-y: 85;" StackPane.alignment="BOTTOM_CENTER">
-                           <children>
-                              <VBox alignment="CENTER" spacing="10">
-                                 <children>
-                                    <ImageView fitHeight="45" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../assets/icons/search.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Label text="Discover campus events" />
-                                 </children>
-                              </VBox>
-                              <VBox alignment="CENTER" spacing="10">
-                                 <children>
-                                    <ImageView fitHeight="45" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../assets/icons/list.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Label text="Track Attendance" />
-                                 </children>
-                              </VBox>
-                              <VBox alignment="CENTER" spacing="10">
-                                 <children>
-                                    <ImageView fitHeight="45" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../assets/icons/bell.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Label text="Event Alerts" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
-                     </children>
-                  </StackPane>
-                  <VBox spacing="30" style="-fx-padding: 20 40 40 40;">
-                     <children>
-                        <HBox alignment="CENTER_LEFT">
-                           <children>
-                              <Label text="Events">
-                                 <font>
-                                    <Font size="28" />
-                                 </font>
-                              </Label>
-                              <Region HBox.hgrow="ALWAYS" />
-                              <Label fx:id="seeAllEventsLink" onMouseClicked="#goToAllEvents" style="-fx-text-fill: #1B336F; -fx-font-size:16; -fx-underline: true; -fx-cursor: hand;" text="see all events" />
-                           </children>
-                        </HBox>
-                        <FlowPane fx:id="eventGrid" hgap="25" vgap="25" />
-                     </children>
-                  </VBox>
-               </children>
-            </VBox>
-         </content>
-      </ScrollPane>
-   </children>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
 </VBox>
