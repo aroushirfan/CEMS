@@ -12,17 +12,24 @@ import java.net.http.HttpClient;
 public class LocalHttpClientHelper {
     private static final String BASE_URL = "http://localhost";
     private static String PORT = System.getenv().getOrDefault("PORT","8080"); // default port
-    private static final HttpClient httpClient = HttpClient.newHttpClient();
+    private static HttpClient httpClient;
+    private static ObjectMapper objectMapper;
 
     public static HttpClient getClient() {
+        if (httpClient == null) {
+            httpClient = HttpClient.newHttpClient();
+        }
        return httpClient;
     }
 
     public static ObjectMapper getMapper() {
-        return new ObjectMapper()
-                .registerModule(new JavaTimeModule())
-                .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        if (objectMapper == null) {
+            objectMapper = new ObjectMapper()
+                    .registerModule(new JavaTimeModule())
+                    .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+                    .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        }
+        return objectMapper;
     }
 
     public static void setPort(String port) {
