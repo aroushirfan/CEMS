@@ -17,7 +17,7 @@
 
     <children>
 
-        <!-- ⭐ IMPORTANT: Give ScrollPane an fx:id -->
+
         <ScrollPane fx:id="scrollPane"
                     fitToWidth="true"
                     hbarPolicy="NEVER"
@@ -39,7 +39,7 @@
                                 <VBox spacing="0" HBox.hgrow="ALWAYS">
                                     <children>
 
-                                        <!-- ⭐ FIXED HERO IMAGE -->
+
                                         <ImageView fx:id="heroImage"
                                                    fitHeight="260"
                                                    preserveRatio="false">

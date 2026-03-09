@@ -34,7 +34,7 @@ public class MainHomeController {
     @FXML
     public void initialize() {
 
-        // ⭐ FIX: Bind hero image width to ScrollPane viewport (removes scrollbar)
+
         scrollPane.viewportBoundsProperty().addListener((obs, oldVal, newVal) -> {
             heroImage.setFitWidth(newVal.getWidth());
         });
@@ -77,10 +77,10 @@ public class MainHomeController {
                 EventCardController controller = loader.getController();
                 controller.setEventModel(event);
 
-                // ⭐ Make card clickable
+
                 card.setOnMouseClicked(e -> SceneNavigator.loadEventDetail(event));
 
-                // ⭐ Make Learn More button clickable
+
                 controller.getLearnMoreButton().setOnAction(e -> SceneNavigator.loadEventDetail(event));
 
                 eventGrid.getChildren().add(card);
