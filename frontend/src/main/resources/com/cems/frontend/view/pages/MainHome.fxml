@@ -22,7 +22,7 @@
                             <children>
                                 <VBox spacing="0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <ImageView fx:id="heroImage" fitHeight="260" preserveRatio="true" HBox.hgrow="ALWAYS">
+                                        <ImageView fx:id="heroImage" fitHeight="260" HBox.hgrow="ALWAYS">
                                             <image>
                                                 <Image url="@../assets/hero.jpg" />
                                             </image>
