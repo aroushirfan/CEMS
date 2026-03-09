@@ -1,6 +1,6 @@
 package com.cems.frontend.controllers.pages;
 
-import com.cems.frontend.controllers.components.SidebarController;
+import com.cems.frontend.controllers.components.SidebarUserController;
 import com.cems.frontend.models.NavigationNotifier;
 import com.cems.frontend.models.NavigationObserver;
 import com.cems.frontend.models.Paths;
@@ -14,13 +14,13 @@ import java.io.IOException;
 public class NavigationController implements NavigationObserver {
     @FXML
     private BorderPane borderPane;
-    private SidebarController sidebarController;
+    private SidebarUserController sidebarUserController;
 
     @FXML
     public void initialize() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.SIDEBAR.path));
         VBox sidebar = loader.load();
-        sidebarController = loader.getController();
+        sidebarUserController = loader.getController();
 
         borderPane.setLeft(sidebar);
         FXMLLoader contentLoader = new FXMLLoader(getClass().getResource(Paths.HOME.path));

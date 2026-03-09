@@ -351,7 +351,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
 import com.cems.frontend.view.SceneNavigator;
 
-public class SidebarController implements NavigationObserver {
+public class SidebarUserController implements NavigationObserver {
 
     @FXML private Button createEventBtn;
     @FXML private ToggleButton darkModeToggle;
