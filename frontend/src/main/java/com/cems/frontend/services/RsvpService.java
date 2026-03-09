@@ -63,6 +63,7 @@ public class RsvpService {
         if (response.statusCode() == 201) {
             return objectMapper.readTree(response.body()).get("message").asText();
         }else {
+            System.out.println(response.body());
             throw new RuntimeException("Post request failed with status code: " + response.statusCode());
         }
     }
@@ -78,6 +79,7 @@ public class RsvpService {
         if (response.statusCode() == 204 || response.statusCode() == 200) {
             return "Registration cancelled successfully";
         }else {
+            System.out.println(response.body());
             throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
         }
     }

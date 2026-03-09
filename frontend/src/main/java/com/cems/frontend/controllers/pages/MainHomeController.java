@@ -29,7 +29,7 @@ public class MainHomeController {
 
     private List<Event> allEvents = new ArrayList<>();
     private int currentIndex = 0;
-    private final int pageSize = 4;
+    private final int pageSize = 4; // number of events per page
 
     @FXML
     public void initialize() {

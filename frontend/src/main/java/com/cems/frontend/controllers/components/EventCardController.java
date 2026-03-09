@@ -31,11 +31,6 @@ public class EventCardController {
 
     @FXML private Button learnMoreButton;
 
-    @FXML
-    private void initialize() {
-        registerButton.setDisable(true);
-    }
-
     public void setEventModel(Event event) {
         this.currentEvent = event;
         titleLabel.textProperty().bind(event.titleProperty());
