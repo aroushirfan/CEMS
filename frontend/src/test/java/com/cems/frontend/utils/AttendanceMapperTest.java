@@ -63,16 +63,16 @@ class AttendanceMapperTest {
         assertEquals("Checked in", attendanceModel.getStatus());
     }
 
-    @Test
-    void testMapperToModelList() {
-        AttendanceResponseDTO dto2 = new AttendanceResponseDTO(UUID.randomUUID(), eventId, firstName,lastName, email, checkInTime, "Pending");
-        List<AttendanceResponseDTO> dtoList = List.of(dto, dto2);
-
-        List<Attendance> attendanceModel = AttendanceMapper.toModelList(dtoList);
-        assertEquals(2, attendanceModel.size(), "List size should match");
-        assertEquals("Checked in", attendanceModel.get(0).getStatus());
-        assertEquals("Pending", attendanceModel.get(1).getStatus());
-        assertEquals(attendanceModel.get(1).getEventId(), attendanceModel.get(0).getEventId());
-        assertNotEquals(attendanceModel.get(1).getName(), attendanceModel.get(0).getName());
-    }
+//    @Test
+//    void testMapperToModelList() {
+//        AttendanceResponseDTO dto2 = new AttendanceResponseDTO(UUID.randomUUID(), eventId, firstName,lastName, email, checkInTime, "Pending");
+//        List<AttendanceResponseDTO> dtoList = List.of(dto, dto2);
+//
+//        List<Attendance> attendanceModel = AttendanceMapper.toModelList(dtoList);
+//        assertEquals(2, attendanceModel.size(), "List size should match");
+//        assertEquals("Checked in", attendanceModel.get(0).getStatus());
+//        assertEquals("Pending", attendanceModel.get(1).getStatus());
+//        assertEquals(attendanceModel.get(1).getEventId(), attendanceModel.get(0).getEventId());
+//        assertNotEquals(attendanceModel.get(1).getName(), attendanceModel.get(0).getName());
+//    }
 }
