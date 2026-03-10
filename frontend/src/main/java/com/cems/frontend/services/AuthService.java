@@ -25,9 +25,7 @@ public class AuthService {
             .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
-    private String port = System.getenv().getOrDefault("PORT","8081");
-
-    private String API_URL = String.format("http://localhost:%s/auth", port);
+    private String API_URL = String.format("%s/auth", System.getenv().getOrDefault("BACKEND_URL", "http://localhost:8080"));
 
     private AuthService() {
         this.client = HttpClientObject.getClient();
@@ -107,7 +105,6 @@ public class AuthService {
     }
 
     public void setPort(String port) {
-        this.port = port;
         API_URL = String.format("http://localhost:%s/auth", port);
     }
 }
