@@ -28,7 +28,4 @@ RUN wget $OPENJFX_URL -O /tmp/openjfx.zip && \
 
 COPY --from=build /app/frontend/target/frontend.jar frontend.jar
 
-CMD ["java",
-     "--module-path","/opt/openjfx/lib",
-     "--add-modules","javafx.controls,javafx.fxml",
-     "-jar","frontend.jar"]
+CMD ["java", "--module-path","/opt/openjfx/lib", "--add-modules","javafx.controls,javafx.fxml", "-jar","frontend.jar"]

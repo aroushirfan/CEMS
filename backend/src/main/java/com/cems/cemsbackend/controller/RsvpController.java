@@ -1,7 +1,10 @@
 package com.cems.cemsbackend.controller;
 
+import com.cems.cemsbackend.model.Attendance;
+import com.cems.cemsbackend.model.AttendanceId;
 import com.cems.cemsbackend.model.Event;
 import com.cems.cemsbackend.model.User;
+import com.cems.cemsbackend.repository.AttendanceRepository;
 import com.cems.cemsbackend.repository.EventRepository;
 import com.cems.cemsbackend.repository.UserRepository;
 import com.cems.cemsbackend.mappers.EventMapper;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,10 +26,12 @@ public class RsvpController {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final AttendanceRepository attendanceRepository;
 
-    public RsvpController(EventRepository eventRepository, UserRepository userRepository) {
+    public RsvpController(EventRepository eventRepository, UserRepository userRepository, AttendanceRepository attendanceRepository) {
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
+        this.attendanceRepository = attendanceRepository;
     }
 
     @PostMapping("/{eventId}")
@@ -51,7 +57,16 @@ public class RsvpController {
         }
 
         event.addAttendee(user);
+
+
         eventRepository.save(event);
+
+        var attendance = new Attendance();
+        attendance.setId(new AttendanceId(userId, eventId));
+        attendance.setStatus("ABSENT");
+        attendance.setUser(user);
+        attendance.setEvent(event);
+        attendanceRepository.save(attendance);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("message", "RSVP successful"));
@@ -74,6 +89,8 @@ public class RsvpController {
         if (!event.getAttendees().contains(user)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You have not RSVPed to this event");
         }
+
+        attendanceRepository.deleteAttendanceByUser_IdAndEvent_Id(userId, eventId);
 
         event.removeAttendee(user);
         eventRepository.save(event);

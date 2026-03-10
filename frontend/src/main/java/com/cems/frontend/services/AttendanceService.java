@@ -44,16 +44,21 @@ public class AttendanceService {
      * @return List<Attendance>
      */
     public String checkInEvent(UUID eventId) throws Exception {
-        String requestUrl = String.format("attendance/event/%s/check-in", eventId.toString());
-        HttpRequest request = LocalHttpClientHelper.buildPostRequest(requestUrl,AuthService.getInstance().getToken());
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        try {
+            String requestUrl = String.format("attendance/event/%s/check-in", eventId.toString());
+            HttpRequest request = LocalHttpClientHelper.buildPostRequest(requestUrl, AuthService.getInstance().getToken());
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200 || response.statusCode() == 201) {
+            if (response.statusCode() == 200 || response.statusCode() == 201) {
 //            "Check in Successful. Thank you for your attendance."
-            return objectMapper.readTree(response.body()).get("message").asText();
-        }else {
-            System.out.println(response.body());
-            throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
+                return objectMapper.readTree(response.body()).get("message").asText();
+            } else {
+                System.out.println(response.body());
+                throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 

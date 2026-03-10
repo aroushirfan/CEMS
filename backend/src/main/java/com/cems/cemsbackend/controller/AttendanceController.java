@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,7 @@ public class AttendanceController {
     }
 
     @PostMapping("/event/{eventId}/check-in")
-    public ResponseEntity<AttendanceResponseDTO> checkIn(@PathVariable UUID eventId) {
+    public ResponseEntity<?> checkIn(@PathVariable UUID eventId) {
         // Identity: Securely pull the UserID from the JWT
         UUID userId = (UUID) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -48,7 +49,10 @@ public class AttendanceController {
         // Service Call: No status needed from the frontend
         Attendance attendance = attendanceService.createCheckIn(user, event);
 
-        return new ResponseEntity<>(AttendanceMapper.toDto(attendance), HttpStatus.CREATED);
+        TreeMap<String, String> responseMap = new TreeMap<>();
+        responseMap.put("message", "Check in Successful. Thank you for your attendance.");
+
+        return new ResponseEntity<>(responseMap, HttpStatus.CREATED);
     }
 
     @GetMapping("/event/{eventId}")

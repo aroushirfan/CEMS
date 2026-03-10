@@ -72,6 +72,9 @@ public class ApiEventService implements IEventService {
             return EventMapper.toModelList(dtos);
         } else if (response.statusCode() == 204) {
             return List.of();
+        } else if (response.statusCode() == 401) {
+            AuthService.getInstance().logout();
+            return List.of();
         } else {
             throw new RuntimeException("Fetch failed: " + response.statusCode());
         }
