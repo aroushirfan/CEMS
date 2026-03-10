@@ -9,3 +9,4 @@ target/
 *.iml
 *.env
 frontend/src/main/java/com/cems/frontend/services/MockEventService.java
+.env

@@ -1,0 +1,43 @@
+services:
+  db:
+    image: ${DB_IMAGE}       # image comes from .env
+    container_name: cems_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:3306"
+    volumes:
+      - ./sqldata:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mariadb-admin", "ping", "-h", "localhost", "-uroot", "-p${DB_PASSWORD}" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    image: ${BACKEND_IMAGE}  # image from .env
+    container_name: cems_backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: 8080
+    ports:
+      - "${BACKEND_PORT}:8080"
+
+  frontend:
+    image: ${FRONTEND_IMAGE} # image from .env
+    container_name: cems_frontend
+    depends_on:
+      - backend
+    environment:
+      BACKEND_URL: http://backend:8080
+      DISPLAY: ${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix

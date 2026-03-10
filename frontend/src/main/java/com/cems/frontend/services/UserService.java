@@ -22,7 +22,7 @@ public class UserService {
     private final ObjectMapper mapper = new ObjectMapper()
             .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
 
-    private final String API_URL = String.format("http://localhost:%s/users", System.getenv("PORT"));
+    private final String API_URL = String.format("%s/users", System.getenv().getOrDefault("BACKEND_URL", "http://localhost:8080"));
 
     public UserService() {
         this.client = HttpClientObject.getClient();

@@ -10,8 +10,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpClient;
 
 public class LocalHttpClientHelper {
-    private static final String BASE_URL = "http://localhost";
-    private static String PORT = System.getenv().getOrDefault("PORT","8080"); // default port
+    private static String BASE_URL = System.getenv().getOrDefault("BACKEND_URL", "http://localhost:8080");
     private static HttpClient httpClient;
     private static ObjectMapper objectMapper;
 
@@ -33,12 +32,12 @@ public class LocalHttpClientHelper {
     }
 
     public static void setPort(String port) {
-        PORT = port;
+        BASE_URL = String.format("http://localhost:%s", port);
     }
 
     public static HttpRequest buildGetRequest (String uri,String token) {
         return HttpRequest.newBuilder()
-                .uri(URI.create(String.format("%s:%s/%s", BASE_URL,PORT, uri)))
+                .uri(URI.create(String.format("%s/%s", BASE_URL, uri)))
                 .header("Accept", "application/json")
                 .header("Authorization", String.format("Bearer %s", token))
                 .GET()
@@ -47,7 +46,7 @@ public class LocalHttpClientHelper {
 
     public static HttpRequest buildPostRequest (String uri,String token) {
         return HttpRequest.newBuilder()
-                .uri(URI.create(String.format("%s:%s/%s", BASE_URL,PORT, uri)))
+                .uri(URI.create(String.format("%s/%s", BASE_URL, uri)))
                 .header("Accept", "application/json")
                 .header("Authorization", String.format("Bearer %s", token))
                 .POST(HttpRequest.BodyPublishers.noBody())
@@ -56,7 +55,7 @@ public class LocalHttpClientHelper {
 
     public static HttpRequest buildDeleteRequest (String uri,String token) {
         return HttpRequest.newBuilder()
-                .uri(URI.create(String.format("%s:%s/%s", BASE_URL,PORT, uri)))
+                .uri(URI.create(String.format("%s/%s", BASE_URL, uri)))
                 .header("Accept", "application/json")
                 .header("Authorization", String.format("Bearer %s", token))
                 .DELETE()

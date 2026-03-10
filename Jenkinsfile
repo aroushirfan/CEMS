@@ -78,10 +78,15 @@ pipeline {
             }
         }
 
-       stage('Build Docker Image') {
+       stage('Build Frontend Docker Image') {
            steps {
-               sh 'docker build -t ${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG} .'
+               sh 'docker build --target frontend -t ${DOCKERHUB_REPO}_frontend:${DOCKER_IMAGE_TAG} .'
            }
+       }
+       stage('Build Backend Docker Image') {
+            steps {
+              sh 'docker build --target backend -t ${DOCKERHUB_REPO}_backend:${DOCKER_IMAGE_TAG} .'
+            }
        }
 
         stage('Push Docker Image to Docker Hub') {
@@ -95,7 +100,8 @@ pipeline {
                 ]) {
                     sh '''
                         echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                        docker push ${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}
+                        docker push ${DOCKERHUB_REPO}_frontend:${DOCKER_IMAGE_TAG}
+                        docker push ${DOCKERHUB_REPO}_backend:${DOCKER_IMAGE_TAG}
                         docker logout
                     '''
                 }
