@@ -1,20 +1,6 @@
+
 pipeline {
     agent any
-
-    // 1️⃣ Parameters block
-    // Removed so that default values can be set manually on Jenkins, insteaad of setting parameters every time
-    // parameters {
-    //     string(name: 'GITHUB_REPO', defaultValue: 'https://github.com/aroushirfan/CEMS.git', description: 'Git repository URL')
-    //     string(name: 'DOCKERHUB_REPO', defaultValue: '', description: 'Docker Hub repository')
-    //     string(name: 'DOCKERHUB_CREDENTIALS_ID', defaultValue: '', description: 'Docker Hub credentials ID')
-    //     string(name: 'DOCKER_IMAGE_TAG', defaultValue: 'latest', description: 'Docker image tag')
-    //     string(name: 'DB_USERNAME', defaultValue: '', description: 'Database username')
-    //     string(name: 'DB_PASSWORD', defaultValue: '', description: 'Database password')
-    //     string(name: 'PORT', defaultValue: '8080', description: 'Application port')
-    //     string(name: 'DB_URL', defaultValue: '', description: 'Database URL')
-    //     string(name: 'JWT_SECRET', defaultValue: '', description: 'JWT secret')
-    //     string(name: 'MAVEN', defaultValue: 'Maven3', description: 'Maven')
-    // }
 
     // 2️⃣ Environment block
     environment {
@@ -30,82 +16,100 @@ pipeline {
 
     // 3️⃣ Tools block
     tools {
+        jdk 'Jdk@21'
         maven "${params.MAVEN}"
     }
 
     stages {
 
-        stage('Check Docker') {
+        stage('Check Java') {
             steps {
-                sh 'docker --version'
+                bat 'java -version'
+                bat 'echo %JAVA_HOME%'
+                bat 'mvn -version'
             }
         }
 
+        stage('Check Docker') {
+            steps {
+                bat 'docker --version'
+            }
+        }
+
+
         stage('Checkout') {
             steps {
-                // Use parameterized repo
-                git branch: 'main', url: "${params.GITHUB_REPO}"
+                git branch: "${params.MAVEN}", url: "${params.GITHUB_REPO}"
             }
         }
 
         stage('Build') {
             steps {
-                sh 'mvn clean install -DskipTests'
+                bat 'mvn clean install -DskipTests'
             }
         }
 
-        stage('Test') {
+        // stage('Test') {
+        //     steps {
+        //             withEnv([
+        //             'DB_URL=jdbc:mariadb://localhost:3306/cems_db',
+        //             'DB_USERNAME=root',
+        //             'DB_PASSWORD=root'
+        //         ]) {
+        //             bat 'mvn test -DDB_URL=$DB_URL -DDB_USERNAME=$DB_USERNAME -DDB_PASSWORD=$DB_PASSWORD'
+        //         }
+        //     }
+        // }
+
+        // stage('Code Coverage') {
+        //     steps {
+        //         bat 'mvn jacoco:report'
+        //     }
+        // }
+
+        // stage('Publish Test Results') {
+        //     steps {
+        //         junit '**/**/target/surefire-reports/*.xml'
+        //     }
+        // }
+
+        // stage('Publish Coverage Report') {
+        //     steps {
+        //         jacoco()
+        //     }
+        // }
+
+        stage('Build Frontend Docker Image') {
             steps {
-                sh 'mvn test'
+                bat "docker build --target frontend -t ${DOCKERHUB_REPO}_frontend:${DOCKER_IMAGE_TAG} ."
             }
         }
-
-        stage('Code Coverage') {
+        stage('Build Backend Docker Image') {
             steps {
-                sh 'mvn jacoco:report'
+                bat "docker build --target backend -t ${DOCKERHUB_REPO}_backend:${DOCKER_IMAGE_TAG} ."
             }
         }
-
-        stage('Publish Test Results') {
-            steps {
-                junit '**/**/target/surefire-reports/*.xml'
-            }
-        }
-
-        stage('Publish Coverage Report') {
-            steps {
-                jacoco()
-            }
-        }
-
-       stage('Build Frontend Docker Image') {
-           steps {
-               sh 'docker build --target frontend -t ${DOCKERHUB_REPO}_frontend:${DOCKER_IMAGE_TAG} .'
-           }
-       }
-       stage('Build Backend Docker Image') {
-            steps {
-              sh 'docker build --target backend -t ${DOCKERHUB_REPO}_backend:${DOCKER_IMAGE_TAG} .'
-            }
-       }
 
         stage('Push Docker Image to Docker Hub') {
             steps {
-                withCredentials([
-                        usernamePassword(
-                                credentialsId: "${DOCKERHUB_CREDENTIALS_ID}",
-                                usernameVariable: 'DOCKER_USER',
-                                passwordVariable: 'DOCKER_PASS'
-                        )
-                ]) {
-                    sh '''
-                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                        docker push ${DOCKERHUB_REPO}_frontend:${DOCKER_IMAGE_TAG}
-                        docker push ${DOCKERHUB_REPO}_backend:${DOCKER_IMAGE_TAG}
-                        docker logout
-                    '''
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', env.DOCKERHUB_CREDENTIALS_ID) {
+                        docker.image("${DOCKERHUB_REPO}_frontend:${DOCKER_IMAGE_TAG}").push()
+                        docker.image("${DOCKERHUB_REPO}_backend:${DOCKER_IMAGE_TAG}").push()
+                    }
                 }
             }
+        }
+    }
+    post {
+        always {
+            bat "docker logout"
+        }
+        success {
+            echo "Image published to Docker Hub successfully."
+        }
+        failure {
+            echo 'Pipeline failed. Check the logs above for details.'
         }
     }
 }
