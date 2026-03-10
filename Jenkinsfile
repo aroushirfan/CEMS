@@ -49,35 +49,29 @@ pipeline {
             }
         }
 
-        // stage('Test') {
-        //     steps {
-        //             withEnv([
-        //             'DB_URL=jdbc:mariadb://localhost:3306/cems_db',
-        //             'DB_USERNAME=root',
-        //             'DB_PASSWORD=root'
-        //         ]) {
-        //             bat 'mvn test -DDB_URL=$DB_URL -DDB_USERNAME=$DB_USERNAME -DDB_PASSWORD=$DB_PASSWORD'
-        //         }
-        //     }
-        // }
+         stage('Test') {
+             steps {
+                 bat 'mvn test'
+             }
+         }
 
-        // stage('Code Coverage') {
-        //     steps {
-        //         bat 'mvn jacoco:report'
-        //     }
-        // }
+         stage('Code Coverage') {
+             steps {
+                 bat 'mvn jacoco:report'
+             }
+         }
 
-        // stage('Publish Test Results') {
-        //     steps {
-        //         junit '**/**/target/surefire-reports/*.xml'
-        //     }
-        // }
+         stage('Publish Test Results') {
+             steps {
+                 junit '**/**/target/surefire-reports/*.xml'
+             }
+         }
 
-        // stage('Publish Coverage Report') {
-        //     steps {
-        //         jacoco()
-        //     }
-        // }
+         stage('Publish Coverage Report') {
+             steps {
+                 jacoco()
+             }
+         }
 
         stage('Build Frontend Docker Image') {
             steps {
