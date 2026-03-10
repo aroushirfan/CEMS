@@ -39,7 +39,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: "${params.MAVEN}", url: "${params.GITHUB_REPO}"
+                git branch: "${params.BRANCH}", url: "${params.GITHUB_REPO}"
             }
         }
 
