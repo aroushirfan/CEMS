@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface AttendanceRepository extends JpaRepository<Attendance, AttendanceId> {
@@ -24,4 +25,8 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Attendan
     // Find a specific check-in record by User and Event
     // Note: The AttendanceService utilizes this for the "Duplicate Check"
     Optional<Attendance> findByUserAndEvent(User user, Event event);
+
+    void deleteAttendancesByEvent_Id(UUID eventId);
+
+    void deleteAttendanceByUser_IdAndEvent_Id(UUID userId, UUID eventId);
 }

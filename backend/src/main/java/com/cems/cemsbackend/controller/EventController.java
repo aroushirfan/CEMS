@@ -3,6 +3,7 @@ package com.cems.cemsbackend.controller;
 import com.cems.cemsbackend.mappers.EventMapper;
 import com.cems.cemsbackend.model.Event;
 import com.cems.cemsbackend.model.User;
+import com.cems.cemsbackend.repository.AttendanceRepository;
 import com.cems.cemsbackend.repository.EventRepository;
 import com.cems.cemsbackend.repository.UserRepository;
 import com.cems.shared.model.EventDto.*;
@@ -31,10 +32,12 @@ public class EventController {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final AttendanceRepository attendanceRepository;
 
-    public EventController(EventRepository eventRepository, UserRepository userRepository) {
+    public EventController(EventRepository eventRepository, UserRepository userRepository, AttendanceRepository attendanceRepository) {
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
+        this.attendanceRepository = attendanceRepository;
     }
 
     // get all
@@ -190,12 +193,14 @@ public class EventController {
     ) {
         Optional<Event> eventOpt;
         try {
-            eventOpt = eventRepository.deleteEventById(UUID.fromString(id));
+            eventOpt = eventRepository.getEventById(UUID.fromString(id));
+            if (eventOpt.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event with id not found");
+            }
+            attendanceRepository.deleteAttendancesByEvent_Id(UUID.fromString(id));
+            eventRepository.delete(eventOpt.get());
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Id");
-        }
-        if (eventOpt.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event with id not found");
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }

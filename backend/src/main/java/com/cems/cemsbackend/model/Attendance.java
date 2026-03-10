@@ -20,8 +20,8 @@ public class Attendance {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @Column(nullable = false, name = "check_in_time")
-    private Instant checkInTime;
+    @Column(nullable = true, name = "check_in_time")
+    private Instant checkInTime = null;
 
     @Column(nullable = false)
     private String status;

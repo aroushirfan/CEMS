@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AttendanceService {
@@ -25,19 +26,16 @@ public class AttendanceService {
     public Attendance createCheckIn(User user, Event event) {
         // Gatekeeper: Validate RSVP against partner's model
         List<User> registeredAttendees = event.getAttendees();
-        if (!registeredAttendees.contains(user)) {
+        Optional<Attendance> attendanceOpt = attendanceRepository.findByUserAndEvent(user, event);
+        if (!registeredAttendees.contains(user) || attendanceOpt.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User must RSVP before checking in.");
         }
-
+        Attendance attendance = attendanceOpt.get();
         // Prevent Duplicate Check-ins
-        if (attendanceRepository.findByUserAndEvent(user, event).isPresent()) {
+        if (attendance.getStatus().equals("PRESENT")) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User is already checked in.");
         }
 
-        Attendance attendance = new Attendance();
-        attendance.setId(new AttendanceId(user.getId(), event.getId()));
-        attendance.setUser(user);
-        attendance.setEvent(event);
         attendance.setCheckInTime(Instant.now());
         attendance.setStatus("PRESENT"); // Automatically set to PRESENT
 
@@ -49,6 +47,7 @@ public class AttendanceService {
     }
 
     public boolean hasCheckedIn(User user, Event event) {
-        return attendanceRepository.findByUserAndEvent(user, event).isPresent();
+        var attendanceOpt = attendanceRepository.findByUserAndEvent(user, event);
+        return attendanceOpt.isPresent() && attendanceOpt.get().getStatus().equals("PRESENT");
     }
 }

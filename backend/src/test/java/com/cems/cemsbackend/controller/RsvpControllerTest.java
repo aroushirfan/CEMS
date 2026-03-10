@@ -2,6 +2,7 @@ package com.cems.cemsbackend.controller;
 
 import com.cems.cemsbackend.model.Event;
 import com.cems.cemsbackend.model.User;
+import com.cems.cemsbackend.repository.AttendanceRepository;
 import com.cems.cemsbackend.repository.EventRepository;
 import com.cems.cemsbackend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +24,7 @@ public class RsvpControllerTest {
     private EventRepository eventRepository;
     private UserRepository userRepository;
     private RsvpController rsvpController;
+    private AttendanceRepository attendanceRepository;
 
     private UUID userId;
     private UUID eventId;
@@ -32,8 +34,9 @@ public class RsvpControllerTest {
 
         eventRepository = Mockito.mock(EventRepository.class);
         userRepository = Mockito.mock(UserRepository.class);
+        attendanceRepository = Mockito.mock(AttendanceRepository.class);
 
-        rsvpController = new RsvpController(eventRepository, userRepository);
+        rsvpController = new RsvpController(eventRepository, userRepository, attendanceRepository);
 
         userId = UUID.randomUUID();
         eventId = UUID.randomUUID();
