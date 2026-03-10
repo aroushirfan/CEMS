@@ -3,7 +3,7 @@ package com.cems.frontend.utils;
 public class RbacUtil {
     public static String getRole() {
         String role = LocalStorage.get("role");
-        if (role.isEmpty()) {
+        if (role == null || role.isEmpty()) {
             return "";
         } else {
             return role;
