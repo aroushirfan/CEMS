@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 
@@ -114,6 +113,22 @@ public class RsvpController {
                 .toList();
 
         return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/{eventId}/registered")
+    public ResponseEntity<?> checkUserEventRsvp(@PathVariable UUID eventId) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
+
+        UUID userId = (UUID) auth.getPrincipal();
+        User user = userRepository.getUserById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+
+        return ResponseEntity.ok(Map.of("registered",event.getAttendees().contains(user)));
     }
 }
 
