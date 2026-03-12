@@ -40,6 +40,7 @@ public class EventDetailController {
     @FXML private HBox buttonLayout;
 
     private final BooleanProperty registered = new SimpleBooleanProperty(false);
+    private final BooleanProperty checkedIn = new SimpleBooleanProperty(false);
     private final ApiEventService eventService = new ApiEventService();
     private Event currentEvent; // The property-based Frontend Model
 
@@ -53,7 +54,12 @@ public class EventDetailController {
                 registered
                         .map(isRegistered -> isRegistered ? "Cancel Registration" : "Register Now")
         );
-        buttonLayout.getChildren().remove(checkInButton);
+        // Bind button disable to the checkin status
+        checkInButton.disableProperty().bind(registered.not());
+        checkInButton.textProperty().bind(
+                checkedIn
+                        .map(isCheckedIn -> isCheckedIn ? "Attended" : "Check in")
+        );
         buttonLayout.getChildren().remove(viewAttendanceButton);
     }
 
@@ -63,14 +69,12 @@ public class EventDetailController {
         capacityLabel.textProperty().unbind();
         titleLabel.textProperty().bind(currentEvent.titleProperty());
         capacityLabel.textProperty().bind(currentEvent.capacityProperty().asString("Capacity: %d"));
-        getRegisteredEvents();
-        checkAttendanceStatus();
+        checkUserEventRsvpStatus();
         updateStaticLabels();
         refreshEventFromServer();
 
         boolean isUser = RbacUtil.isUser();
         boolean eventPending = Instant.now().isBefore(currentEvent.getDateTime());
-//        boolean canCheckIn = isUser && !eventPending;
         boolean canRegister = isUser && eventPending;
 
         //  Display button only if it is a user and the event has not started
@@ -81,8 +85,6 @@ public class EventDetailController {
         if (RbacUtil.isFaculty() || RbacUtil.isAdmin()) {
             buttonLayout.getChildren().add(viewAttendanceButton);
         }
-        //  Display button if event has started and is normal user
-        buttonLayout.getChildren().add(checkInButton);
     }
 
     private void refreshEventFromServer() {
@@ -115,24 +117,20 @@ public class EventDetailController {
         }
     }
 
-    private void getRegisteredEvents(){
-        Task<List<Event>> rsvpTask = new Task<>() {
+    private void checkUserEventRsvpStatus(){
+        Task<Boolean> rsvpTask = new Task<>() {
             @Override
-            protected List<Event> call() throws Exception {
-                return rsvpService.getRegisteredEvents();
+            protected Boolean call() throws Exception {
+                return rsvpService.checkUserRsvp(currentEvent.getId());
             }
         };
 
         rsvpTask.setOnSucceeded(e -> {
-            registered.set(rsvpTask.getValue().stream()
-                    .anyMatch(event -> event.getId().equals(currentEvent.getId())));
+            registered.set(rsvpTask.getValue());
         });
-
-        //      run the thread to check rsvp in the background
+        //   run the thread to check rsvp in the background
         new Thread(rsvpTask).start();
-    }
 
-    private void checkAttendanceStatus(){
         Task<Boolean> checkInStatusTask = new Task<>() {
             @Override
             protected Boolean call() throws Exception {
@@ -141,9 +139,10 @@ public class EventDetailController {
         };
 
         checkInStatusTask.setOnSucceeded(e -> {
-            Platform.runLater(() -> checkInButton.setDisable(checkInStatusTask.getValue()));
+              checkedIn.set(checkInStatusTask.getValue());
         });
-        //      run the thread to check rsvp in the background
+
+        //   run the thread to check rsvp in the background
         new Thread(checkInStatusTask).start();
     }
 
@@ -162,7 +161,7 @@ public class EventDetailController {
 
         checkInTask.setOnFailed(e -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Check In Failed. Try again.");
+            alert.setContentText(checkInTask.getException().getMessage());
             alert.show();
         });
         //      run the thread to send check in the background
@@ -173,6 +172,7 @@ public class EventDetailController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setContentText(message);
         alert.showAndWait();
+        checkInButton.setDisable(true);
     }
 
     @FXML
@@ -193,7 +193,7 @@ public class EventDetailController {
 
         rsvpTask.setOnFailed(e -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Registration Failed. Try again.");
+            alert.setContentText(rsvpTask.getException().getMessage());
             alert.show();
         });
         //      run the thread to send rsvp in the background

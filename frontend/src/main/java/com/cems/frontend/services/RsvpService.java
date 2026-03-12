@@ -55,6 +55,21 @@ public class RsvpService {
 
     /**
      * Returns a success message
+     * @return boolean
+     */
+    public boolean checkUserRsvp(UUID eventId) throws Exception {
+        HttpRequest request = LocalHttpClientHelper.buildGetRequest(String.format("rsvp/%s/registered",eventId),AuthService.getInstance().getToken());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            return objectMapper.readTree(response.body()).get("registered").asBoolean();
+        }else {
+            throw new RuntimeException("Fetch request failed with status code: " + response.statusCode() + "error: "+ response.body());
+        }
+    }
+
+    /**
+     * Returns a success message
      * @return String
      */
     public String register(UUID eventId) throws Exception {
@@ -64,7 +79,7 @@ public class RsvpService {
             return objectMapper.readTree(response.body()).get("message").asText();
         }else {
             System.out.println(response.body());
-            throw new RuntimeException("Post request failed with status code: " + response.statusCode());
+            throw new RuntimeException(objectMapper.readTree(response.body()).get("message").asText());
         }
     }
 

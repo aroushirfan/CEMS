@@ -1,0 +1,9 @@
+.profile-btn{
+    -fx-background-color: #272424;
+    -fx-background-radius: 100;
+    -fx-border-radius: 100;
+    -fx-border-insets: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 10 11;
+    -fx-cursor:hand;
+}

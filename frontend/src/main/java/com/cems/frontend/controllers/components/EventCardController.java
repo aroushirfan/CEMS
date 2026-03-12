@@ -52,17 +52,15 @@ public class EventCardController {
     }
 
     private void getRegisteredEvents(){
-        Task<List<Event>> rsvpTask = new Task<>() {
+        Task<Boolean> rsvpTask = new Task<>() {
             @Override
-            protected List<Event> call() throws Exception {
-                return rsvpService.getRegisteredEvents();
+            protected Boolean call() throws Exception {
+                return rsvpService.checkUserRsvp(currentEvent.getId());
             }
         };
 
         rsvpTask.setOnSucceeded(e -> {
-//            TODO: REGSITER EVENT should be a single event check
-            registered.set(rsvpTask.getValue().stream()
-                    .anyMatch(event -> event.getId().equals(currentEvent.getId())));
+            registered.set(rsvpTask.getValue());
         });
 
         //   run the thread to check rsvp in the background
@@ -87,7 +85,7 @@ public class EventCardController {
 
         rsvpTask.setOnFailed(e -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Registration Failed. Please try again.");
+            alert.setContentText(rsvpTask.getException().getMessage());
             alert.show();
         });
         //      run the thread to send rsvp in the background
