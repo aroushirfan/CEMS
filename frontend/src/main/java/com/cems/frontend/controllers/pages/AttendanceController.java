@@ -158,7 +158,6 @@ public class AttendanceController {
         new Thread(fetchTask).start();
     }
 
-
     private void handleSearchFocus(){
         searchTextField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
             if (isNowFocused) {
@@ -170,10 +169,12 @@ public class AttendanceController {
     }
 
     private void updateAttendanceRecords(){
-        totalRegisteredLabel.setText(String.valueOf(attendanceModelObservable.size()));
+        long totalAttendanceCount = attendanceModelObservable.size();
+        long attendancePresentCount = attendanceModelObservable.stream().filter(attendance->attendance.getStatus().equals("PRESENT")).count();
+        totalRegisteredLabel.setText(String.valueOf(totalAttendanceCount));
         //        Filter by status to get count for checked in and pending attendees
-        attendeesCheckedInLabel.setText(String.valueOf(attendanceModelObservable.size()));
-        attendeesPendingLabel.setText(String.valueOf(attendanceModelObservable.size()));
+        attendeesCheckedInLabel.setText(String.valueOf(attendancePresentCount));
+        attendeesPendingLabel.setText(String.valueOf(totalAttendanceCount - attendancePresentCount));
     }
 
     @FXML
