@@ -73,6 +73,10 @@ public class AttendanceController {
 
     private Event loadedEvent;
 
+    private final ObservableList<Attendance> attendanceModelObservable = FXCollections.observableArrayList();
+
+    private final AttendanceService attendanceService = new AttendanceService(LocalHttpClientHelper.getClient(), LocalHttpClientHelper.getMapper());
+
     public void loadAttendanceForEvent(Event event) {
         loadedEvent = event;
         eventName.setText(event.getTitle());
@@ -84,11 +88,6 @@ public class AttendanceController {
         }
         fetchAttendanceRecords(event.getId());
     }
-
-
-    private final ObservableList<Attendance> attendanceModelObservable = FXCollections.observableArrayList();
-
-    private final AttendanceService attendanceService = new AttendanceService(LocalHttpClientHelper.getClient(), LocalHttpClientHelper.getMapper());
 
     @FXML
     public void initialize() {
@@ -129,8 +128,12 @@ public class AttendanceController {
             @Override
             protected void updateItem(Instant time, boolean empty) {
                 super.updateItem(time, empty);
-                setText(empty || time == null ? null : time.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm")));
-            }
+                if (empty) {
+                    setText(null);
+                }else {
+                    setText(time == null ? "Yet to check in" : time.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm")));
+                }
+             }
         });
     }
 
