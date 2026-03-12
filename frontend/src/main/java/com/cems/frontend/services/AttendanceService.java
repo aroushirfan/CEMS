@@ -50,11 +50,9 @@ public class AttendanceService {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200 || response.statusCode() == 201) {
-//            "Check in Successful. Thank you for your attendance."
                 return objectMapper.readTree(response.body()).get("message").asText();
             } else {
-                System.out.println(response.body());
-                throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
+                throw new RuntimeException(objectMapper.readTree(response.body()).get("error").asText());
             }
         } catch (Exception e) {
             e.printStackTrace();
