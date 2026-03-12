@@ -1,5 +1,7 @@
 package com.cems.frontend.controllers.components;
 
+import com.cems.frontend.models.NavigationNotifier;
+import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.AuthService;
 import com.cems.frontend.utils.LocalStorage;
 import javafx.fxml.FXML;
@@ -12,6 +14,7 @@ public class NavbarController {
     public static NavbarController instance;
     @FXML private Label loginLabel;
     @FXML private Button signupBtn;
+    @FXML private Button profileBtn;
 
     @FXML
     public void initialize() {
@@ -28,6 +31,14 @@ public class NavbarController {
 
         signupBtn.setVisible(!isLoggedIn);
         signupBtn.setManaged(!isLoggedIn);
+
+        profileBtn.setVisible(isLoggedIn);
+        profileBtn.setManaged(isLoggedIn);
+    }
+
+    @FXML
+    private void handleViewProfile() {
+        NavigationNotifier.getInstance().notifyAllObservers(Paths.USER_SETTINGS);
     }
 
     @FXML
