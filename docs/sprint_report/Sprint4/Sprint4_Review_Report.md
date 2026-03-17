@@ -46,13 +46,13 @@ During the final review, the team demonstrated the following:
 
 ## 👥 Team Effort & Time Spent
 
-| Member | Role | Key Tasks | Hours |
-| :--- | :--- | :--- |:------|
-| **Sailesh Karki** | Scrum Master | Dockerization, README, Backend Logic | 21    |
-| **Jiya Jameela** | Developer | Authentication, Event CRUD Logic | 14    |
-| **Puntawat Subhamani** | Developer | RSVP UI, Database Integration | 12    |
-| **Aroush Irfan** | QA/DevOps | Jenkins Pipeline, JaCoCo Coverage | 12    |
-| **Ayokunle Ogunbiyi** | Developer | Notification System, Bug Fixing | 17    |
+| Member | Role                 | Key Tasks                                                                                                                  | Hours |
+| :--- |:---------------------|:---------------------------------------------------------------------------------------------------------------------------|:------|
+| **Sailesh Karki** | Scrum Master         | Readme Documentation, Q&A, Testing, Presentation, Trello Borad update, Sprint Review and sprint retrospective.             | 21    |
+| **Jiya Jameela** | Backend Developer    | HomePage- pagination  and sidebar modification.                                                                            | 20    |
+| **Puntawat Subhamani** | Full Stack Developer | Sidebar navigation, Docker & Jenkins CI/CD, & Debugging                                                                    | 21    |
+| **Aroush Irfan** | Front Developer      | Admin pages (user and event management), role based access in frontend, testing for some features                          | 15    |
+| **Ayokunle Ogunbiyi** | Full Stack Developer | Notification System Beackend, Bug Fixing, Attendence Tracking frontend Jenkins CI/CD pipeline and Docker Image publishing. | 17    |
 
 ---
 
@@ -62,5 +62,5 @@ During the final review, the team demonstrated the following:
 ---
 
 ## 🚀 Next Sprint Focus (Final)
-* **Final Presentation**: Deliver the project following the lecturer’s instructions during the Week 8 session.
-* **Project Handover**: Finalize the user manual and peer feedback logs.
+* **Scrum Master Handover**: Review sprint 4 and hand over to new srcum master.
+* **Focus on Remaining Product Backlog**: Prepare new sprint 5 and accomplished the new tasks and plan for localization and cloud deployment.
