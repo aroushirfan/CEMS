@@ -2,7 +2,7 @@
 
 **Project:** Campus Event Management System (CEMS)  
 **Sprint Number:** 4  
-**Dates:** 05/03/2026 – 10/03/2026
+**Dates:** 05/03/2026 – 18/03/2026
 
 ---
 
@@ -38,7 +38,7 @@ The goal of Sprint 4 is to finalize all system functionality, containerize the a
 
 ## 👥 Team Capacity & Assumptions
 * **Capacity**: The team is committed to a 100% completion rate for this final sprint.
-* **Hours**: Estimated total effort of approximately 12–21 hours per member.
+* **Hours**: Estimated total effort of approximately 15–21 hours per member.
 * **Assumptions**:
     * The Shared DTO module remains the stable contract for all communications.
     * The Jenkins CI/CD pipeline remains operational for final automated testing.
