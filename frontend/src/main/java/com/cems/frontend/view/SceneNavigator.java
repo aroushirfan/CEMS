@@ -81,6 +81,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class SceneNavigator {
     private static Stage mainStage;
@@ -101,7 +103,10 @@ public class SceneNavigator {
             double width = mainStage.getWidth();
             double height = mainStage.getHeight();
 
-            FXMLLoader loader = new FXMLLoader(resource);
+            Locale locale = new Locale("en", "US");
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("Bundles", locale);
+
+            FXMLLoader loader = new FXMLLoader(resource,resourceBundle);
             Scene scene = new Scene(loader.load(), width, height);
 
 
