@@ -69,7 +69,7 @@ public class MainHomeController {
 
         for (Event event : page) {
             try {
-                FXMLLoader loader = new FXMLLoader(
+                FXMLLoader loader = SceneNavigator.getLoader(
                         getClass().getResource("/com/cems/frontend/view/components/event-card.fxml")
                 );
 

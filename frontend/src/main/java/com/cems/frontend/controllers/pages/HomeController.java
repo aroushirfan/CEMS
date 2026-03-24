@@ -68,7 +68,8 @@ public class HomeController {
 
         for (Event eventModel : events) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cems/frontend/view/components/event-card.fxml"));
+                FXMLLoader loader = SceneNavigator.getLoader(
+                        getClass().getResource("/com/cems/frontend/view/components/event-card.fxml"));
                 VBox card = loader.load();
 
                 EventCardController cardController = loader.getController();
