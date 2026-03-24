@@ -76,6 +76,7 @@ import com.cems.frontend.controllers.pages.EventDetailController;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.NavigationNotifier;
 import com.cems.frontend.models.Paths;
+import com.cems.frontend.utils.LocaleUtil;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -103,7 +104,7 @@ public class SceneNavigator {
             double width = mainStage.getWidth();
             double height = mainStage.getHeight();
 
-            Locale locale = new Locale("en", "US");
+            Locale locale = LocaleUtil.getInstance().getLocale();
             ResourceBundle resourceBundle = ResourceBundle.getBundle("Bundles", locale);
 
             FXMLLoader loader = new FXMLLoader(resource,resourceBundle);
