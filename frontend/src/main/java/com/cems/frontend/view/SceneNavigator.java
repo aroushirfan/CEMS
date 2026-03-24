@@ -155,6 +155,16 @@ public class SceneNavigator {
         AttendanceController controller = (AttendanceController) NavigationNotifier.getInstance().notifyAllObservers(Paths.ATTENDANCE_VIEW);
         controller.loadAttendanceForEvent(event);
     }
+
+    // new method to current SceneNavigator class
+    public static FXMLLoader getLoader(URL resource) {
+        // Matches your existing locale logic
+        Locale locale = new Locale("en", "US");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("Bundles", locale);
+
+        // Returns a loader that already "knows" the dictionary
+        return new FXMLLoader(resource, resourceBundle);
+    }
 }
 
 
