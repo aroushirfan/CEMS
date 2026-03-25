@@ -26,8 +26,6 @@ public class NavigationController implements NavigationObserver {
         sidebarController = loader.getController();
 
         borderPane.setLeft(sidebar);
-//        FXMLLoader navbarLoader = new FXMLLoader(getClass().getResource("/com/cems/frontend/view/components/navbar.fxml"));
-//        borderPane.setTop(navbarLoader.load());
         FXMLLoader contentLoader = SceneNavigator.getLoader(getClass().getResource(Paths.HOME.path));
         borderPane.setCenter(contentLoader.load());
 
@@ -37,12 +35,6 @@ public class NavigationController implements NavigationObserver {
     @Override
     @Deprecated
     public void setPage(Paths page) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource(page.path));
-//            borderPane.setCenter(loader.load());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public Object setPageReturnController(Paths page) {
