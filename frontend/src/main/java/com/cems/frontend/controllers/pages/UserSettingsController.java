@@ -1,6 +1,7 @@
 package com.cems.frontend.controllers.pages;
 
-import com.cems.frontend.utils.SideBarState;
+import com.cems.frontend.utils.Language;
+import com.cems.frontend.utils.LocaleUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -54,8 +55,8 @@ public class UserSettingsController {
 
         languageComboBox.getItems().addAll(
                 "English",
-                "Finnish"
-
+                "Urdu",
+                "Thai"
         );
 
         // Mock user data (temporary)
@@ -102,13 +103,16 @@ public class UserSettingsController {
         String email = emailField.getText();
         String language = languageComboBox.getValue();
 
+        LocaleUtil localeUtil = LocaleUtil.getInstance();
+        localeUtil.setLocale(Language.fromDisplayName(language));
+
         System.out.println("Saving user settings:");
         System.out.println("Name: " + fullName);
         System.out.println("Username: " + username);
         System.out.println("DOB: " + dob);
         System.out.println("Phone: " + phone);
         System.out.println("Email: " + email);
-        System.out.println("Language: " + language);
+        System.out.println("Language: " + Language.fromDisplayName(language).getDisplayName());
 
         // TODO: Replace with real service call
     }
