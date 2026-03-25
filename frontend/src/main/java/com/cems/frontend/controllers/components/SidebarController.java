@@ -207,6 +207,7 @@ import com.cems.frontend.view.SceneNavigator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class SidebarController implements NavigationObserver {
 
@@ -293,11 +294,18 @@ public class SidebarController implements NavigationObserver {
         Scene scene = sidebarRoot.getScene();
         if (scene == null) return;
 
+        // Retrieve the ResourceBundle used to load this FXML
+        ResourceBundle bundle = (ResourceBundle) sidebarRoot.getProperties().get("org.openjfx.resourcebundle");
+
+        // Fallback if bundle is null (for safety)
+        if (bundle == null) {
+            bundle = ResourceBundle.getBundle("Bundles", java.util.Locale.getDefault());
+        }
         if (darkModeToggle.isSelected()) {
-            darkModeToggle.setText("ON");
+            darkModeToggle.setText(bundle.getString("sidebar.toggle_button.on"));
             applyDarkMode(scene);
         } else {
-            darkModeToggle.setText("OFF");
+            darkModeToggle.setText(bundle.getString("sidebar.toggle_button.off"));
             removeDarkMode(scene);
         }
     }

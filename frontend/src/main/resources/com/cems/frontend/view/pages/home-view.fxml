@@ -16,10 +16,10 @@
                <children>
                   <VBox spacing="15">
                      <children>
-                        <Label style="-fx-font-size: 32; -fx-font-weight: bold;" text="All Available Events" />
+                        <Label style="-fx-font-size: 32; -fx-font-weight: bold;" text="%home_view.title" />
                         <HBox alignment="CENTER_LEFT" maxWidth="500">
                            <children>
-                              <TextField fx:id="searchField" prefHeight="45" promptText="Search by title or location..." style="-fx-background-radius: 10; -fx-padding: 0 15; -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
+                              <TextField fx:id="searchField" prefHeight="45" promptText="%home_view.search.prompt" style="-fx-background-radius: 10; -fx-padding: 0 15; -fx-font-size: 14;" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                      </children>

@@ -39,7 +39,7 @@
 
     <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10 0;">
         <Label text="%sidebar.dark_mode" />
-        <ToggleButton fx:id="darkModeToggle" onAction="#handleDarkMode" style="-fx-background-radius: 15;" text="ON" />
+        <ToggleButton fx:id="darkModeToggle" onAction="#handleDarkMode" style="-fx-background-radius: 15;" text="%sidebar.toggle_button.on" />
     </HBox>
 
     <Button fx:id="logoutButton" maxWidth="Infinity" onAction="#handleLogout" style="-fx-background-color: #546E7A; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10;" text="%sidebar.logout" />

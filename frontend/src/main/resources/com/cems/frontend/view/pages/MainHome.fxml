@@ -66,7 +66,7 @@
                                                 <ImageView fitHeight="45" preserveRatio="true">
                                                     <image><Image url="@../assets/icons/search.png"/></image>
                                                 </ImageView>
-                                                <Label text="Discover campus events"/>
+                                                <Label text="%main_home.hero.discover"/>
                                             </children>
                                         </VBox>
 
@@ -75,7 +75,7 @@
                                                 <ImageView fitHeight="45" preserveRatio="true">
                                                     <image><Image url="@../assets/icons/list.png"/></image>
                                                 </ImageView>
-                                                <Label text="Track Attendance"/>
+                                                <Label text="%main_home.hero.track"/>
                                             </children>
                                         </VBox>
 
@@ -84,7 +84,7 @@
                                                 <ImageView fitHeight="45" preserveRatio="true">
                                                     <image><Image url="@../assets/icons/bell.png"/></image>
                                                 </ImageView>
-                                                <Label text="Event Alerts"/>
+                                                <Label text="%main_home.hero.alerts"/>
                                             </children>
                                         </VBox>
 
@@ -100,12 +100,12 @@
 
                                 <HBox alignment="CENTER_LEFT">
                                     <children>
-                                        <Label text="Events">
+                                        <Label text="%main_home.section.title">
                                             <font><Font size="28"/></font>
                                         </Label>
                                         <Region HBox.hgrow="ALWAYS"/>
                                         <Label fx:id="seeAllEventsLink"
-                                               text="see all events"
+                                               text="%main_home.link.see_all"
                                                onMouseClicked="#goToAllEvents"
                                                style="-fx-text-fill: #1B336F;
                                                       -fx-font-size:16;
@@ -123,7 +123,7 @@
                             <HBox alignment="CENTER">
                                 <children>
                                     <Label fx:id="viewMoreLabel"
-                                           text="View more"
+                                           text="%main_home.button.view_more"
                                            style="
                                                -fx-background-color: #F9F5FF;
                                                -fx-text-fill: #1B336F;
