@@ -133,28 +133,18 @@ public class SceneNavigator {
         controller.initData(event);
     }
     public static void loadAttendancePage(Event event) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader(
-//                    SceneNavigator.class.getResource("/com/cems/frontend/view/pages/attendance-view.fxml")
-//            );
-//            Scene scene = new Scene(loader.load(), mainStage.getWidth(), mainStage.getHeight());
-//
-//            // Apply CSS
-//            scene.getStylesheets().add(
-//                    SceneNavigator.class.getResource("/com/cems/frontend/view/css/sidebar.css").toExternalForm()
-//            );
-//
-//            AttendanceController controller = loader.getController();
-//            controller.loadAttendanceForEvent(event);
-//
-//            mainStage.setScene(scene);
-//            mainStage.show();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         AttendanceController controller = (AttendanceController) NavigationNotifier.getInstance().notifyAllObservers(Paths.ATTENDANCE_VIEW);
         controller.loadAttendanceForEvent(event);
+    }
+
+    // new method to current SceneNavigator class
+    public static FXMLLoader getLoader(URL resource) {
+        // Matches your existing locale logic
+        Locale locale = LocaleUtil.getInstance().getLocale();
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("Bundles", locale);
+
+        // Returns a loader that already "knows" the dictionary
+        return new FXMLLoader(resource, resourceBundle);
     }
 }
 

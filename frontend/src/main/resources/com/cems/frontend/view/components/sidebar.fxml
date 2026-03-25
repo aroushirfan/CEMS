@@ -16,8 +16,8 @@
 
     <HBox alignment="CENTER_LEFT" spacing="10">
         <VBox>
-            <Label style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #1A237E;" text="CEMS" />
-            <Label style="-fx-font-size: 12; -fx-text-fill: #757575;" text="logo" />
+            <Label style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #1A237E;" text="%sidebar.cems" />
+            <Label style="-fx-font-size: 12; -fx-text-fill: #757575;" text="%sidebar.logo" />
         </VBox>
         <Region HBox.hgrow="ALWAYS" />
         <Label style="-fx-font-size: 20; -fx-cursor: hand;" text="«" />
@@ -26,21 +26,21 @@
     <Region prefHeight="40.0" />
 
     <VBox spacing="8.0">
-        <Button fx:id="homeButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToHome" styleClass="regular" text="Home" />
-        <Button fx:id="allEventsButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToAllEvents" styleClass="regular" text="All Events" />
-        <Button fx:id="createEventBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToCreateEvent" styleClass="regular" text="Create Event" />
-        <Button fx:id="settingsButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToSettings" styleClass="regular" text="Settings" />
-        <Button fx:id="eventManagementBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToEventManagement" styleClass="regular" text="Event Management" />
+        <Button fx:id="homeButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToHome" styleClass="regular" text="%sidebar.home" />
+        <Button fx:id="allEventsButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToAllEvents" styleClass="regular" text="%sidebar.all_events" />
+        <Button fx:id="createEventBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToCreateEvent" styleClass="regular" text="%sidebar.create_event" />
+        <Button fx:id="settingsButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToSettings" styleClass="regular" text="%sidebar.settings" />
+        <Button fx:id="eventManagementBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToEventManagement" styleClass="regular" text="%sidebar.event_mgmt" />
 
-        <Button fx:id="userManagementBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToUserManagement" styleClass="regular" text="User Management" />
+        <Button fx:id="userManagementBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToUserManagement" styleClass="regular" text="%sidebar.user_mgmt" />
     </VBox>
 
     <Region VBox.vgrow="ALWAYS" />
 
     <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10 0;">
-        <Label text="Dark Mode" />
+        <Label text="%sidebar.dark_mode" />
         <ToggleButton fx:id="darkModeToggle" onAction="#handleDarkMode" style="-fx-background-radius: 15;" text="ON" />
     </HBox>
 
-    <Button fx:id="logoutButton" maxWidth="Infinity" onAction="#handleLogout" style="-fx-background-color: #546E7A; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10;" text="Logout" />
+    <Button fx:id="logoutButton" maxWidth="Infinity" onAction="#handleLogout" style="-fx-background-color: #546E7A; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10;" text="%sidebar.logout" />
 </VBox>
