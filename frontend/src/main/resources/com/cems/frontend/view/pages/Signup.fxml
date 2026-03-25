@@ -16,9 +16,9 @@
 
     <VBox alignment="TOP_CENTER" layoutX="241.0" layoutY="95.0" prefHeight="404.0" prefWidth="400.0" spacing="20" style="     -fx-background-color: white;    -fx-padding: 30;     -fx-background-radius: 12;     -fx-border-radius: 12;     -fx-border-color: #dddddd;     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0.3, 0, 4);" AnchorPane.bottomAnchor="116.0" AnchorPane.leftAnchor="241.0" AnchorPane.rightAnchor="259.0" AnchorPane.topAnchor="95.0">
 
-        <Label style="-fx-font-size: 28; -fx-font-weight: bold;" text="CEMS" />
+        <Label style="-fx-font-size: 28; -fx-font-weight: bold;" text="%auth.signup.header" />
 
-        <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="Register to Sign up" />
+        <Label style="-fx-font-size: 20; -fx-font-weight: bold;" text="%auth.signup.title" />
 
         <GridPane hgap="15" prefHeight="50.0" prefWidth="338.0" vgap="10.0">
             <columnConstraints>
@@ -26,18 +26,18 @@
                 <ColumnConstraints prefWidth="260" />
             </columnConstraints>
 
-            <Label text="First Name" />
-            <TextField fx:id="firstNameField" promptText="First Name" GridPane.columnIndex="1" />
+            <Label text="%auth.signup.first_name" />
+            <TextField fx:id="firstNameField" promptText="%auth.signup.first_name" GridPane.columnIndex="1" />
 
-            <Label text="Last Name" GridPane.rowIndex="1" />
-            <TextField fx:id="lastNameField" promptText="Last Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="%auth.signup.last_name" GridPane.rowIndex="1" />
+            <TextField fx:id="lastNameField" promptText="%auth.signup.last_name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-            <Label text="Email" GridPane.rowIndex="2" />
-            <TextField fx:id="emailField" promptText="Email" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-         <Label text="Password" GridPane.rowIndex="3" />
-         <PasswordField fx:id="passwordField" promptText="Pasword" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-         <PasswordField fx:id="confirmPasswordField" promptText="Repeat Password" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-         <Label text="Confirm" GridPane.rowIndex="4" />
+            <Label text="%auth.signup.email" GridPane.rowIndex="2" />
+            <TextField fx:id="emailField" promptText="%auth.signup.password_prompt" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         <Label text="%auth.signup.password" GridPane.rowIndex="3" />
+         <PasswordField fx:id="passwordField" promptText="%auth.signup.password_prompt" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         <PasswordField fx:id="confirmPasswordField" promptText="%auth.signup.confirm_prompt" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         <Label text="%auth.signup.confirm" GridPane.rowIndex="4" />
          <rowConstraints>
             <RowConstraints />
             <RowConstraints />
@@ -54,11 +54,11 @@
         </GridPane>
 
         <HBox alignment="CENTER" spacing="15">
-            <Button onAction="#handleSignup" text="Sign Up" />
-            <Button onAction="#handleCancel" text="Cancel" />
+            <Button onAction="#handleSignup" text="%auth.signup.btn_signup" />
+            <Button onAction="#handleCancel" text="%auth.signup.btn_cancel" />
         </HBox>
 
-        <Hyperlink onAction="#goToLogin" text="Already have an account? Login" />
+        <Hyperlink onAction="#goToLogin" text="%auth.signup.link_login" />
 
     </VBox>
 </AnchorPane>
