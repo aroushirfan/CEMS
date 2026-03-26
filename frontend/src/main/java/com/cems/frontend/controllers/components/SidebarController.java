@@ -348,31 +348,28 @@ public class SidebarController {
     @FXML
     private void goToHome() {
         SceneNavigator.loadContent(Paths.HOME);
-//        setActiveButton(homeButton);
     }
 
     @FXML
     private void goToAllEvents() {
         SceneNavigator.loadContent(Paths.ALL_EVENTS);
-//        setActiveButton(allEventsButton);
     }
 
     @FXML
     private void goToCreateEvent() {
         SceneNavigator.loadContent(Paths.CREATE_EVENT);
-//        setActiveButton(createEventBtn);
     }
 
     @FXML
     private void goToSettings() {
         SceneNavigator.loadContent(Paths.USER_SETTINGS);
-//        setActiveButton(settingsButton);
     }
 
     @FXML
     private void handleLogout() {
         LocalStorage.remove("role");
         LocalStorage.remove("token");
+        refreshVisibility();
         SceneNavigator.loadContent(Paths.HOME);
     }
 
@@ -403,12 +400,10 @@ public class SidebarController {
     @FXML
     private void goToEventManagement() {
         SceneNavigator.loadContent(Paths.EVENT_MANAGEMENT);
-//        setActiveButton(eventManagementBtn);
     }
 
     @FXML
     private void goToUserManagement() {
         SceneNavigator.loadContent(Paths.USER_MANAGEMENT);
-//        setActiveButton(userManagementBtn);
     }
 }
