@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -20,18 +17,6 @@
          <center>
             <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="200.0" spacing="5.0" stylesheets="@../css/navbar.css">
-                     <children>
-                        <Label maxHeight="1.7976931348623157E308" prefHeight="40.0" prefWidth="70.0" styleClass="language-label" text="Language :" />
-                        <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" spacing="5.0">
-                           <children>
-                              <Button fx:id="englishButton" mnemonicParsing="false" onAction="#handleEnglish" styleClass="lang-btn" text="En" />
-                              <Button fx:id="thaiButton" mnemonicParsing="false" onAction="#handleThai" styleClass="lang-btn" text="Th" />
-                              <Button fx:id="urduButton" mnemonicParsing="false" onAction="#handleUrdu" styleClass="lang-btn" text="Ur" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </HBox>
 <!--                  <fx:include source="../components/navbar.fxml" />-->
                   <StackPane fx:id="contentArea" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                </children>

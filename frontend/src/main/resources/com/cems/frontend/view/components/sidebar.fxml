@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.HBox?>
@@ -36,6 +37,7 @@
     </VBox>
 
     <Region VBox.vgrow="ALWAYS" />
+   <ComboBox fx:id="languageComboBox" maxWidth="1.7976931348623157E308" onAction="#handleLanguageChange" prefWidth="150.0" promptText="Language" />
 
     <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10 0;">
         <Label text="%sidebar.dark_mode" />

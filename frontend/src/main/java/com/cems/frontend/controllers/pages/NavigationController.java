@@ -22,9 +22,6 @@ public class NavigationController {
     @FXML private SidebarController sideBarController;
     @FXML private AnchorPane rootView;
     @FXML private StackPane contentArea;
-    @FXML private Button englishButton;
-    @FXML private Button thaiButton;
-    @FXML private Button urduButton;
 
     private Paths currentPath;
 
@@ -33,35 +30,6 @@ public class NavigationController {
         SceneNavigator.setNavigationController(this);
         loadContent(Paths.HOME);
     }
-
-    public StackPane getContentArea() {
-        return contentArea;
-    }
-
-    private void setActiveLangButton(Button btn) {
-        btn.getStyleClass().add("active");
-    }
-
-    @FXML
-    private void handleThai(){
-        setActiveLangButton(thaiButton);
-        LocaleUtil.getInstance().setLocale(Language.TH);
-    }
-
-    @FXML
-    private void handleEnglish(){
-        setActiveLangButton(englishButton);
-        LocaleUtil.getInstance().setLocale(Language.EN);
-    }
-
-    @FXML
-    private void handleUrdu(){
-        setActiveLangButton(urduButton);
-        LocaleUtil.getInstance().setLocale(Language.UR);
-        rootView.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-    }
-
-
 
     public <T> T loadContent(Paths fxmlPath){
         try{

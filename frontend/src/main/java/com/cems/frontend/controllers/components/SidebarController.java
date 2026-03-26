@@ -194,11 +194,15 @@ package com.cems.frontend.controllers.components;
 import com.cems.frontend.controllers.pages.NavigationController;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.AuthService;
+import com.cems.frontend.utils.Language;
 import com.cems.frontend.utils.LocalStorage;
+import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.view.SceneNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
 import java.util.Map;
@@ -231,6 +235,9 @@ public class SidebarController {
     @FXML
     private Button userManagementBtn;
 
+    @FXML
+    private ComboBox<String> languageComboBox;
+
     private Button activeButton;
 
     private Map<Paths, Button> pathMap;
@@ -238,8 +245,9 @@ public class SidebarController {
     @FXML
     private void initialize() {
         refreshVisibility();
-//        setActiveButton(homeButton);
         logoutButton.setVisible(!AuthService.getInstance().getToken().isEmpty());
+
+        languageComboBox.getItems().addAll(Language.EN.getDisplayName(),Language.TH.getDisplayName(),Language.UR.getDisplayName());
 
         this.pathMap = Map.of(
                 Paths.CREATE_EVENT, createEventBtn,
@@ -248,6 +256,14 @@ public class SidebarController {
                 Paths.ALL_EVENTS, allEventsButton,
                 Paths.USER_SETTINGS, settingsButton,
                 Paths.HOME,homeButton);
+
+        languageComboBox.setValue(LocaleUtil.getInstance().getLanguage().getDisplayName());
+    }
+
+    public void handleLanguageChange(){
+        if (languageComboBox.getValue().equalsIgnoreCase(LocaleUtil.getInstance().getLanguage().getDisplayName())) return;
+        System.out.println("Changing language to "+LocaleUtil.getInstance().getLocale().getDisplayName());
+        LocaleUtil.getInstance().setLocale(Language.fromDisplayName(languageComboBox.getValue()));
     }
 
     public void refreshVisibility() {

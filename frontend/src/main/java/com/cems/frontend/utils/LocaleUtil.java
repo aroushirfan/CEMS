@@ -8,9 +8,11 @@ import java.util.ResourceBundle;
 public class LocaleUtil {
     private Locale locale;
     private static LocaleUtil localeUtil;
+    private Language language;
 
     private LocaleUtil() {
         this.locale = Locale.US;
+        this.language = Language.EN;
     }
 
     public static LocaleUtil getInstance() {
@@ -20,7 +22,13 @@ public class LocaleUtil {
         return localeUtil;
     }
 
+    public Language getLanguage() {
+        return language;
+    }
+
     public void setLocale(Language language) {
+        if (this.language.equals(language)) return;
+        this.language = language;
         this.locale = language.getLocale();
         SceneNavigator.reloadNavigationView();
     }
