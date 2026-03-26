@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="sidebarRoot" prefHeight="700.0" prefWidth="240.0" spacing="10.0" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-width: 0 1 0 0;" stylesheets="@../css/sidebar.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.components.SidebarController">
+<VBox fx:id="sidebarRoot" prefHeight="700.0" prefWidth="240.0" spacing="10.0" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-width: 0 1 0 0;" stylesheets="@../css/sidebar.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.components.SidebarController">
 
     <padding>
         <Insets bottom="20" left="20" right="20" top="30" />
@@ -26,13 +26,13 @@
     <Region prefHeight="40.0" />
 
     <VBox spacing="8.0">
-        <Button fx:id="homeButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToHome" styleClass="regular" text="%sidebar.home" />
-        <Button fx:id="allEventsButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToAllEvents" styleClass="regular" text="%sidebar.all_events" />
-        <Button fx:id="createEventBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToCreateEvent" styleClass="regular" text="%sidebar.create_event" />
-        <Button fx:id="settingsButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToSettings" styleClass="regular" text="%sidebar.settings" />
-        <Button fx:id="eventManagementBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToEventManagement" styleClass="regular" text="%sidebar.event_mgmt" />
+        <Button fx:id="homeButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToHome" styleClass="sidebar-btn" text="%sidebar.home" />
+        <Button fx:id="allEventsButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToAllEvents" styleClass="sidebar-btn" text="%sidebar.all_events" />
+        <Button fx:id="createEventBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToCreateEvent" styleClass="sidebar-btn" text="%sidebar.create_event" />
+        <Button fx:id="settingsButton" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToSettings" styleClass="sidebar-btn" text="%sidebar.settings" />
+        <Button fx:id="eventManagementBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToEventManagement" styleClass="sidebar-btn" text="%sidebar.event_mgmt" />
 
-        <Button fx:id="userManagementBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToUserManagement" styleClass="regular" text="%sidebar.user_mgmt" />
+        <Button fx:id="userManagementBtn" alignment="BASELINE_LEFT" maxWidth="Infinity" onAction="#goToUserManagement" styleClass="sidebar-btn" text="%sidebar.user_mgmt" />
     </VBox>
 
     <Region VBox.vgrow="ALWAYS" />

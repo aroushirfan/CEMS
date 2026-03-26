@@ -1,21 +1,12 @@
 package com.cems.frontend.controllers.pages;
 
-import com.cems.frontend.models.NavigationNotifier;
-import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.AuthService;
 import com.cems.frontend.view.SceneNavigator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class SignupController {
 
@@ -53,8 +44,6 @@ public class SignupController {
             return;
         }
 
-        // Temporary (replace with backend later)
-//        System.out.println("User registered: " + email);
         try {
             authService.signUp(firstName, lastName, email, password, confirmPassword);
         } catch (Exception e) {
@@ -86,17 +75,6 @@ public class SignupController {
     private void goToLogin(ActionEvent event) {
         SceneNavigator.loadPage("Login.fxml");
     }
-
-    // Scene switcher
-   // private void switchScene(ActionEvent event, String fxmlPath) {
-     //   try {
-       //     Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-         //   Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-           // stage.setScene(new Scene(root));
-        //} catch (IOException e) {
-          //  e.printStackTrace();
-        //}
-    //}
 
     private void clearFields() {
         firstNameField.clear();

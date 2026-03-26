@@ -1,13 +1,18 @@
-.select {
-    -fx-background-color: #F0E6FF;
-    -fx-text-fill: #6200EE;
-    -fx-font-weight: bold;
-    -fx-background-radius: 5;
-}
-
-.regular {
+.sidebar-btn {
     -fx-background-color: transparent;
     -fx-text-fill: regular;
     -fx-font-weight: normal;
+}
+
+.sidebar-btn:hover {
+    -fx-background-color: #F8F0FF;
+    /*-fx-text-fill: #6200EE;*/
+    -fx-cursor: hand;
+}
+
+.sidebar-btn.active {
+    -fx-background-color: #F0E6FF;
+    -fx-text-fill: #6200EE;
     -fx-background-radius: 5;
+    -fx-font-weight: bold;
 }

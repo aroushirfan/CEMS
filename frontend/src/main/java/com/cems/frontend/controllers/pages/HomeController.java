@@ -1,7 +1,6 @@
 package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.models.Event;
-import com.cems.frontend.utils.SideBarState;
 import com.cems.frontend.view.SceneNavigator;
 import com.cems.frontend.controllers.components.EventCardController;
 import com.cems.frontend.services.ApiEventService;
