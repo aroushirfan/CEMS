@@ -1,7 +1,6 @@
 package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.controllers.components.EventFormController;
-import com.cems.frontend.models.NavigationNotifier;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.ApiEventService;
 import com.cems.frontend.services.IEventService;
@@ -21,7 +20,7 @@ public class CreateEventController {
             EventRequestDTO dto = eventFormController.getFormData();
             eventService.createEvent(dto);
             AlertHelper.showInfo("Success", "Event created successfully!");
-            NavigationNotifier.getInstance().notifyAllObservers(Paths.CREATE_EVENT);
+            SceneNavigator.loadContent(Paths.CREATE_EVENT);
 
         } catch (NumberFormatException e) {
             AlertHelper.showError("Input Error", "Capacity must be a valid number.");
@@ -34,6 +33,6 @@ public class CreateEventController {
 
     @FXML
     private void handleCancel() {
-        NavigationNotifier.getInstance().notifyAllObservers(Paths.CREATE_EVENT);
+        SceneNavigator.loadContent(Paths.CREATE_EVENT);
     }
 }

@@ -1,57 +1,76 @@
 package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.controllers.components.SidebarController;
-import com.cems.frontend.models.Event;
-import com.cems.frontend.models.NavigationNotifier;
-import com.cems.frontend.models.NavigationObserver;
 import com.cems.frontend.models.Paths;
-import javafx.application.Platform;
+import com.cems.frontend.utils.Language;
+import com.cems.frontend.utils.LocaleUtil;
+import com.cems.frontend.view.SceneNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.geometry.NodeOrientation;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-public class NavigationController implements NavigationObserver {
-    @FXML
-    private BorderPane borderPane;
-    private SidebarController sidebarController;
+public class NavigationController {
+    @FXML private SidebarController sideBarController;
+    @FXML private AnchorPane rootView;
+    @FXML private StackPane contentArea;
+
+    private Paths currentPath;
 
     @FXML
     public void initialize() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.SIDEBAR.path));
-        VBox sidebar = loader.load();
-        sidebarController = loader.getController();
-
-        borderPane.setLeft(sidebar);
-//        FXMLLoader navbarLoader = new FXMLLoader(getClass().getResource("/com/cems/frontend/view/components/navbar.fxml"));
-//        borderPane.setTop(navbarLoader.load());
-        FXMLLoader contentLoader = new FXMLLoader(getClass().getResource(Paths.HOME.path));
-        borderPane.setCenter(contentLoader.load());
-
-        NavigationNotifier.getInstance().addObserver(this);
+        SceneNavigator.setNavigationController(this);
+        loadContent(Paths.HOME);
     }
 
-    @Override
-    @Deprecated
-    public void setPage(Paths page) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource(page.path));
-//            borderPane.setCenter(loader.load());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+    public <T> T loadContent(Paths fxmlPath){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath.path));
+
+            Locale locale = LocaleUtil.getInstance().getLocale();
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("Bundles", locale);
+            loader.setResources(resourceBundle);
+
+            Node content = loader.load();
+            T controller = loader.getController();
+
+            contentArea.getChildren().setAll(content);
+            currentPath = fxmlPath;
+            sideBarController.setActiveByPath(fxmlPath);
+            return controller;
+        }catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public Object setPageReturnController(Paths page) {
+    public void reloadUI() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(page.path));
-            borderPane.setCenter(loader.load());
-            return loader.getController();
+            ResourceBundle bundle = LocaleUtil.getInstance().getBundle();
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(Paths.NAVIGATION.path),
+                    bundle
+            );
+            Parent contentRoot = loader.load();
+            NavigationController updatedNavigationController = loader.getController();
+            updatedNavigationController.restoreState(currentPath);
+            contentArea.getScene().setRoot(contentRoot);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+    }
+
+    public void restoreState(Paths fxmlPath) {
+        currentPath = fxmlPath;
+        loadContent(currentPath);
     }
 }

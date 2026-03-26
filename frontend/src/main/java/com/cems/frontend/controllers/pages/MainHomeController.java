@@ -1,6 +1,5 @@
 package com.cems.frontend.controllers.pages;
 
-import com.cems.frontend.models.NavigationNotifier;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.ApiEventService;
 import com.cems.frontend.services.IEventService;
@@ -34,7 +33,6 @@ public class MainHomeController {
     @FXML
     public void initialize() {
 
-
         scrollPane.viewportBoundsProperty().addListener((obs, oldVal, newVal) -> {
             heroImage.setFitWidth(newVal.getWidth());
         });
@@ -46,7 +44,7 @@ public class MainHomeController {
 
     @FXML
     private void goToAllEvents() {
-        NavigationNotifier.getInstance().notifyAllObservers(Paths.ALL_EVENTS);
+        SceneNavigator.loadContent(Paths.ALL_EVENTS);
 
     }
 
@@ -69,7 +67,7 @@ public class MainHomeController {
 
         for (Event event : page) {
             try {
-                FXMLLoader loader = new FXMLLoader(
+                FXMLLoader loader = SceneNavigator.getLoader(
                         getClass().getResource("/com/cems/frontend/view/components/event-card.fxml")
                 );
 
@@ -79,8 +77,6 @@ public class MainHomeController {
 
 
                 card.setOnMouseClicked(e -> SceneNavigator.loadEventDetail(event));
-
-
                 controller.getLearnMoreButton().setOnAction(e -> SceneNavigator.loadEventDetail(event));
 
                 eventGrid.getChildren().add(card);

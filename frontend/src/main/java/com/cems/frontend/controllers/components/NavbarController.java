@@ -1,8 +1,6 @@
 package com.cems.frontend.controllers.components;
 
-import com.cems.frontend.models.NavigationNotifier;
 import com.cems.frontend.models.Paths;
-import com.cems.frontend.services.AuthService;
 import com.cems.frontend.utils.LocalStorage;
 import javafx.fxml.FXML;
 import com.cems.frontend.view.SceneNavigator;
@@ -38,7 +36,7 @@ public class NavbarController {
 
     @FXML
     private void handleViewProfile() {
-        NavigationNotifier.getInstance().notifyAllObservers(Paths.USER_SETTINGS);
+        SceneNavigator.loadContent(Paths.USER_SETTINGS);
     }
 
     @FXML

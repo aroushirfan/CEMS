@@ -1,7 +1,6 @@
 package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.models.Event;
-import com.cems.frontend.utils.SideBarState;
 import com.cems.frontend.view.SceneNavigator;
 import com.cems.frontend.controllers.components.EventCardController;
 import com.cems.frontend.services.ApiEventService;
@@ -68,7 +67,8 @@ public class HomeController {
 
         for (Event eventModel : events) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cems/frontend/view/components/event-card.fxml"));
+                FXMLLoader loader = SceneNavigator.getLoader(
+                        getClass().getResource("/com/cems/frontend/view/components/event-card.fxml"));
                 VBox card = loader.load();
 
                 EventCardController cardController = loader.getController();
