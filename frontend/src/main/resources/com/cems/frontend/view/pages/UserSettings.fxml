@@ -13,7 +13,12 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToWidth="true" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane
+        fx:controller="com.cems.frontend.controllers.pages.UserSettingsController"
+        fitToWidth="true"
+        xmlns="http://javafx.com/javafx/24.0.1"
+        xmlns:fx="http://javafx.com/fxml/1">
+
    <content>
       <VBox spacing="30" style="-fx-padding: 40;">
          <children>
@@ -23,7 +28,7 @@
                   <VBox alignment="TOP_CENTER" spacing="15">
                      <children>
                         <ImageView fx:id="profileImage" fitHeight="120" fitWidth="120" preserveRatio="true" />
-                        <Button fx:id="editProfileButton" style="-fx-background-color: #999; -fx-text-fill: white; -fx-background-radius: 20;" text="Edit Profile" />
+
                      </children>
                   </VBox>
                   <GridPane hgap="20" vgap="15">
@@ -39,8 +44,8 @@
                      <children>
                         <Label text="Full Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <TextField fx:id="fullNameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                        <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+
                         <Label text="Date of Birth:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                         <DatePicker fx:id="dobPicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
@@ -62,12 +67,22 @@
                   <Label text="Phone Number:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                   <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                   <Label text="Email Address:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                  <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label text="Language:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                  <ComboBox fx:id="languageComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="emailField" editable="false"
+                             GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
                </children>
             </GridPane>
-            <Button fx:id="saveButton" style="-fx-background-color: #6200EE; -fx-text-fill: white; -fx-padding: 10 20;" text="Save Changes" />
+             <Button fx:id="saveButton"
+                     text="Save Changes"
+                     onAction="#handleSaveChanges"
+                     style="-fx-background-color: #6200EE; -fx-text-fill: white; -fx-padding: 10 20;" />
+
+             <Button fx:id="deleteButton"
+                     text="Delete Account"
+                     onAction="#handleDeleteAccount"
+                     style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-padding: 10 20;" />
+
+
          </children>
       </VBox>
    </content>
