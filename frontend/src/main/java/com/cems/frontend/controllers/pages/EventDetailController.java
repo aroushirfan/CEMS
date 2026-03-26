@@ -1,7 +1,6 @@
 package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.models.Event;
-import com.cems.frontend.models.NavigationNotifier;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.ApiEventService;
 import com.cems.frontend.services.AttendanceService;
@@ -233,7 +232,7 @@ public class EventDetailController {
                 eventService.deleteEvent(currentEvent.getId().toString());
                 AlertHelper.showInfo("Deleted", "Event removed successfully.");
 //                SceneNavigator.loadPage("home-view.fxml");
-                NavigationNotifier.getInstance().notifyAllObservers(Paths.HOME);
+                SceneNavigator.loadContent(Paths.HOME);
             } catch (Exception e) {
                 AlertHelper.showError("Error", "Could not delete: " + e.getMessage());
             }
@@ -242,6 +241,6 @@ public class EventDetailController {
 
     @FXML
     private void handleBack() {
-        NavigationNotifier.getInstance().notifyAllObservers(Paths.ALL_EVENTS);
+        SceneNavigator.loadContent(Paths.ALL_EVENTS);
     }
 }

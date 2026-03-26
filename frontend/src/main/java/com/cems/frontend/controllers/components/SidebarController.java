@@ -191,25 +191,24 @@
 //}
 package com.cems.frontend.controllers.components;
 
-import com.cems.frontend.models.NavigationNotifier;
-import com.cems.frontend.models.NavigationObserver;
+import com.cems.frontend.controllers.pages.NavigationController;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.AuthService;
+import com.cems.frontend.utils.Language;
 import com.cems.frontend.utils.LocalStorage;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
+import com.cems.frontend.utils.LocaleUtil;
+import com.cems.frontend.view.SceneNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
-import com.cems.frontend.view.SceneNavigator;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
-public class SidebarController implements NavigationObserver {
+public class SidebarController {
 
     @FXML
     private Button allEventsButton;
@@ -236,19 +235,35 @@ public class SidebarController implements NavigationObserver {
     @FXML
     private Button userManagementBtn;
 
-    private Button currentHighlighted = null;
+    @FXML
+    private ComboBox<String> languageComboBox;
 
-    private List<NavigationObserver> observers = new ArrayList<>();
+    private Button activeButton;
+
+    private Map<Paths, Button> pathMap;
 
     @FXML
     private void initialize() {
-        NavigationNotifier.getInstance().addObserver(this);
         refreshVisibility();
-        currentHighlighted = homeButton;
-        homeButton.getStyleClass().removeAll("regular");
-        homeButton.getStyleClass().add("select");
-
         logoutButton.setVisible(!AuthService.getInstance().getToken().isEmpty());
+
+        languageComboBox.getItems().addAll(Language.EN.getDisplayName(),Language.TH.getDisplayName(),Language.UR.getDisplayName());
+
+        this.pathMap = Map.of(
+                Paths.CREATE_EVENT, createEventBtn,
+                Paths.EVENT_MANAGEMENT, eventManagementBtn,
+                Paths.USER_MANAGEMENT, userManagementBtn,
+                Paths.ALL_EVENTS, allEventsButton,
+                Paths.USER_SETTINGS, settingsButton,
+                Paths.HOME,homeButton);
+
+        languageComboBox.setValue(LocaleUtil.getInstance().getLanguage().getDisplayName());
+    }
+
+    public void handleLanguageChange(){
+        if (languageComboBox.getValue().equalsIgnoreCase(LocaleUtil.getInstance().getLanguage().getDisplayName())) return;
+        System.out.println("Changing language to "+LocaleUtil.getInstance().getLocale().getDisplayName());
+        LocaleUtil.getInstance().setLocale(Language.fromDisplayName(languageComboBox.getValue()));
     }
 
     public void refreshVisibility() {
@@ -308,6 +323,7 @@ public class SidebarController implements NavigationObserver {
             darkModeToggle.setText(bundle.getString("sidebar.toggle_button.off"));
             removeDarkMode(scene);
         }
+
     }
 
     private void applyDarkMode(Scene scene) {
@@ -329,94 +345,65 @@ public class SidebarController implements NavigationObserver {
     }
     // Navigation
 
-
     @FXML
     private void goToHome() {
-//        SceneNavigator.loadPage("home-view.fxml");
-        NavigationNotifier.getInstance().notifyAllObservers(Paths.HOME);
+        SceneNavigator.loadContent(Paths.HOME);
     }
 
     @FXML
     private void goToAllEvents() {
-//        SceneNavigator.loadPage("home-view.fxml");
-        NavigationNotifier.getInstance().notifyAllObservers(Paths.ALL_EVENTS);
+        SceneNavigator.loadContent(Paths.ALL_EVENTS);
     }
 
     @FXML
     private void goToCreateEvent() {
-//        SceneNavigator.loadPage("create-event-view.fxml");
-        NavigationNotifier.getInstance().notifyAllObservers(Paths.CREATE_EVENT);
+        SceneNavigator.loadContent(Paths.CREATE_EVENT);
     }
 
     @FXML
     private void goToSettings() {
-//        SceneNavigator.loadPage("UserSettings.xml");
-        NavigationNotifier.getInstance().notifyAllObservers(Paths.USER_SETTINGS);
+        SceneNavigator.loadContent(Paths.USER_SETTINGS);
     }
 
     @FXML
     private void handleLogout() {
         LocalStorage.remove("role");
         LocalStorage.remove("token");
-        SceneNavigator.loadPage("navigation.fxml");
-        NavigationNotifier.getInstance().notifyAllObservers(Paths.ALL_EVENTS);
+        refreshVisibility();
+        SceneNavigator.loadContent(Paths.HOME);
     }
 
-    public void removeAllNavigationObservers() {
-        observers = new ArrayList<>();
-    }
-
-    public void setSidebarSelected(Paths path) {
-        switch (path) {
-            case HOME:
-                selectButton(homeButton);
-                break;
-            case ALL_EVENTS:
-                selectButton(allEventsButton);
-                break;
-            case USER_SETTINGS:
-                selectButton(settingsButton);
-                break;
-            case USER_MANAGEMENT:
-                selectButton(userManagementBtn);
-                break;
-            case EVENT_MANAGEMENT:
-                selectButton(eventManagementBtn);
-                break;
-            case CREATE_EVENT:
-                selectButton(createEventBtn);
-                break;
+    private void setActiveButton(Button selectedButton) {
+        if (selectedButton == null) return;
+        if (activeButton != null) {
+            activeButton.getStyleClass().remove("active");
         }
+        selectedButton.getStyleClass().add("active");
+        activeButton = selectedButton;
     }
 
-    private void clearSelected() {
-        if (currentHighlighted != null) {
-            currentHighlighted.getStyleClass().removeAll("select");
-            currentHighlighted.getStyleClass().add("regular");
+    private void removeActiveButton() {
+        activeButton.getStyleClass().remove("active");
+        activeButton = null;
+    }
+
+    public void setActiveByPath(Paths fxmlPath) {
+        if (pathMap == null) return;
+        Button btn = pathMap.get(fxmlPath);
+        if (btn == null) {
+            removeActiveButton();
+            return;
         }
-    }
-
-    private void selectButton(Button button) {
-        clearSelected();
-        button.getStyleClass().removeAll("regular");
-        button.getStyleClass().add("select");
-        currentHighlighted = button;
+        setActiveButton(btn);
     }
 
     @FXML
     private void goToEventManagement() {
-        NavigationNotifier.getInstance().notifyAllObservers(Paths.EVENT_MANAGEMENT);
+        SceneNavigator.loadContent(Paths.EVENT_MANAGEMENT);
     }
 
     @FXML
     private void goToUserManagement() {
-        NavigationNotifier.getInstance().notifyAllObservers(Paths.USER_MANAGEMENT);
-    }
-
-
-    @Override
-    public void setPage(Paths page) {
-        refreshVisibility();
-        setSidebarSelected(page);
+        SceneNavigator.loadContent(Paths.USER_MANAGEMENT);
     }
 }
