@@ -115,7 +115,7 @@ public class SceneNavigator {
             double height = mainStage.getHeight();
 
             Locale locale = LocaleUtil.getInstance().getLocale();
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("Bundles", locale);
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("com.cems.frontend.view.i18n.Bundles", locale);
 
             FXMLLoader loader = new FXMLLoader(resource,resourceBundle);
             Scene scene = new Scene(loader.load(), width, height);
