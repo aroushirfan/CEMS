@@ -2,7 +2,7 @@ package com.cems.frontend.services;
 
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.HttpClientObject;
-import com.cems.frontend.utils.EventMapper; // Assuming you put the mapper in .utils
+import com.cems.frontend.utils.EventMapper;
 import com.cems.frontend.view.SceneNavigator;
 import com.cems.frontend.utils.LocalStorage;
 import com.cems.shared.model.EventDto;

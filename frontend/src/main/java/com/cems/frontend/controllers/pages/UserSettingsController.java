@@ -142,7 +142,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.time.LocalDate;
 
 public class UserSettingsController {
 
@@ -222,7 +221,7 @@ public class UserSettingsController {
 
             dto.setAccessLevel(currentUser.getAccessLevel());
 
-            // Split full name
+
             String[] parts = fullNameField.getText().trim().split("\\s+", 2);
             dto.setFirstName(parts.length > 0 ? parts[0] : "");
             dto.setLastName(parts.length > 1 ? parts[1] : "");
@@ -234,10 +233,10 @@ public class UserSettingsController {
                             : currentUser.getProfileImageUrl()
             );
 
-            // ⭐ Update backend and use returned updated user
+            // Update backend and use returned updated user
             currentUser = userService.updateCurrentUser(dto);
 
-            // ⭐ Update UI WITHOUT reloading stale backend data
+            //  Update UI
             fillUIWithUser(currentUser);
 
             new Alert(Alert.AlertType.INFORMATION, "Profile updated successfully.").show();

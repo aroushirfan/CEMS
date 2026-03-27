@@ -75,7 +75,7 @@ public class User {
 
     public User() {}
 
-    // Properties for JavaFX binding
+
     public ObjectProperty<UUID> idProperty() { return id; }
     public StringProperty emailProperty() { return email; }
     public IntegerProperty accessLevelProperty() { return accessLevel; }

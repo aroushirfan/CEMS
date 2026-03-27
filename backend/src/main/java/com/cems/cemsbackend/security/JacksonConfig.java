@@ -12,6 +12,6 @@ public class JacksonConfig {
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper()
-                .registerModule(new JavaTimeModule()); // ✅ enables LocalDate
+                .registerModule(new JavaTimeModule()); //  enables LocalDate
     }
 }

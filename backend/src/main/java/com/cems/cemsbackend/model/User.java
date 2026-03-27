@@ -218,9 +218,7 @@ public class User {
     public String getProfileImageUrl() { return profileImageUrl; }
     public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
 
-    // -------------------------
-    // Restored Relationship Methods
-    // -------------------------
+
 
     public List<Event> getAttendingEvents() {
         return attendingEvents;
