@@ -17,13 +17,13 @@
    <content>
       <VBox spacing="30" style="-fx-padding: 40;">
          <children>
-            <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="Profile Details" />
+            <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="%userSettings.profile_header" />
             <HBox spacing="30">
                <children>
                   <VBox alignment="TOP_CENTER" spacing="15">
                      <children>
                         <ImageView fx:id="profileImage" fitHeight="120" fitWidth="120" preserveRatio="true" />
-                        <Button fx:id="editProfileButton" style="-fx-background-color: #999; -fx-text-fill: white; -fx-background-radius: 20;" text="Edit Profile" />
+                        <Button fx:id="editProfileButton" style="-fx-background-color: #999; -fx-text-fill: white; -fx-background-radius: 20;" text="%userSettings.edit_profile" />
                      </children>
                   </VBox>
                   <GridPane hgap="20" vgap="15">
@@ -37,17 +37,17 @@
                         <RowConstraints />
                      </rowConstraints>
                      <children>
-                        <Label text="Full Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label text="%userSettings.name_label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <TextField fx:id="fullNameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                        <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Label text="%userSettings.username_label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                         <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="Date of Birth:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <Label text="%userSettings.dob_label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                         <DatePicker fx:id="dobPicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                </children>
             </HBox>
-            <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="Contact Info" />
+            <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="%userSettings.contact_header" />
             <GridPane hgap="20" vgap="15">
                <columnConstraints>
                   <ColumnConstraints minWidth="120" />
@@ -59,15 +59,15 @@
                   <RowConstraints />
                </rowConstraints>
                <children>
-                  <Label text="Phone Number:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <Label text="%userSettings.phone_number_label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                   <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                  <Label text="Email Address:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <Label text="%userSettings.email_label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                   <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label text="Language:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                  <Label text="%userSettings.language_label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                   <ComboBox fx:id="languageComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
-            <Button fx:id="saveButton" onAction="#handleSaveChanges" style="-fx-background-color: #6200EE; -fx-text-fill: white; -fx-padding: 10 20;" text="Save Changes" />
+            <Button fx:id="saveButton" onAction="#handleSaveChanges" style="-fx-background-color: #6200EE; -fx-text-fill: white; -fx-padding: 10 20;" text="%userSettings.save_changes" />
          </children>
       </VBox>
    </content>

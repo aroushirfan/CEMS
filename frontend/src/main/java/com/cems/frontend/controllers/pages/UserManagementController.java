@@ -1,12 +1,16 @@
 package com.cems.frontend.controllers.pages;
 
+import com.cems.frontend.models.Paths;
 import com.cems.frontend.models.User;
 import com.cems.frontend.services.UserService;
+import com.cems.frontend.utils.LocaleUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+
+import java.util.ResourceBundle;
 
 public class UserManagementController {
 
@@ -31,6 +35,7 @@ public class UserManagementController {
     }
 
     private void setupColumns() {
+        ResourceBundle rb = LocaleUtil.getInstance().getBundle(Paths.USER_MANAGEMENT);
         idColumn.setCellValueFactory(cell -> cell.getValue().idProperty().asString());
         emailColumn.setCellValueFactory(cell -> cell.getValue().emailProperty());
         firstNameColumn.setCellValueFactory(cell -> cell.getValue().firstNameProperty());
@@ -39,10 +44,10 @@ public class UserManagementController {
 
         actionsColumn.setCellFactory(col -> new TableCell<>() {
 
-            private final Button makeFaculty = new Button("Make Faculty");
-            private final Button makeAdmin = new Button("Make Admin");
-            private final Button removeFaculty = new Button("Remove Faculty");
-            private final Button removeAdmin = new Button("Remove Admin");
+            private final Button makeFaculty = new Button(rb.getString("user_management.make_faculty"));
+            private final Button makeAdmin = new Button(rb.getString("user_management.make_admin"));
+            private final Button removeFaculty = new Button(rb.getString("user_management.remove_faculty"));
+            private final Button removeAdmin = new Button(rb.getString("user_management.remove_admin"));
 
             {
                 makeFaculty.setOnAction(e -> updateRole(1));

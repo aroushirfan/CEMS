@@ -16,7 +16,7 @@
     </padding>
 
     <HBox alignment="CENTER_LEFT" spacing="15.0">
-        <Button onAction="#handleBack" style="-fx-background-color: transparent; -fx-text-fill: #4F46E5; -fx-font-weight: bold; -fx-cursor: hand;" text="← Back to Events" />
+        <Button onAction="#handleBack" style="-fx-background-color: transparent; -fx-text-fill: #4F46E5; -fx-font-weight: bold; -fx-cursor: hand;" text="%eventDetail.back_to_events" />
     </HBox>
 
     <VBox spacing="25.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #E5E7EB; -fx-padding: 40;">
@@ -33,13 +33,13 @@
             </columnConstraints>
 
             <children>
-                <Label style="-fx-text-fill: #6B7280; -fx-font-weight: bold;" text="WHEN" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <Label style="-fx-text-fill: #6B7280; -fx-font-weight: bold;" text="%eventDetail.date_label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                 <Label fx:id="dateLabel" style="-fx-font-size: 16;" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <Label style="-fx-text-fill: #6B7280; -fx-font-weight: bold;" text="WHERE" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <Label style="-fx-text-fill: #6B7280; -fx-font-weight: bold;" text="%eventDetail.location_label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                 <Label fx:id="locationLabel" style="-fx-font-size: 16;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                <Label style="-fx-text-fill: #6B7280; -fx-font-weight: bold;" text="CAPACITY" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <Label style="-fx-text-fill: #6B7280; -fx-font-weight: bold;" text="%eventDetail.capacity_label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                 <Label fx:id="capacityLabel" style="-fx-font-size: 16;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </children>
          <rowConstraints>
@@ -50,22 +50,22 @@
         </GridPane>
 
         <VBox spacing="10.0">
-            <Label style="-fx-text-fill: #6B7280; -fx-font-weight: bold;" text="ABOUT THIS EVENT" />
+            <Label style="-fx-text-fill: #6B7280; -fx-font-weight: bold;" text="%eventDetail.about_label" />
             <Label fx:id="descriptionLabel" style="-fx-font-size: 15; -fx-line-spacing: 5; -fx-text-fill: #374151;" wrapText="true" />
         </VBox>
       <HBox fx:id="buttonLayout" alignment="CENTER_LEFT" spacing="15.0" stylesheets="@../css/event-detail.css">
          <children>
-            <Button fx:id="registerNowButton" disable="true" mnemonicParsing="false" onAction="#handleRegisterNow" styleClass="enroll" text="Register Now" />
-            <Button fx:id="checkInButton" disable="true" mnemonicParsing="false" onAction="#handleCheckIn" styleClass="view-attendance" text="Check In" />
-            <Button fx:id="viewAttendanceButton" mnemonicParsing="false" onAction="#handleViewAttendance" styleClass="view-attendance" text="View Attendance" />
+            <Button fx:id="registerNowButton" disable="true" mnemonicParsing="false" onAction="#handleRegisterNow" styleClass="enroll" text="%eventDetail.register" />
+            <Button fx:id="checkInButton" disable="true" mnemonicParsing="false" onAction="#handleCheckIn" styleClass="view-attendance" text="%eventDetail.check_in" />
+            <Button fx:id="viewAttendanceButton" mnemonicParsing="false" onAction="#handleViewAttendance" styleClass="view-attendance" text="%eventDetail.view_attendance" />
          </children>
       </HBox>
 
         <Separator />
 
                     <HBox alignment="CENTER_RIGHT" spacing="15.0">
-            <Button onAction="#handleDelete" style="-fx-background-color: #FEE2E2; -fx-text-fill: #DC2626; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10 20; -fx-cursor: hand;" text="Delete Event" />
-            <Button onAction="#handleEdit" style="-fx-background-color: #4F46E5; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10 25; -fx-cursor: hand;" text="Edit Details" />
+            <Button onAction="#handleDelete" style="-fx-background-color: #FEE2E2; -fx-text-fill: #DC2626; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10 20; -fx-cursor: hand;" text="%eventDetail.delete_event" />
+            <Button onAction="#handleEdit" style="-fx-background-color: #4F46E5; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10 25; -fx-cursor: hand;" text="%eventDetail.edit_event" />
         </HBox>
     </VBox>
 </VBox>

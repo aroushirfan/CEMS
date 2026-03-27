@@ -383,6 +383,7 @@ public class SidebarController {
     }
 
     private void removeActiveButton() {
+        if (activeButton == null) return;
         activeButton.getStyleClass().remove("active");
         activeButton = null;
     }
@@ -390,7 +391,7 @@ public class SidebarController {
     public void setActiveByPath(Paths fxmlPath) {
         if (pathMap == null) return;
         Button btn = pathMap.get(fxmlPath);
-        if (btn == null) {
+        if (btn == null && activeButton != null) {
             removeActiveButton();
             return;
         }

@@ -36,7 +36,7 @@ public class NavigationController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath.path));
 
             Locale locale = LocaleUtil.getInstance().getLocale();
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("Bundles", locale);
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(fxmlPath.bundlePath, locale);
             loader.setResources(resourceBundle);
 
             Node content = loader.load();
@@ -54,7 +54,7 @@ public class NavigationController {
 
     public void reloadUI() {
         try {
-            ResourceBundle bundle = LocaleUtil.getInstance().getBundle();
+            ResourceBundle bundle = LocaleUtil.getInstance().getBundle(Paths.NAVIGATION);
 
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource(Paths.NAVIGATION.path),

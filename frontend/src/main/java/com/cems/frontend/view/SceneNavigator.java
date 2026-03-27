@@ -135,7 +135,7 @@ public class SceneNavigator {
 
     public void reloadUI(Paths fxmlPath) {
         try {
-            ResourceBundle bundle = LocaleUtil.getInstance().getBundle();
+            ResourceBundle bundle = LocaleUtil.getInstance().getBundle(fxmlPath);
 
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource(fxmlPath.path),

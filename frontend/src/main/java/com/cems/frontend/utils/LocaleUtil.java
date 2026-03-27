@@ -1,5 +1,6 @@
 package com.cems.frontend.utils;
 
+import com.cems.frontend.models.Paths;
 import com.cems.frontend.view.SceneNavigator;
 
 import java.util.Locale;
@@ -37,7 +38,7 @@ public class LocaleUtil {
         return locale;
     }
 
-    public ResourceBundle getBundle() {
-        return ResourceBundle.getBundle("Bundles",this.locale);
+    public ResourceBundle getBundle(Paths fxmlPath) {
+        return ResourceBundle.getBundle(fxmlPath.bundlePath,this.locale);
     }
 }
