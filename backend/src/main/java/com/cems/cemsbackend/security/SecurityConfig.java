@@ -21,7 +21,17 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/users/**").hasRole("ADMIN")
+
+
+
+
+                        .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/users/me").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/users/me").authenticated()
+
+
+
+
                         .requestMatchers(HttpMethod.GET, "/events/**").permitAll()//hasAnyRole("USER", "FACULTY", "ADMIN")
                         .requestMatchers("/events/approved").permitAll()
                         .requestMatchers(HttpMethod.POST, "/events/**").hasAnyRole("FACULTY", "ADMIN")

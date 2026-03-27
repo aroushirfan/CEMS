@@ -28,7 +28,7 @@ public class ApiEventService implements IEventService {
             .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
-    private final String API_URL = String.format("%s/events", System.getenv().getOrDefault("BACKEND_URL","http://localhost:8080"));
+    private final String API_URL = String.format("%s/events", System.getenv().getOrDefault("BACKEND_URL","http://localhost:8081"));
 
     private final AuthService authService = AuthService.getInstance();
 

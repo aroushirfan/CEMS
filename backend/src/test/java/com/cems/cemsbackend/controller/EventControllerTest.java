@@ -39,7 +39,14 @@ class EventControllerTest {
         eventRepository.deleteAll();
         userRepository.deleteAll();
         assertNotNull(controller);
-        User user = new User("test", "test", 2, "first", null, null);
+        User user = new User();
+        user.setEmail("email@example.com");
+        user.setHashedPassword("hashed");
+        user.setAccessLevel(1);
+        user.setFirstName("first");
+        user.setMiddleName(null);
+        user.setLastName(null);
+
         User userEntity = userRepository.save(user);
         auth = new UsernamePasswordAuthenticationToken(userEntity.getId(), null, List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
         SecurityContextHolder.getContext().setAuthentication(auth);
