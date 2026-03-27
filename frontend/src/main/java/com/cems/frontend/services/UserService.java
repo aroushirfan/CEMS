@@ -130,7 +130,7 @@ public class UserService {
         this.client = HttpClientObject.getClient();
     }
 
-    // ⭐ GET /users/me
+    //  GET /users/me
     public User getCurrentUser() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_URL + "/me"))
@@ -154,14 +154,12 @@ public class UserService {
         }
     }
 
-    // ⭐ PUT /users/me
+    //  PUT /users/me
     public User updateCurrentUser(UserDTO dto) throws Exception {
 
-        // ❗ IMPORTANT: Remove fields the backend does NOT allow to change
-        dto.setId(null);
-        dto.setEmail(null);
-        dto.setAccessLevel(0); // ignored by backend mapper anyway
 
+        dto.setEmail(null);
+        dto.setAccessLevel(0);
         String json = mapper.writeValueAsString(dto);
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -241,7 +239,7 @@ public class UserService {
             throw new RuntimeException("Role update failed: " + response.body());
         }
     }
-    // ⭐ DELETE /users/me
+    //  DELETE /users/me
     public void deleteCurrentUser() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_URL + "/me"))

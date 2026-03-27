@@ -149,7 +149,7 @@ public class UserService {
     }
 
     // -------------------------
-    // GET USER BY EMAIL (keep if needed elsewhere)
+    // GET USER BY EMAIL
     // -------------------------
     public UserDTO getUserByEmail(String email) {
         User user = userRepository.getUserByEmail(email)
@@ -169,7 +169,7 @@ public class UserService {
     }
 
     // -------------------------
-    // UPDATE CURRENT USER (BY ID ✅ ONLY)
+    // UPDATE CURRENT USER
     // -------------------------
     public UserDTO updateCurrentUser(UUID userId, UserDTO dto) {
         User user = userRepository.findById(userId)
@@ -182,7 +182,7 @@ public class UserService {
     }
 
     // -------------------------
-    // DELETE USER (BY ID ✅ ONLY)
+    // DELETE USER
     // -------------------------
     public void deleteUser(UUID id) {
         userRepository.deleteById(id);

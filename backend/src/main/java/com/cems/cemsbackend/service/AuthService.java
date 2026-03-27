@@ -102,8 +102,7 @@ public class AuthService {
             super(message);
         }
     }
-
-    // ⭐ REGISTER USER
+    //  REGISTER USER
     public void register(RegisterRequestDTO registerRequest) throws AuthException {
 
         if (userRepository.existsUserByEmail(registerRequest.getEmail())) {
@@ -112,7 +111,7 @@ public class AuthService {
 
         String hashedPassword = bcrypt.encode(registerRequest.getPassword());
 
-        // ⭐ Use setters instead of old constructor
+
         User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setHashedPassword(hashedPassword);
@@ -130,7 +129,7 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    // ⭐ LOGIN USER
+
     public AuthResponseDTO login(LoginRequestDTO loginRequest) throws AuthException {
 
         var userOpt = userRepository.getUserByEmail(loginRequest.getEmail());
