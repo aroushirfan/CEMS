@@ -9,18 +9,18 @@
     <VBox spacing="20" HBox.hgrow="ALWAYS" style="-fx-padding: 20;">
         <HBox spacing="10">
         <TextField fx:id="searchField"
-                   promptText="Search users..."
+                   promptText="%user_management.search_prompt"
                    style="-fx-padding: 8; -fx-background-radius: 5;"/>
         </HBox>
 
         <TableView fx:id="userTable" maxWidth="1100">
             <columns>
-                <TableColumn fx:id="idColumn" text="ID" prefWidth="200"/>
-                <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
-                <TableColumn fx:id="firstNameColumn" text="First Name" prefWidth="150"/>
-                <TableColumn fx:id="lastNameColumn" text="Last Name" prefWidth="150"/>
-                <TableColumn fx:id="accessLevelColumn" text="Role" prefWidth="100"/>
-                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="300"/>
+                <TableColumn fx:id="idColumn" text="%user_management.id" prefWidth="200"/>
+                <TableColumn fx:id="emailColumn" text="%user_management.email" prefWidth="200"/>
+                <TableColumn fx:id="firstNameColumn" text="%user_management.first_name" prefWidth="150"/>
+                <TableColumn fx:id="lastNameColumn" text="%user_management.last_name" prefWidth="150"/>
+                <TableColumn fx:id="accessLevelColumn" text="%user_management.role" prefWidth="100"/>
+                <TableColumn fx:id="actionsColumn" text="%user_management.actions" prefWidth="300"/>
             </columns>
         </TableView>
 

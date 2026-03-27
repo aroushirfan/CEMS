@@ -6,6 +6,7 @@ import com.cems.frontend.services.ApiEventService;
 import com.cems.frontend.services.AttendanceService;
 import com.cems.frontend.services.RsvpService;
 import com.cems.frontend.utils.LocalHttpClientHelper;
+import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.utils.RbacUtil;
 import com.cems.frontend.view.AlertHelper;
 import com.cems.frontend.view.SceneNavigator;
@@ -25,6 +26,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class EventDetailController {
 
@@ -45,19 +47,22 @@ public class EventDetailController {
 
     private final RsvpService rsvpService = new RsvpService(LocalHttpClientHelper.getClient(),LocalHttpClientHelper.getMapper());
     private final AttendanceService attendanceService = new AttendanceService(LocalHttpClientHelper.getClient(),LocalHttpClientHelper.getMapper());
+    private LocaleUtil localeService = LocaleUtil.getInstance();
+    private ResourceBundle rb;
 
     @FXML
     public void initialize() {
+        rb = localeService.getBundle(Paths.EVENT_DETAIL_VIEW);
         // Bind button text to the registered property
         registerNowButton.textProperty().bind(
                 registered
-                        .map(isRegistered -> isRegistered ? "Cancel Registration" : "Register Now")
+                        .map(isRegistered -> isRegistered ? rb.getString("eventDetail.cancel_register") : rb.getString("eventDetail.register"))
         );
         // Bind button disable to the checkin status
         checkInButton.disableProperty().bind(registered.not());
         checkInButton.textProperty().bind(
                 checkedIn
-                        .map(isCheckedIn -> isCheckedIn ? "Attended" : "Check in")
+                        .map(isCheckedIn -> isCheckedIn ? rb.getString("eventDetail.attended") : rb.getString("eventDetail.check_in"))
         );
         buttonLayout.getChildren().remove(viewAttendanceButton);
     }
@@ -108,7 +113,7 @@ public class EventDetailController {
 
     private void updateStaticLabels() {
         locationLabel.setText(currentEvent.getLocation() != null ? currentEvent.getLocation() : "TBD");
-        descriptionLabel.setText(currentEvent.getDescription() != null ? currentEvent.getDescription() : "No description provided.");
+        descriptionLabel.setText(currentEvent.getDescription() != null ? currentEvent.getDescription() : rb.getString("eventDetail.no_description"));
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy - HH:mm");
         if (currentEvent.getDateTime() != null) {
@@ -231,7 +236,6 @@ public class EventDetailController {
             try {
                 eventService.deleteEvent(currentEvent.getId().toString());
                 AlertHelper.showInfo("Deleted", "Event removed successfully.");
-//                SceneNavigator.loadPage("home-view.fxml");
                 SceneNavigator.loadContent(Paths.HOME);
             } catch (Exception e) {
                 AlertHelper.showError("Error", "Could not delete: " + e.getMessage());
