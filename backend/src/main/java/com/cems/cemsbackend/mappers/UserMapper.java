@@ -34,7 +34,6 @@ public class UserMapper {
         dto.setLastName(user.getLastName());
 
 
-
         dto.setPhone(user.getPhone());
         dto.setDob(user.getDob());
         dto.setProfileImageUrl(user.getProfileImageUrl());
@@ -44,8 +43,7 @@ public class UserMapper {
 
     public static void updateEntity(User user, UserDTO dto) {
 
-        // ❌ NEVER update email
-        // ❌ NEVER update access level
+
 
         if (dto.getFirstName() != null)
             user.setFirstName(dto.getFirstName());
