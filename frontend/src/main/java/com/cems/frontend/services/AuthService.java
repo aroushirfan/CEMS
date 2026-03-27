@@ -25,7 +25,7 @@ public class AuthService {
             .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
-    private String API_URL = String.format("%s/auth", System.getenv().getOrDefault("BACKEND_URL", "http://localhost:8080"));
+    private String API_URL = String.format("%s/auth", System.getenv().getOrDefault("BACKEND_URL", "http://localhost:8081"));
 
     private AuthService() {
         this.client = HttpClientObject.getClient();
