@@ -1,8 +1,10 @@
 package com.cems.frontend.controllers.components;
 
 import com.cems.frontend.models.Event;
+import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.RsvpService;
 import com.cems.frontend.utils.LocalHttpClientHelper;
+import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.utils.RbacUtil;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -17,6 +19,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class EventCardController {
     @FXML private Label titleLabel;
@@ -28,8 +31,13 @@ public class EventCardController {
     private Event currentEvent;
     private final BooleanProperty registered = new SimpleBooleanProperty(false);
     private final RsvpService rsvpService = new RsvpService(LocalHttpClientHelper.getClient(),LocalHttpClientHelper.getMapper());
-
+    private ResourceBundle rb;
     @FXML private Button learnMoreButton;
+
+    @FXML
+    public void initialize() {
+        rb = LocaleUtil.getInstance().getBundle(Paths.EVENT_DETAIL_VIEW);
+    }
 
     public void setEventModel(Event event) {
         this.currentEvent = event;
@@ -43,7 +51,7 @@ public class EventCardController {
         spotsLabel.textProperty().bind(event.capacityProperty().asString("Capacity: %d"));
         registerButton.textProperty().bind(
                 registered
-                        .map(isRegistered -> isRegistered ? "Cancel Registration" : "Register")
+                        .map(isRegistered -> isRegistered ? rb.getString("eventDetail.cancel_register") : rb.getString("eventDetail.register"))
         );
         getRegisteredEvents();
         if (Instant.now().isBefore(currentEvent.getDateTime()) && RbacUtil.isUser()) {

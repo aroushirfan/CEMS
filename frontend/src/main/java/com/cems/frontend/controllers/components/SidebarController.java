@@ -262,7 +262,6 @@ public class SidebarController {
 
     public void handleLanguageChange(){
         if (languageComboBox.getValue().equalsIgnoreCase(LocaleUtil.getInstance().getLanguage().getDisplayName())) return;
-        System.out.println("Changing language to "+LocaleUtil.getInstance().getLocale().getDisplayName());
         LocaleUtil.getInstance().setLocale(Language.fromDisplayName(languageComboBox.getValue()));
     }
 

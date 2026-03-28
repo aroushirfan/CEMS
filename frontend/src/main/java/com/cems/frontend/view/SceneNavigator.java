@@ -70,11 +70,9 @@
 
 package com.cems.frontend.view;
 
-import com.cems.frontend.controllers.pages.AttendanceController;
-import com.cems.frontend.controllers.pages.EditEventController;
-import com.cems.frontend.controllers.pages.EventDetailController;
-import com.cems.frontend.controllers.pages.NavigationController;
+import com.cems.frontend.controllers.pages.*;
 import com.cems.frontend.models.Event;
+import com.cems.frontend.models.NavigationMemento;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.utils.LocaleUtil;
 import javafx.fxml.FXMLLoader;
@@ -89,6 +87,7 @@ import java.util.ResourceBundle;
 public class SceneNavigator {
     private static Stage mainStage;
     private static NavigationController navigationController;
+    private static NavigationMemento currentState;
 
     public static void setStage(Stage stage) {
         mainStage = stage;
@@ -96,6 +95,19 @@ public class SceneNavigator {
 
     public static void setNavigationController(NavigationController navController) {
         navigationController = navController;
+        currentState = new NavigationMemento(Paths.HOME,null);
+    }
+
+    public void switchOrientation(){
+        navigationController.setOrientation();
+    }
+
+    public static void setCurrentState(NavigationMemento currentState) {
+        SceneNavigator.currentState = currentState;
+    }
+
+    public static NavigationMemento getCurrentState() {
+        return currentState;
     }
 
     public static void loadContent(Paths fxmlPath) {
@@ -104,6 +116,7 @@ public class SceneNavigator {
 
     public static void loadPage(String fxmlPath) {
         try {
+
             URL resource = SceneNavigator.class.getResource("/com/cems/frontend/view/pages/" + fxmlPath);
 
             if (resource == null) {
@@ -156,15 +169,18 @@ public class SceneNavigator {
     }
 
     public static void loadEventDetail(Event event) {
+        currentState = new NavigationMemento(Paths.EVENT_DETAIL_VIEW, event);
         EventDetailController controller = navigationController.loadContent(Paths.EVENT_DETAIL_VIEW);
         controller.initData(event);
     }
 
     public static void loadEditPage(Event event) {
+        currentState = new NavigationMemento(Paths.EDIT_VIEW, event);
         EditEventController controller = navigationController.loadContent(Paths.EDIT_VIEW);
         controller.initData(event);
     }
     public static void loadAttendancePage(Event event) {
+        currentState = new NavigationMemento(Paths.ATTENDANCE_VIEW, event);
         AttendanceController controller = navigationController.loadContent(Paths.ATTENDANCE_VIEW);
         controller.loadAttendanceForEvent(event);
     }

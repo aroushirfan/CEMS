@@ -1,8 +1,10 @@
 package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.models.Event;
+import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.ApiEventService;
 import com.cems.frontend.utils.LocalStorage;
+import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.view.AlertHelper;
 import com.cems.frontend.view.SceneNavigator;
 import javafx.beans.property.SimpleStringProperty;
@@ -15,6 +17,7 @@ import javafx.scene.layout.HBox;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.UUID;
 
 public class AdminPageController {
@@ -46,9 +49,11 @@ public class AdminPageController {
 
     private final ApiEventService eventService = new ApiEventService();
     private final ObservableList<Event> masterData = FXCollections.observableArrayList();
+    private ResourceBundle rb;
 
     @FXML
     public void initialize() {
+        rb = LocaleUtil.getInstance().getBundle(Paths.EVENT_MANAGEMENT);
         String role = LocalStorage.get("role");
         if (!"ADMIN".equals(role)) {
             SceneNavigator.loadPage("home-view.fxml");
@@ -87,7 +92,7 @@ public class AdminPageController {
         approvedColumn.setPrefWidth(80);
         attendanceColumn.setCellFactory(col -> new TableCell<>() {
 
-            private final Button attendanceBtn = new Button("View");
+            private final Button attendanceBtn = new Button(rb.getString("eventManagement.view_attendance"));
 
             {
                 attendanceBtn.setOnAction(e -> {
@@ -106,9 +111,9 @@ public class AdminPageController {
         actionsColumn.setPrefWidth(150);
 
         actionsColumn.setCellFactory(col -> new TableCell<>() {
-            private final Button approveBtn = new Button("Approve");
-            private final Button editBtn = new Button("Edit");
-            private final Button deleteBtn = new Button("Delete");
+            private final Button approveBtn = new Button(rb.getString("eventManagement.approve_event"));
+            private final Button editBtn = new Button(rb.getString("eventManagement.edit_event"));
+            private final Button deleteBtn = new Button(rb.getString("eventManagement.delete_event"));
 
             {
                 approveBtn.setOnAction(e -> {
@@ -173,7 +178,7 @@ public class AdminPageController {
 
         task.setOnFailed(e -> {
             task.getException().printStackTrace();
-            AlertHelper.showError("Error", "Failed to load events.");
+            AlertHelper.showError(rb.getString("eventManagement.error_title"), rb.getString("eventManagement.load_event_error_message"));
         });
 
         new Thread(task).start();
@@ -181,17 +186,17 @@ public class AdminPageController {
 
     private void handleDelete(Event event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText("Delete event?");
-        alert.setContentText("Are you sure you want to delete: " + event.getTitle());
+        alert.setHeaderText(rb.getString("eventManagement.delete_confirmation_title"));
+        alert.setContentText(rb.getString("eventManagement.delete_confirmation_content") + " " + event.getTitle());
 
         alert.showAndWait().ifPresent(result -> {
             if (result == ButtonType.OK) {
                 try {
                     eventService.deleteEvent(event.getId().toString());
                     masterData.remove(event);
-                    AlertHelper.showInfo("Deleted", "Event removed successfully.");
+                    AlertHelper.showInfo(rb.getString("eventManagement.delete_success_title"), rb.getString("eventManagement.delete_success_content"));
                 } catch (Exception ex) {
-                    AlertHelper.showError("Error", ex.getMessage());
+                    AlertHelper.showError(rb.getString("eventManagement.error_title"), ex.getMessage());
                 }
             }
         });
@@ -207,9 +212,9 @@ public class AdminPageController {
             Event updated = eventService.approveEvent(event.getId().toString());
             event.setApproved(true); // update UI model
             eventTable.refresh();
-            AlertHelper.showInfo("Approved", "Event approved successfully.");
+            AlertHelper.showInfo(rb.getString("eventManagement.approve_success_tile"), rb.getString("eventManagement.approve_success_content"));
         } catch (Exception ex) {
-            AlertHelper.showError("Error", ex.getMessage());
+            AlertHelper.showError(rb.getString("eventManagement.error_title"), ex.getMessage());
         }
     }
 }
