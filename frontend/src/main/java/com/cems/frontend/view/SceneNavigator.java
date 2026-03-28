@@ -170,7 +170,7 @@ public class SceneNavigator {
     public static FXMLLoader getLoader(URL resource) {
         // Matches your existing locale logic
         Locale locale = LocaleUtil.getInstance().getLocale();
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("Bundles", locale);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("com.cems.frontend.view.i18n.Bundles", locale);
 
         // Returns a loader that already "knows" the dictionary
         return new FXMLLoader(resource, resourceBundle);
