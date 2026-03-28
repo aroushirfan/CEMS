@@ -1,0 +1,9 @@
+/* Define the font using @font-face */
+@font-face {
+    font-family: "Noto Sans Thai";
+    src: url("../fonts/NotoSansThai.ttf") format("truetype");
+}
+
+* {
+    -fx-font-family: "Noto Sans Thai";
+}

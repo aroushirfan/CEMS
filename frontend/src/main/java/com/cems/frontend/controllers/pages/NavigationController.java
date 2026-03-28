@@ -73,4 +73,8 @@ public class NavigationController {
         currentPath = fxmlPath;
         loadContent(currentPath);
     }
+
+    public StackPane getContentArea() {
+        return contentArea;
+    }
 }

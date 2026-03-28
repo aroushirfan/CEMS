@@ -119,6 +119,9 @@ public class SceneNavigator {
 
             FXMLLoader loader = new FXMLLoader(resource,resourceBundle);
             Scene scene = new Scene(loader.load(), width, height);
+            if (LocaleUtil.getInstance().getLanguage().getFontCss() != null) {
+                scene.getStylesheets().add(SceneNavigator.class.getResource(LocaleUtil.getInstance().getLanguage().getFontCss()).toExternalForm());
+            }
 
 
             scene.getStylesheets().add(
@@ -174,6 +177,10 @@ public class SceneNavigator {
 
         // Returns a loader that already "knows" the dictionary
         return new FXMLLoader(resource, resourceBundle);
+    }
+
+    public static NavigationController getNavigationController() {
+        return navigationController;
     }
 }
 
