@@ -4,10 +4,12 @@ import com.cems.frontend.controllers.components.SidebarController;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.NavigationMemento;
 import com.cems.frontend.models.Paths;
+import com.cems.frontend.utils.Language;
 import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.view.SceneNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
@@ -27,6 +29,12 @@ public class NavigationController {
     public void initialize() throws IOException {
         SceneNavigator.setNavigationController(this);
         loadContent(Paths.HOME);
+        setOrientation();
+    }
+
+    public void setOrientation(){
+        boolean ltr = LocaleUtil.getInstance().getLanguage().equals(Language.UR);
+        rootView.setNodeOrientation(!ltr ?NodeOrientation.LEFT_TO_RIGHT:NodeOrientation.RIGHT_TO_LEFT);
     }
 
     public <T> T loadContent(Paths fxmlPath){

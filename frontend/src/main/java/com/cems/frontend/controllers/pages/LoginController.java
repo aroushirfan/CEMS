@@ -2,13 +2,18 @@ package com.cems.frontend.controllers.pages;
 
 
 import com.cems.frontend.services.AuthService;
+import com.cems.frontend.utils.Language;
 import com.cems.frontend.utils.LocalStorage;
+import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.view.SceneNavigator;
 import com.cems.shared.model.AuthDTO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 public class LoginController {
 
@@ -16,12 +21,19 @@ public class LoginController {
     private TextField emailField;
     @FXML
     private PasswordField passwordField;
+    @FXML private AnchorPane rootView;
 
     private final AuthService authService = AuthService.getInstance();
 
     @FXML
     public void initialize() {
         System.out.println("Login view loaded");
+        setOrientation();
+    }
+
+    public void setOrientation(){
+        boolean ltr = LocaleUtil.getInstance().getLanguage().equals(Language.UR);
+        rootView.setNodeOrientation(!ltr ?NodeOrientation.LEFT_TO_RIGHT:NodeOrientation.RIGHT_TO_LEFT);
     }
 
     @FXML

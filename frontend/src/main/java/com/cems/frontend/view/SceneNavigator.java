@@ -98,6 +98,10 @@ public class SceneNavigator {
         currentState = new NavigationMemento(Paths.HOME,null);
     }
 
+    public void switchOrientation(){
+        navigationController.setOrientation();
+    }
+
     public static void setCurrentState(NavigationMemento currentState) {
         SceneNavigator.currentState = currentState;
     }
@@ -112,6 +116,7 @@ public class SceneNavigator {
 
     public static void loadPage(String fxmlPath) {
         try {
+
             URL resource = SceneNavigator.class.getResource("/com/cems/frontend/view/pages/" + fxmlPath);
 
             if (resource == null) {
