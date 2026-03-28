@@ -75,4 +75,8 @@ public class NavigationController {
             ((AttendanceController) controller).loadAttendanceForEvent(navigationMemento.getPayload(Event.class));
         }
     }
+
+    public StackPane getContentArea() {
+        return contentArea;
+    }
 }
