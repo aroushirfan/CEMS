@@ -22,9 +22,9 @@ module com.cems.frontend {
     opens com.cems.frontend.controllers.components to javafx.fxml;
 
     opens com.cems.frontend to javafx.fxml;
-    opens com.cems.frontend.models to javafx.base, com.fasterxml.jackson.databind;
 
     exports com.cems.frontend;
+    opens com.cems.frontend.models to com.fasterxml.jackson.databind, javafx.base, javafx.fxml;
 
 
 }

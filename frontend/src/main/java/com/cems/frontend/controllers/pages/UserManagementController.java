@@ -26,16 +26,17 @@ public class UserManagementController {
 
     private final UserService userService = new UserService();
     private final ObservableList<User> masterData = FXCollections.observableArrayList();
+    private  ResourceBundle rb;
 
     @FXML
     public void initialize() {
+        this.rb = LocaleUtil.getInstance().getBundle(Paths.USER_MANAGEMENT);
         setupColumns();
         setupSearch();
         loadUsers();
     }
 
     private void setupColumns() {
-        ResourceBundle rb = LocaleUtil.getInstance().getBundle(Paths.USER_MANAGEMENT);
         idColumn.setCellValueFactory(cell -> cell.getValue().idProperty().asString());
         emailColumn.setCellValueFactory(cell -> cell.getValue().emailProperty());
         firstNameColumn.setCellValueFactory(cell -> cell.getValue().firstNameProperty());

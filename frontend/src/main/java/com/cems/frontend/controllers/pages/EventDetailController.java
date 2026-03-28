@@ -228,17 +228,17 @@ public class EventDetailController {
     @FXML
     private void handleDelete() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Delete");
-        alert.setHeaderText("Delete '" + currentEvent.getTitle() + "'?");
+        alert.setTitle(rb.getString("eventDetail.confirm_delete"));
+        alert.setHeaderText(rb.getString("eventDetail.delete_event") + currentEvent.getTitle() + "'?");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 eventService.deleteEvent(currentEvent.getId().toString());
-                AlertHelper.showInfo("Deleted", "Event removed successfully.");
+                AlertHelper.showInfo(rb.getString("eventDetail.delete_success_title"), rb.getString("eventDetail.delete_success_message"));
                 SceneNavigator.loadContent(Paths.HOME);
             } catch (Exception e) {
-                AlertHelper.showError("Error", "Could not delete: " + e.getMessage());
+                AlertHelper.showError(rb.getString("eventDetail.delete_error"), rb.getString("eventDetail.delete_error_message") + e.getMessage());
             }
         }
     }
