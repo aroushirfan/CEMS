@@ -17,7 +17,7 @@
          <center>
             <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-<!--                  <fx:include source="../components/navbar.fxml" />-->
+                  <fx:include source="../components/navbar.fxml" />
                   <StackPane fx:id="contentArea" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>

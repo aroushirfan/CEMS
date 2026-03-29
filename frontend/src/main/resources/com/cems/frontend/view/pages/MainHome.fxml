@@ -28,7 +28,7 @@
 
                 <VBox spacing="0">
 
-                    <fx:include source="../components/navbar.fxml" />
+<!--                    <fx:include source="../components/navbar.fxml" />-->
 
                     <children>
 

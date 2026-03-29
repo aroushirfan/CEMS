@@ -37,6 +37,7 @@ public class EventCardController {
     @FXML
     public void initialize() {
         rb = LocaleUtil.getInstance().getBundle(Paths.EVENT_DETAIL_VIEW);
+        learnMoreButton.setText(rb.getString("eventDetail.learn_more"));
     }
 
     public void setEventModel(Event event) {
