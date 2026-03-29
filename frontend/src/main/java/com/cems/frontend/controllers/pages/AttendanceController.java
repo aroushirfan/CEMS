@@ -2,8 +2,10 @@ package com.cems.frontend.controllers.pages;
 
 import com.cems.frontend.models.Attendance;
 import com.cems.frontend.models.Event;
+import com.cems.frontend.models.Paths;
 import com.cems.frontend.utils.LocalHttpClientHelper;
 import com.cems.frontend.services.AttendanceService;
+import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.view.SceneNavigator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -20,6 +22,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.UUID;
 
 public class AttendanceController {
@@ -77,6 +80,8 @@ public class AttendanceController {
 
     private final AttendanceService attendanceService = new AttendanceService(LocalHttpClientHelper.getClient(), LocalHttpClientHelper.getMapper());
 
+    private ResourceBundle resourceBundle;
+
     public void loadAttendanceForEvent(Event event) {
         loadedEvent = event;
         eventName.setText(event.getTitle());
@@ -91,7 +96,8 @@ public class AttendanceController {
 
     @FXML
     public void initialize() {
-        attendanceTableView.setPlaceholder(new Label("No Attendance data available at the moment"));
+        resourceBundle = LocaleUtil.getInstance().getBundle(Paths.ATTENDANCE_VIEW);
+        attendanceTableView.setPlaceholder(new Label(resourceBundle.getString("attendance.no_attendance_data")));
         //  set up the table view to display records
         setupTableView();
         attendanceSearchFilter();
@@ -131,7 +137,7 @@ public class AttendanceController {
                 if (empty) {
                     setText(null);
                 }else {
-                    setText(time == null ? "Yet to check in" : time.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm")));
+                    setText(time == null ? resourceBundle.getString("attendance.check_in_time_unavailable") : time.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm")));
                 }
              }
         });

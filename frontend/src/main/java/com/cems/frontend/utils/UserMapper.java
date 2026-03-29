@@ -43,7 +43,7 @@ public class UserMapper {
         user.setFirstName(dto.getFirstName());
         user.setMiddleName(dto.getMiddleName());
         user.setLastName(dto.getLastName());
-
+        user.setAccessLevel(dto.getAccessLevel());
 
         user.setPhone(dto.getPhone());
         user.setDob(dto.getDob());

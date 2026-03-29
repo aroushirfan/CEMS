@@ -18,15 +18,15 @@
 
             <TableView fx:id="eventTable" maxWidth="1100">
                 <columns>
-                    <TableColumn fx:id="idColumn" text="ID" prefWidth="200"/>
-                    <TableColumn fx:id="titleColumn" text="Title" prefWidth="150"/>
-                    <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="200"/>
-                    <TableColumn fx:id="locationColumn" text="Location" prefWidth="150"/>
-                    <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="100"/>
-                    <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
-                    <TableColumn fx:id="approvedColumn" text="Approved" prefWidth="100"/>
-                    <TableColumn fx:id="attendanceColumn" text="Attendance" prefWidth="80"/>
-                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="300"/>
+                    <TableColumn fx:id="idColumn" text="%event_management_ID" prefWidth="200"/>
+                    <TableColumn fx:id="titleColumn" text="%event_management_Title" prefWidth="150"/>
+                    <TableColumn fx:id="descriptionColumn" text="%event_management_Description" prefWidth="200"/>
+                    <TableColumn fx:id="locationColumn" text="%event_management_Location" prefWidth="150"/>
+                    <TableColumn fx:id="capacityColumn" text="%event_management_Capacity" prefWidth="100"/>
+                    <TableColumn fx:id="dateColumn" text="%event_management_Date" prefWidth="150"/>
+                    <TableColumn fx:id="approvedColumn" text="%event_management_Approved" prefWidth="100"/>
+                    <TableColumn fx:id="attendanceColumn" text="%event_management_Attendance" prefWidth="80"/>
+                    <TableColumn fx:id="actionsColumn" text="%event_management_Actions" prefWidth="300"/>
 
                 </columns>
             </TableView>
