@@ -37,7 +37,7 @@
                      </Pane>
 
                         <!--  Navbar -->
-                     <fx:include source="../components/navbar.fxml" />
+<!--                     <fx:include source="../components/navbar.fxml" />-->
 
                   </children>
                </HBox>
