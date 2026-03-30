@@ -115,6 +115,7 @@
     -fx-background-color: transparent;
     -fx-padding: 0;
     -fx-font-weight:bold;
+    -fx-font-family: "Google Sans Bold";
     -fx-cursor:hand;
     -fx-text-fill: #4F46E5;
 }

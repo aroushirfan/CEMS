@@ -6,6 +6,7 @@
     -fx-cursor:hand;
     -fx-padding:  10 40;
     -fx-font-weight: bold;
+    -fx-font-family: "Google Sans Bold";
 }
 
 .view-attendance{
@@ -17,4 +18,5 @@
     -fx-cursor:hand;
     -fx-padding:  10 20;
     -fx-font-weight: bold;
+    -fx-font-family: "Google Sans Bold";
 }

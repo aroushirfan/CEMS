@@ -1,9 +1,14 @@
 /* Define the font using @font-face */
 @font-face {
-    font-family: "Noto Sans Thai";
-    src: url("../fonts/NotoSansThai.ttf") format("truetype");
+    -fx-font-family: "Google Sans";
+    src: url("../fonts/GoogleSans.ttf") format("truetype");
+}
+
+@font-face {
+    -fx-font-family: "Google Sans Bold";
+    src: url("../fonts/GoogleSans-Bold.ttf") format("truetype");
 }
 
 * {
-    -fx-font-family: "Noto Sans Thai";
+    -fx-font-family: "Google Sans";
 }
