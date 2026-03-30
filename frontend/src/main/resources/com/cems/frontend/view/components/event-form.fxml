@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-<VBox spacing="15.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.cems.frontend.controllers.components.EventFormController">
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="335.0" prefWidth="519.0" spacing="15.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.components.EventFormController">
     <children>
         <VBox spacing="5.0">
-            <Label text="%eventForm_title" style="-fx-font-weight: bold; -fx-text-fill: #374151;" />
-            <TextField fx:id="titleField" promptText="%event_enter_event_placeholder"
-                       style="-fx-padding: 8; -fx-background-radius: 5;" />
+            <Label style="-fx-font-weight: bold; -fx-text-fill: #374151;" text="%eventForm_title" />
+            <TextField fx:id="titleField" promptText="%event_enter_event_placeholder" style="-fx-padding: 8; -fx-background-radius: 5;" />
         </VBox>
 
         <VBox spacing="5.0">
-            <Label text="%event_description" style="-fx-font-weight: bold; -fx-text-fill: #374151;" />
-            <TextArea fx:id="descriptionField" promptText="%event_enter_event_details" prefHeight="100.0"
-                      style="-fx-padding: 8; -fx-background-radius: 5;" wrapText="true" />
+            <Label style="-fx-font-weight: bold; -fx-text-fill: #374151;" text="%event_description" />
+            <TextArea fx:id="descriptionField" prefHeight="100.0" promptText="%event_enter_event_details" style="-fx-padding: 8; -fx-background-radius: 5;" wrapText="true" />
         </VBox>
 
         <HBox spacing="15.0">
             <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                <Label text="%event_location" style="-fx-font-weight: bold; -fx-text-fill: #374151;" />
-                <TextField fx:id="locationField" promptText="%event_example_hallA"
-                           style="-fx-padding: 8; -fx-background-radius: 5;" />
+                <Label style="-fx-font-weight: bold; -fx-text-fill: #374151;" text="%event_location" />
+                <TextField fx:id="locationField" promptText="%event_example_hallA" style="-fx-padding: 8; -fx-background-radius: 5;" />
             </VBox>
             <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                <Label text="%event_capacity" style="-fx-font-weight: bold; -fx-text-fill: #374151;" />
-                <TextField fx:id="capacityField" promptText="%event_example_integer"
-                           style="-fx-padding: 8; -fx-background-radius: 5;" />
+                <Label style="-fx-font-weight: bold; -fx-text-fill: #374151;" text="%event_capacity" />
+                <TextField fx:id="capacityField" promptText="%event_example_integer" style="-fx-padding: 8; -fx-background-radius: 5;" />
             </VBox>
         </HBox>
 
         <VBox spacing="5.0">
-            <Label text="%event_date_and_time" style="-fx-font-weight: bold; -fx-text-fill: #374151;" />
-            <HBox spacing="10.0" alignment="CENTER_LEFT">
-                <DatePicker fx:id="datePicker" HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                            style="-fx-padding: 5; -fx-background-radius: 5;" />
+            <Label style="-fx-font-weight: bold; -fx-text-fill: #374151;" text="%event_date_and_time" />
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <DatePicker fx:id="datePicker" maxWidth="Infinity" style="-fx-padding: 5; -fx-background-radius: 5;" HBox.hgrow="ALWAYS" />
 
-                <Label text="%event_at" style="-fx-text-fill: #6B7280;" />
+                <Label style="-fx-text-fill: #6B7280;" text="%event_at" />
 
-                <ComboBox fx:id="hourComboBox" prefWidth="80.0" promptText="%event_HH"
-                          style="-fx-background-radius: 5;" />
+                <ComboBox fx:id="hourComboBox" prefWidth="80.0" promptText="%event_HH" style="-fx-background-radius: 5;" />
                 <Label text="%event_colon" />
-                <ComboBox fx:id="minuteComboBox" prefWidth="80.0" promptText="%event_MM"
-                          style="-fx-background-radius: 5;" />
+                <ComboBox fx:id="minuteComboBox" prefWidth="80.0" promptText="%event_MM" style="-fx-background-radius: 5;" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%event_oclock" />
             </HBox>
         </VBox>
     </children>

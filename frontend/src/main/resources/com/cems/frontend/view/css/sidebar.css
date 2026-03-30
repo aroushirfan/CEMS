@@ -14,6 +14,7 @@
     -fx-text-fill: #6200EE;
     -fx-background-radius: 5;
     -fx-font-weight: bold;
+    -fx-font-family: "Google Sans Bold";
     -fx-border-color: #7c3aed;
     -fx-border-width: 0 0 0 2px;
 }
