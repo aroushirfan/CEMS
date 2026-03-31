@@ -70,13 +70,13 @@
 
 package com.cems.frontend.view;
 
+import com.cems.frontend.controllers.components.NavbarController;
 import com.cems.frontend.controllers.pages.*;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.NavigationMemento;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.utils.LocaleUtil;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -87,6 +87,7 @@ import java.util.ResourceBundle;
 public class SceneNavigator {
     private static Stage mainStage;
     private static NavigationController navigationController;
+    private static NavbarController navbarController;
     private static NavigationMemento currentState;
 
     public static void setStage(Stage stage) {
@@ -98,8 +99,12 @@ public class SceneNavigator {
         currentState = new NavigationMemento(Paths.HOME,null);
     }
 
-    public void switchOrientation(){
-        navigationController.setOrientation();
+    public static void setNavbarController(NavbarController navbar) {
+        navbarController = navbar;
+    }
+
+    public static void refreshNavbar() {
+        navbarController.refreshVisibility();
     }
 
     public static void setCurrentState(NavigationMemento currentState) {
@@ -144,21 +149,6 @@ public class SceneNavigator {
             mainStage.setScene(scene);
             mainStage.show();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void reloadUI(Paths fxmlPath) {
-        try {
-            ResourceBundle bundle = LocaleUtil.getInstance().getBundle(fxmlPath);
-
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(fxmlPath.path),
-                    bundle
-            );
-            Parent contentRoot = loader.load();
-            mainStage.getScene().setRoot(contentRoot);
         } catch (IOException e) {
             e.printStackTrace();
         }

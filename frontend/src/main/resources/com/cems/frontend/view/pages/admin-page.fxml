@@ -12,7 +12,7 @@
 
             <HBox spacing="10">
 
-                <TextField fx:id="searchField" promptText="Search events..."
+                <TextField fx:id="searchField" promptText="%event_management_search_prompt"
                            style="-fx-padding: 8; -fx-background-radius: 5;"/>
             </HBox>
 
