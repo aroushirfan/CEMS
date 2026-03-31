@@ -16,6 +16,7 @@ public class NavbarController {
 
     @FXML
     public void initialize() {
+        SceneNavigator.setNavbarController(this);
         instance = this;
         refreshVisibility();
     }
