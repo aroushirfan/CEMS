@@ -6,12 +6,13 @@
 Prepare the CEMS application for full multilingual support by implementing UI localization, integrate dynamic language switching, and full GUI localization for two non-Latin languages with LTR/RTL orientation.
 
 ## Completed User Stories / Tasks
-- Externalized UI static text (labels, buttons, alerts, validation messages, and table headers) into localization resource files.
+- Externalized UI static text (labels, buttons, alerts, validation messages, and table headers) into localization resource files (https://www.canva.com/design/DAHEdTKJAUo/hTLd7ummAdt-kLV4O--WOg/edit?utm_content=DAHEdTKJAUo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton).
 - Implemented language selection in the UI and verified runtime language switching behavior.
 - Implemented non-Latin GUI localization for Urdu (`ur`) and Thai (`th`).
 - Added locale-aware formatting for dates and numbers.
 - Verified RTL/LTR behavior and layout alignment for localized screens.
 - Updated localization setup document and usage notes for future maintenance or reference by new team members.
+
 
 ## Demo Summary
 The team demonstrated runtime language switching between default language (English), Urdu, and Thai; validated localized labels and messages across major screens, and showed locale-based date/number formatting with RTL/LTR layout adaptation.
