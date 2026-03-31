@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.UUID;
@@ -50,10 +51,11 @@ public class AdminPageController {
     private final ApiEventService eventService = new ApiEventService();
     private final ObservableList<Event> masterData = FXCollections.observableArrayList();
     private ResourceBundle rb;
+    private LocaleUtil localeService = LocaleUtil.getInstance();
 
     @FXML
     public void initialize() {
-        rb = LocaleUtil.getInstance().getBundle(Paths.EVENT_MANAGEMENT);
+        rb = localeService.getBundle(Paths.EVENT_MANAGEMENT);
         String role = LocalStorage.get("role");
         if (!"ADMIN".equals(role)) {
             SceneNavigator.loadPage("home-view.fxml");
@@ -76,7 +78,7 @@ public class AdminPageController {
             if (cell.getValue().getDateTime() == null)
                 return new SimpleStringProperty("");
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            DateTimeFormatter formatter = localeService.dateTime(FormatStyle.FULL,FormatStyle.SHORT);
             return new SimpleStringProperty(
                     formatter.format(cell.getValue().getDateTime().atZone(ZoneId.systemDefault()))
             );

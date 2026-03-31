@@ -5,6 +5,8 @@ import com.cems.frontend.view.SceneNavigator;
 import javafx.application.Platform;
 
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -64,5 +66,27 @@ public class LocaleUtil {
 
     public ResourceBundle getBundle(Paths fxmlPath) {
         return ResourceBundle.getBundle(fxmlPath.bundlePath,this.locale);
+    }
+
+    //    formatters
+    public DateTimeFormatter dateTime(
+            FormatStyle dateStyle,
+            FormatStyle timeStyle
+    ) {
+        return DateTimeFormatter
+                .ofLocalizedDateTime(dateStyle, timeStyle)
+                .withLocale(locale);
+    }
+
+    public DateTimeFormatter date(FormatStyle style) {
+        return DateTimeFormatter
+                .ofLocalizedDate(style)
+                .withLocale(locale);
+    }
+
+    public DateTimeFormatter time(FormatStyle style) {
+        return DateTimeFormatter
+                .ofLocalizedTime(style)
+                .withLocale(locale);
     }
 }

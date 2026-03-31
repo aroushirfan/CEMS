@@ -11,8 +11,8 @@
     </padding>
 
     <VBox spacing="5.0">
-        <Label text="Create New Event" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: #111827;" />
-        <Label text="Set up your event details and invite participants." style="-fx-text-fill: #6B7280;" />
+        <Label text="%createEvent_header" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: #111827;" />
+        <Label text="%createEvent_sub_header" style="-fx-text-fill: #6B7280;" />
     </VBox>
 
     <VBox spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #E5E7EB; -fx-padding: 25;">
@@ -20,9 +20,9 @@
     </VBox>
 
     <HBox spacing="15.0" alignment="CENTER_RIGHT">
-        <Button text="Cancel" onAction="#handleCancel"
+        <Button text="%eventForm_cancel" onAction="#handleCancel"
                 style="-fx-background-color: transparent; -fx-text-fill: #374151; -fx-cursor: hand;" />
-        <Button text="Save Event" onAction="#handleSubmit"
+        <Button text="%eventForm_save_event" onAction="#handleSubmit"
                 style="-fx-background-color: #4F46E5; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10 25; -fx-cursor: hand;" />
     </HBox>
 </VBox>

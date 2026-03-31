@@ -1,6 +1,7 @@
 package com.cems.frontend.controllers.components;
 
 import com.cems.frontend.models.Event;
+import com.cems.frontend.utils.LocaleUtil;
 import com.cems.shared.model.EventDto.EventRequestDTO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.time.chrono.Chronology;
 
 public class EventFormController {
 
@@ -25,9 +27,9 @@ public class EventFormController {
             hourComboBox.getItems().add(String.format("%02d", i));
         }
         minuteComboBox.getItems().addAll("00", "15", "30", "45");
-
         hourComboBox.setValue("12");
         minuteComboBox.setValue("00");
+        datePicker.setChronology(Chronology.ofLocale(LocaleUtil.getInstance().getLocale()));
         datePicker.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {

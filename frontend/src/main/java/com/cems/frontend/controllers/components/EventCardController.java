@@ -18,6 +18,7 @@ import javafx.scene.control.Label;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -32,19 +33,20 @@ public class EventCardController {
     private final BooleanProperty registered = new SimpleBooleanProperty(false);
     private final RsvpService rsvpService = new RsvpService(LocalHttpClientHelper.getClient(),LocalHttpClientHelper.getMapper());
     private ResourceBundle rb;
+    private LocaleUtil localeService = LocaleUtil.getInstance();
     @FXML private Button learnMoreButton;
 
     @FXML
     public void initialize() {
         rb = LocaleUtil.getInstance().getBundle(Paths.EVENT_DETAIL_VIEW);
+        learnMoreButton.setText(rb.getString("eventDetail.learn_more"));
     }
 
     public void setEventModel(Event event) {
         this.currentEvent = event;
         titleLabel.textProperty().bind(event.titleProperty());
         if (event.getDateTime() != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-                    .withZone(ZoneId.systemDefault());
+            DateTimeFormatter formatter = localeService.dateTime(FormatStyle.MEDIUM,FormatStyle.SHORT).withZone(ZoneId.systemDefault());
             dateTimeLabel.setText(formatter.format(event.getDateTime()));
         }
         locationLabel.setText(event.getLocation() != null ? event.getLocation() : "TBD");
