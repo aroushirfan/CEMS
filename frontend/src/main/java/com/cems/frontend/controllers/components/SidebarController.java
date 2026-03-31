@@ -283,6 +283,7 @@ public class SidebarController {
 
         logoutButton.setVisible(false);
         logoutButton.setManaged(false);
+
         if (loggedIn) {
             settingsButton.setVisible(true);
             settingsButton.setManaged(true);
@@ -369,6 +370,7 @@ public class SidebarController {
         LocalStorage.remove("role");
         LocalStorage.remove("token");
         refreshVisibility();
+        SceneNavigator.refreshNavbar();
         SceneNavigator.loadContent(Paths.HOME);
     }
 
