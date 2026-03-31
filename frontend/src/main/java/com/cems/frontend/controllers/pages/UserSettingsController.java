@@ -130,8 +130,10 @@
 
 package com.cems.frontend.controllers.pages;
 
+import com.cems.frontend.models.Paths;
 import com.cems.frontend.models.User;
 import com.cems.frontend.services.UserService;
+import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.view.SceneNavigator;
 import com.cems.shared.model.UserDTO;
 import javafx.fxml.FXML;
@@ -142,27 +144,27 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.ResourceBundle;
 
 public class UserSettingsController {
 
     @FXML private ImageView profileImage;
-    @FXML private Button editProfileButton;
     @FXML private TextField fullNameField;
 
     @FXML private DatePicker dobPicker;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
-
     @FXML private Button saveButton;
 
     private final UserService userService = new UserService();
     private User currentUser;
     private String selectedProfileImagePath;
+    private ResourceBundle resourceBundle;
 
     @FXML
     public void initialize() {
+        resourceBundle = LocaleUtil.getInstance().getBundle(Paths.USER_SETTINGS);
         loadDefaultProfileImage();
-
         loadUserFromBackend();
     }
 
@@ -172,7 +174,7 @@ public class UserSettingsController {
             fillUIWithUser(currentUser);
         } catch (Exception e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Failed to load user data").show();
+            new Alert(Alert.AlertType.ERROR, resourceBundle.getString("userSettings.profile_error")).show();
         }
     }
 
@@ -195,7 +197,7 @@ public class UserSettingsController {
     @FXML
     private void handleEditProfileImage() {
         FileChooser chooser = new FileChooser();
-        chooser.setTitle("Select Profile Image");
+        chooser.setTitle(resourceBundle.getString("userSettings.choose_profile_image_title"));
         chooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
         );
@@ -239,11 +241,11 @@ public class UserSettingsController {
             //  Update UI
             fillUIWithUser(currentUser);
 
-            new Alert(Alert.AlertType.INFORMATION, "Profile updated successfully.").show();
+            new Alert(Alert.AlertType.INFORMATION, resourceBundle.getString("userSettings.update_success")).show();
 
         } catch (Exception e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Failed to update profile.").show();
+            new Alert(Alert.AlertType.ERROR, resourceBundle.getString("userSettings.update_failure")).show();
         }
     }
 
@@ -259,17 +261,17 @@ public class UserSettingsController {
     @FXML
     private void handleDeleteAccount() {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-                "Are you sure you want to delete your account?");
+                resourceBundle.getString("userSettings.delete_confirmation"));
         confirm.showAndWait().ifPresent(response -> {
             if (response.getButtonData().isDefaultButton()) {
                 try {
                     userService.deleteCurrentUser();
-                    new Alert(Alert.AlertType.INFORMATION, "Account deleted.").show();
+                    new Alert(Alert.AlertType.INFORMATION, resourceBundle.getString("userSettings.delete_success")).show();
                     // Redirect to login
                     SceneNavigator.loadPage("Login.fxml");
                 } catch (Exception e) {
                     e.printStackTrace();
-                    new Alert(Alert.AlertType.ERROR, "Failed to delete account.").show();
+                    new Alert(Alert.AlertType.ERROR, resourceBundle.getString("userSettings.delete_failure")).show();
                 }
             }
         });

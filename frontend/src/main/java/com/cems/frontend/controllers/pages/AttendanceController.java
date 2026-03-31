@@ -21,7 +21,9 @@ import javafx.scene.layout.HBox;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
@@ -81,13 +83,14 @@ public class AttendanceController {
     private final AttendanceService attendanceService = new AttendanceService(LocalHttpClientHelper.getClient(), LocalHttpClientHelper.getMapper());
 
     private ResourceBundle resourceBundle;
+    private LocaleUtil localeService = LocaleUtil.getInstance();
 
     public void loadAttendanceForEvent(Event event) {
         loadedEvent = event;
         eventName.setText(event.getTitle());
         eventOrganizer.setText(event.getTitle());
         eventLocation.setText(event.getLocation() != null ? event.getLocation() : "TBD");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy - HH:mm");
+        DateTimeFormatter formatter = localeService.dateTime(FormatStyle.FULL, FormatStyle.SHORT);
         if (event.getDateTime() != null) {
             eventDate.setText(event.getDateTime().atZone(ZoneId.systemDefault()).format(formatter));
         }
@@ -96,7 +99,7 @@ public class AttendanceController {
 
     @FXML
     public void initialize() {
-        resourceBundle = LocaleUtil.getInstance().getBundle(Paths.ATTENDANCE_VIEW);
+        resourceBundle = localeService.getBundle(Paths.ATTENDANCE_VIEW);
         attendanceTableView.setPlaceholder(new Label(resourceBundle.getString("attendance.no_attendance_data")));
         //  set up the table view to display records
         setupTableView();
@@ -137,7 +140,7 @@ public class AttendanceController {
                 if (empty) {
                     setText(null);
                 }else {
-                    setText(time == null ? resourceBundle.getString("attendance.check_in_time_unavailable") : time.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm")));
+                    setText(time == null ? resourceBundle.getString("attendance.check_in_time_unavailable") : time.atZone(ZoneId.systemDefault()).format(localeService.time(FormatStyle.MEDIUM)));
                 }
              }
         });
