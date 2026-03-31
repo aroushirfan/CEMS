@@ -24,7 +24,7 @@ import javafx.scene.layout.HBox;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.time.format.FormatStyle;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -115,7 +115,7 @@ public class EventDetailController {
         locationLabel.setText(currentEvent.getLocation() != null ? currentEvent.getLocation() : "TBD");
         descriptionLabel.setText(currentEvent.getDescription() != null ? currentEvent.getDescription() : rb.getString("eventDetail.no_description"));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy - HH:mm");
+        DateTimeFormatter formatter = localeService.dateTime(FormatStyle.FULL,FormatStyle.SHORT);
         if (currentEvent.getDateTime() != null) {
             dateLabel.setText(currentEvent.getDateTime().atZone(ZoneId.systemDefault()).format(formatter));
         }
