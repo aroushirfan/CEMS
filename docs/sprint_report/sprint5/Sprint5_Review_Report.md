@@ -36,7 +36,7 @@ Sprint 6 will focus on database localization planning and implementation, includ
 | Team Member Name | Assigned Tasks                                                                                                         | Time Spent (hrs) | In-class tasks |
 |------------------|------------------------------------------------------------------------------------------------------------------------|------------------|----------------|
 | Sailesh Karki | English resource bundle updates, Localization documentation update,UI text externalization                             | TBD | Submitted |
-| Jiya Jameela | User settings update (frontend and backend integration), bug fixes, Localization integration support                   | TBD | Submitted |
+| Jiya Jameela | User settings update (frontend and backend integration), bug fixes, Localization integration support                   | 13hr | Submitted |
 | Puntawat Subhamani | locale formatting checks,Thai UI verification, Thai resource bundle updates                                            | TBD | Submitted |
 | Aroush Irfan | Frontend localization wiring, Urdu UI verification,Urdu resource bundle updates, User management bug fixes/adjustments | TBD | Submitted |
 | Ayokunle Ogunbiyi | UI text externalization,Language selector integration,English resource bundle updates support                          | TBD | Submitted |
