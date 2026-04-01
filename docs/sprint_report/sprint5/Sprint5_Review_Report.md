@@ -39,7 +39,7 @@ Sprint 6 will focus on database localization planning and implementation, includ
 | Jiya Jameela | User settings update (frontend and backend integration), bug fixes, Localization integration support             | 13h              | Submitted |
 | Puntawat Subhamani | locale formatting checks,Thai UI verification, Thai resource bundle updates, Font support for thai               | 14h              | Submitted |
 | Aroush Irfan | Frontend localization , Urdu UI verification,Urdu resource bundle updates, User management bug fixes/adjustments | 10h              | Submitted |
-| Ayokunle Ogunbiyi | UI text externalization,Language selector integration,English resource bundle updates support                    | 26h              | Submitted |
+| Ayokunle Ogunbiyi | UI text externalization,Language selector integration,English resource bundle updates support                    | 24h              | Submitted |
 
 ## AI Tools Utilized
 - GitHub Copilot (GPT-5.3-Codex): Assisted with documentation drafting, and report structuring.
