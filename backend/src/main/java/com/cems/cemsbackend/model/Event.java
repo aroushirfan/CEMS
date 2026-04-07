@@ -209,6 +209,10 @@ public class Event {
     public UUID getId() {
         return id;
     }
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
 
     public List<User> getAttendees() {
         return attendees;
