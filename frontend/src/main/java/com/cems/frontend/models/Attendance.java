@@ -14,7 +14,6 @@ public class Attendance {
     private final String status;
 
     public Attendance(UUID eventId,String firstName, String lastName, String email, Instant checkInTime, String status) {
-
         this.name = firstName + " " + lastName;
         this.email = email;
         this.eventId = eventId;

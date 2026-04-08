@@ -75,6 +75,15 @@ public class User {
 
     public User() {}
 
+    public User(UUID id, String email, int accessLevel, String firstName, String middleName, String lastName) {
+        this.id.set(id);
+        this.email.set(email);
+        this.accessLevel.set(accessLevel);
+        this.firstName.set(firstName);
+        this.middleName.set(middleName);
+        this.lastName.set(lastName);
+    }
+
 
     public ObjectProperty<UUID> idProperty() { return id; }
     public StringProperty emailProperty() { return email; }
