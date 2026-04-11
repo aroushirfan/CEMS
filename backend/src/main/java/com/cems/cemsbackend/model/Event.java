@@ -1,276 +1,301 @@
-//package com.cems.cemsbackend.model;
-//
-//import com.cems.shared.model.EventDto;
-//import jakarta.persistence.*;
-//import org.hibernate.annotations.JdbcTypeCode;
-//import org.hibernate.type.SqlTypes;
-//
-//import java.time.Instant;
-//import java.util.List;
-//import java.util.UUID;
-//
-//@Entity
-//@Table(
-//        indexes = {
-//                @Index(name = "idx_event_datetime", columnList = "date_time")
-//        }
-//)
-//public class Event {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.UUID)
-//    @JdbcTypeCode(SqlTypes.BINARY)
-//    private UUID id;
-//    @Column(nullable = false)
-//    private String title;
-//    private String description;
-//    private String location;
-//    private long capacity;
-//    @Column(nullable = false, name = "date_time")
-//    private Instant dateTime;
-//    @Column(nullable = false)
-//    private boolean approved = false;
-//    @ManyToMany
-//    private List<User> attendees;
-//    @ManyToOne(optional = false)
-//    private User eventOwner;
-//
-//    public Event() {}
-//
-//    public Event(String title, String description, String location, long capacity, Instant dateTime, User eventOwner, boolean approved) {
-//        this.title = title;
-//        this.description = description;
-//        this.location = location;
-//        this.capacity = capacity;
-//        this.dateTime = dateTime;
-//        this.eventOwner = eventOwner;
-//        this.approved = approved;
-//    }
-//
-//    public Event updateFromDto(EventDto.EventRequestDTO dto) {
-//        if (dto.getTitle() != null) this.setTitle(dto.getTitle());
-//        if (dto.getDescription() != null) this.setDescription(dto.getDescription());
-//        if (dto.getLocation() != null) this.setLocation(dto.getLocation());
-//        if (dto.getCapacity() != null) this.setCapacity(dto.getCapacity());
-//        if (dto.getDateTime() != null) this.setDateTime(dto.getDateTime());
-//        return this;
-//    }
-//
-//    public User getEventOwner() {
-//        return eventOwner;
-//    }
-//
-//    public void setEventOwner(User eventOwner) {
-//        this.eventOwner = eventOwner;
-//    }
-//
-//    public UUID getId() {
-//        return id;
-//    }
-//
-//    public User[] getAttendees() {
-//        return attendees.toArray(new User[0]);
-//    }
-//
-//    public boolean addAttendee(User attendee) {
-//        return attendees.add(attendee);
-//    }
-//
-//    public boolean removeAttendee(User attendee) {
-//        return attendees.remove(attendee);
-//    }
-//
-//    public String getTitle() {
-//        return title;
-//    }
-//
-//    public void setTitle(String title) {
-//        this.title = title;
-//    }
-//
-//    public Instant getDateTime() {
-//        return dateTime;
-//    }
-//
-//    public void setDateTime(Instant dateTime) {
-//        this.dateTime = dateTime;
-//    }
-//
-//    public boolean isApproved() {
-//        return approved;
-//    }
-//
-//    public void setApproved(boolean approved) {
-//        this.approved = approved;
-//    }
-//
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
-//
-//    public String getLocation() {
-//        return location;
-//    }
-//
-//    public void setLocation(String location) {
-//        this.location = location;
-//    }
-//
-//    public long getCapacity() {
-//        return capacity;
-//    }
-//
-//    public void setCapacity(long capacity) {
-//        this.capacity = capacity;
-//    }
-//
-//}
 package com.cems.cemsbackend.model;
 
 import com.cems.shared.model.EventDto;
-import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
+
+/**
+ *  an event entity stored in the system.
+ */
 @Entity
 @Table(
         indexes = {
-                @Index(name = "idx_event_datetime", columnList = "date_time")
+          @Index(name = "idx_event_datetime", columnList = "date_time")
         }
 )
 public class Event {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @JdbcTypeCode(SqlTypes.BINARY)
-    private UUID id;
 
-    @Column(nullable = false)
-    private String title;
+  /**  identifier for the event. */
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  @JdbcTypeCode(SqlTypes.BINARY)
+  private UUID id;
 
-    private String description;
-    private String location;
-    private long capacity;
+  /** Title of the event. */
+  @Column(nullable = false)
+  private String title;
 
-    @Column(nullable = false, name = "date_time")
-    private Instant dateTime;
+  /** Description of the event. */
+  private String description;
 
-    @Column(nullable = false)
-    private boolean approved = false;
+  /** Location of the event. */
+  private String location;
 
-    @ManyToMany
-    @JoinTable(
-            name = "event_attendees",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> attendees = new ArrayList<>();
+  /** Maximum number of attendees allowed. */
+  private long capacity;
 
-    @ManyToOne(optional = false)
-    private User eventOwner;
+  /** Date and time of the event. */
+  @Column(nullable = false, name = "date_time")
+  private Instant dateTime;
 
-    public Event() {}
+  /** Whether the event is approved. */
+  @Column(nullable = false)
+  private boolean approved;
 
-    public Event(String title, String description, String location, long capacity, Instant dateTime, User eventOwner, boolean approved) {
-        this.title = title;
-        this.description = description;
-        this.location = location;
-        this.capacity = capacity;
-        this.dateTime = dateTime;
-        this.eventOwner = eventOwner;
-        this.approved = approved;
-        this.attendees = new ArrayList<>();
+  /** List of attendees. */
+  @ManyToMany
+  @JoinTable(
+          name = "event_attendees",
+          joinColumns = @JoinColumn(name = "event_id"),
+          inverseJoinColumns = @JoinColumn(name = "user_id")
+  )
+  private List<User> attendees = new ArrayList<>();
+
+  /** Owner of the event. */
+  @ManyToOne(optional = false)
+  private User eventOwner;
+
+  /**
+   * Default constructor required by JPA.
+   */
+  public Event() {
+    // intentionally empty
+  }
+
+  /**
+   * Full constructor for creating an event.
+   */
+  public Event(
+          final String title,
+          final String description,
+          final String location,
+          final long capacity,
+          final Instant dateTime,
+          final User eventOwner,
+          final boolean approved
+  ) {
+    this.title = title;
+    this.description = description;
+    this.location = location;
+    this.capacity = capacity;
+    this.dateTime = dateTime;
+    this.eventOwner = eventOwner;
+    this.approved = approved;
+    this.attendees = new ArrayList<>();
+  }
+
+  /**
+   * Updates this event using values from the DTO.
+   *
+   * @param dto the DTO containing updated values
+   * @return this event instance
+   */
+  public Event updateFromDto(final EventDto.EventRequestDTO dto) {
+    if (dto.getTitle() != null) {
+      this.setTitle(dto.getTitle());
     }
-
-    public Event updateFromDto(EventDto.EventRequestDTO dto) {
-        if (dto.getTitle() != null) this.setTitle(dto.getTitle());
-        if (dto.getDescription() != null) this.setDescription(dto.getDescription());
-        if (dto.getLocation() != null) this.setLocation(dto.getLocation());
-        if (dto.getCapacity() != null) this.setCapacity(dto.getCapacity());
-        if (dto.getDateTime() != null) this.setDateTime(dto.getDateTime());
-        return this;
+    if (dto.getDescription() != null) {
+      this.setDescription(dto.getDescription());
     }
-
-    public User getEventOwner() {
-        return eventOwner;
+    if (dto.getLocation() != null) {
+      this.setLocation(dto.getLocation());
     }
-
-    public void setEventOwner(User eventOwner) {
-        this.eventOwner = eventOwner;
+    if (dto.getCapacity() != null) {
+      this.setCapacity(dto.getCapacity());
     }
-
-    public UUID getId() {
-        return id;
+    if (dto.getDateTime() != null) {
+      this.setDateTime(dto.getDateTime());
     }
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    return this;
+  }
 
+  /**
+   * Returns the event owner.
+   *
+   * @return the event owner
+   */
+  public User getEventOwner() {
+    return eventOwner;
+  }
 
-    public List<User> getAttendees() {
-        return attendees;
-    }
+  /**
+   * Sets the event owner.
+   *
+   * @param eventOwner the owner to assign
+   */
+  public void setEventOwner(final User eventOwner) {
+    this.eventOwner = eventOwner;
+  }
 
-    public boolean addAttendee(User attendee) {
-        return attendees.add(attendee);
-    }
+  /**
+   * Returns the event ID.
+   *
+   * @return the event ID
+   */
+  public UUID getId() {
+    return id;
+  }
 
-    public boolean removeAttendee(User attendee) {
-        return attendees.remove(attendee);
-    }
+  /**
+   * Sets the event ID.
+   *
+   * @param id the ID to assign
+   */
+  @SuppressWarnings("PMD.ShortVariable")
+  public void setId(final UUID id) {
+    this.id = id;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  /**
+   * Returns the list of attendees.
+   *
+   * @return list of attendees
+   */
+  public List<User> getAttendees() {
+    return attendees;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  /**
+   * Adds an attendee to the event.
+   *
+   * @param attendee the attendee to add
+   * @return true if added successfully
+   */
+  public boolean addAttendee(final User attendee) {
+    return attendees.add(attendee);
+  }
 
-    public Instant getDateTime() {
-        return dateTime;
-    }
+  /**
+   * Removes an attendee from the event.
+   *
+   * @param attendee the attendee to remove
+   * @return true if removed successfully
+   */
+  public boolean removeAttendee(final User attendee) {
+    return attendees.remove(attendee);
+  }
 
-    public void setDateTime(Instant dateTime) {
-        this.dateTime = dateTime;
-    }
+  /**
+   * Returns the event title.
+   *
+   * @return the title
+   */
+  public String getTitle() {
+    return title;
+  }
 
-    public boolean isApproved() {
-        return approved;
-    }
+  /**
+   * Sets the event title.
+   *
+   * @param title the title to assign
+   */
+  public void setTitle(final String title) {
+    this.title = title;
+  }
 
-    public void setApproved(boolean approved) {
-        this.approved = approved;
-    }
+  /**
+   * Returns the event date and time.
+   *
+   * @return the date and time
+   */
+  public Instant getDateTime() {
+    return dateTime;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  /**
+   * Sets the event date and time.
+   *
+   * @param dateTime the date and time to assign
+   */
+  public void setDateTime(final Instant dateTime) {
+    this.dateTime = dateTime;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  /**
+   * Returns whether the event is approved.
+   *
+   * @return true if approved
+   */
+  public boolean isApproved() {
+    return approved;
+  }
 
-    public String getLocation() {
-        return location;
-    }
+  /**
+   * Sets the approval status.
+   *
+   * @param approved the approval status
+   */
+  public void setApproved(final boolean approved) {
+    this.approved = approved;
+  }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+  /**
+   * Returns the event description.
+   *
+   * @return the description
+   */
+  public String getDescription() {
+    return description;
+  }
 
-    public long getCapacity() {
-        return capacity;
-    }
+  /**
+   * Sets the event description.
+   *
+   * @param description the description to assign
+   */
+  public void setDescription(final String description) {
+    this.description = description;
+  }
 
-    public void setCapacity(long capacity) {
-        this.capacity = capacity;
-    }
+  /**
+   * Returns the event location.
+   *
+   * @return the location
+   */
+  public String getLocation() {
+    return location;
+  }
+
+  /**
+   * Sets the event location.
+   *
+   * @param location the location to assign
+   */
+  public void setLocation(final String location) {
+    this.location = location;
+  }
+
+  /**
+   * Returns the event capacity.
+   *
+   * @return the capacity
+   */
+  public long getCapacity() {
+    return capacity;
+  }
+
+  /**
+   * Sets the event capacity.
+   *
+   * @param capacity the capacity to assign
+   */
+  public void setCapacity(final long capacity) {
+    this.capacity = capacity;
+  }
 }
