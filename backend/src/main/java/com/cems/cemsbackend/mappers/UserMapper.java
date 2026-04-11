@@ -12,10 +12,10 @@ public final class UserMapper {
    * Private constructor to prevent instantiation of utility class.
    */
   private UserMapper() {
-    // Prevent instantiation
+
   }
 
-  // CHECKSTYLE:OFF: AbbreviationAsWordInName
+
   /**
    * Converts a User entity to a UserDTO.
    *
