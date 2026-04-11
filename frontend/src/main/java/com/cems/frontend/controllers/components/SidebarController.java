@@ -1,6 +1,5 @@
 package com.cems.frontend.controllers.components;
 
-import com.cems.frontend.controllers.pages.NavigationController;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.AuthService;
 import com.cems.frontend.utils.Language;
