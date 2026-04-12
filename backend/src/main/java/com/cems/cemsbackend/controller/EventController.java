@@ -2,10 +2,13 @@ package com.cems.cemsbackend.controller;
 
 import com.cems.cemsbackend.mappers.EventMapper;
 import com.cems.cemsbackend.model.Event;
+import com.cems.cemsbackend.model.EventTranslation;
 import com.cems.cemsbackend.model.User;
 import com.cems.cemsbackend.repository.AttendanceRepository;
 import com.cems.cemsbackend.repository.EventRepository;
+import com.cems.cemsbackend.repository.EventTranslationRepository;
 import com.cems.cemsbackend.repository.UserRepository;
+import com.cems.shared.model.EventDto.EventLocalRequestDTO;
 import com.cems.shared.model.EventDto.EventRequestDTO;
 import com.cems.shared.model.EventDto.EventResponseDTO;
 import jakarta.validation.Valid;
@@ -15,7 +18,6 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,199 +31,387 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
- * Controller for managing events.
+ * Controller for managing events, including localization and admin operations.
  */
 @RestController
 @RequestMapping("/events")
+@SuppressWarnings({
+    "PMD.LawOfDemeter",
+    "PMD.CyclomaticComplexity",
+    "PMD.ShortVariable",
+    "PMD.LongVariable",
+    "PMD.UseExplicitTypes",
+    "PMD.MethodArgumentCouldBeFinal",
+    "PMD.LocalVariableCouldBeFinal",
+    "PMD.OnlyOneReturn"
+})
 public class EventController {
 
-  /** Error message. */
-  private static final String NOT_FOUND = "Event with id not found";
-  /** Auth error message. */
-  private static final String NO_AUTH = "User not authenticated";
+  private static final String ERR_NOT_FOUND = "Event with id not found";
+  private static final String ERR_USER_NOT_FOUND = "User not found";
+  private static final String ERR_NO_AUTH = "User not authenticated";
 
-  /** Repository for events. */
+  /** Repository for event entities. */
   private final EventRepository eventRepo;
-  /** Repository for users. */
+
+  /** Repository for user entities. */
   private final UserRepository userRepo;
-  /** Repository for attendances. */
-  private final AttendanceRepository attendRepo;
+
+  /** Repository for attendance records. */
+  private final AttendanceRepository attendanceRepo;
+
+  /** Repository for localized event translations. */
+  private final EventTranslationRepository translationRepo;
+
 
   /**
-   * Constructor for EventController.
+   * Constructs the controller.
    *
-   * @param eventRepo  the repository for events
-   * @param userRepo   the repository for users
-   * @param attendRepo the repository for attendances
+   * @param eventRepo repository for events
+   * @param userRepo repository for users
+   * @param attendanceRepo repository for attendance
+   * @param translationRepo repository for event translations
    */
-  public EventController(final EventRepository eventRepo,
-                         final UserRepository userRepo,
-                         final AttendanceRepository attendRepo) {
+  public EventController(
+          final EventRepository eventRepo,
+          final UserRepository userRepo,
+          final AttendanceRepository attendanceRepo,
+          final EventTranslationRepository translationRepo) {
+
     this.eventRepo = eventRepo;
     this.userRepo = userRepo;
-    this.attendRepo = attendRepo;
+    this.attendanceRepo = attendanceRepo;
+    this.translationRepo = translationRepo;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Helper methods
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Resolves the authenticated user's UUID.
+   *
+   * @return UUID of the authenticated user
+   */
+  private UUID resolveUserId() {
+    final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ERR_NO_AUTH);
+    }
+    return (UUID) auth.getPrincipal();
   }
 
   /**
-   * Fetches all events.
+   * Retrieves an event or throws NOT_FOUND.
+   *
+   * @param id event ID
+   * @return event entity
+   */
+  private Event getEventOrThrow(final UUID id) {
+    return eventRepo.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ERR_NOT_FOUND));
+  }
+
+  /**
+   * Retrieves a user or throws FORBIDDEN.
+   *
+   * @param id user ID
+   * @return user entity
+   */
+  private User getUserOrThrow(final UUID id) {
+    return userRepo.getUserById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN,
+                     ERR_USER_NOT_FOUND));
+  }
+
+  // ---------------------------------------------------------------------------
+  // Public endpoints
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Retrieves all events.
    *
    * @return list of event DTOs
    */
   @GetMapping
   public ResponseEntity<List<EventResponseDTO>> getAllEvents() {
-    final List<Event> eventList = eventRepo.findAll();
-    ResponseEntity<List<EventResponseDTO>> response =
-            ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-    if (!eventList.isEmpty()) {
-      response = ResponseEntity.ok(eventList.stream().map(EventMapper::toDto).toList());
+    final List<Event> events = eventRepo.findAll();
+    if (events.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
-    return response;
+    return ResponseEntity.ok(events.stream().map(EventMapper::toDto).toList());
   }
 
   /**
-   * Fetches event by ID.
+   * Retrieves all events with localization.
    *
-   * @param eventUuid the UUID of the event
-   * @return the event DTO
+   * @param lang language code
+   * @return list of localized event DTOs
    */
-  @GetMapping(path = "/{id}")
-  public ResponseEntity<EventResponseDTO> getEventById(@PathVariable("id") final UUID eventUuid) {
-    final Optional<Event> optionalEvent = eventRepo.findById(eventUuid);
-    ResponseEntity<EventResponseDTO> response = ResponseEntity.notFound().build();
-    if (optionalEvent.isPresent()) {
-      response = ResponseEntity.ok(EventMapper.toDto(optionalEvent.get()));
+  @GetMapping("/all/{lang}")
+  public ResponseEntity<List<EventResponseDTO>> getAllEventsLocalized(
+          @PathVariable final String lang) {
+
+    final List<Event> events = eventRepo.findAll();
+    if (events.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
-    return response;
+
+    final List<EventResponseDTO> response =
+            events.stream()
+                    .map(
+                            event ->
+                                    translationRepo
+                                            .getByRefEventAndLanguage(event, lang)
+                                            .map(t -> EventMapper.toDto(event, t))
+                                            .orElseGet(() -> EventMapper.toDto(event)))
+                    .toList();
+
+    return ResponseEntity.ok(response);
   }
 
   /**
-   * Creates an event.
+   * Retrieves an event by ID.
    *
-   * @param body the request data
-   * @return the created event
+   * @param id event ID
+   * @return event DTO
+   */
+  @GetMapping("/{id}")
+  public ResponseEntity<EventResponseDTO> getEventById(@PathVariable final UUID id) {
+    final Event event = getEventOrThrow(id);
+    return ResponseEntity.ok(EventMapper.toDto(event));
+  }
+
+  /**
+   * Retrieves a localized event by ID.
+   *
+   * @param id event ID
+   * @param lang language code
+   * @return localized event DTO
+   */
+  @GetMapping("/{id}/{lang}")
+  public ResponseEntity<EventResponseDTO> getEventByIdLocalized(
+          @PathVariable final UUID id, @PathVariable final String lang) {
+
+    final Event event = getEventOrThrow(id);
+
+    final Optional<EventTranslation> translation =
+            translationRepo.getByRefEventAndLanguage(event, lang);
+
+    return translation
+            .map(t -> ResponseEntity.ok(EventMapper.toDto(event, t)))
+            .orElseGet(() -> ResponseEntity.ok(EventMapper.toDto(event)));
+  }
+
+  /**
+   * Creates a new event.
+   *
+   * @param body event request data
+   * @return created event DTO
    */
   @PostMapping
   @Transactional
-  public ResponseEntity<EventResponseDTO>
-      createEvent(@RequestBody @Valid final EventRequestDTO body) {
-    final UUID userId = resolveId();
-    final User owner = userRepo.getUserById(userId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User error"));
+  public ResponseEntity<EventResponseDTO> createEvent(
+          @RequestBody @Valid final EventRequestDTO body) {
 
-    final Event event = new Event(
-            body.getTitle(), body.getDescription(), body.getLocation(),
-            body.getCapacity(), body.getDateTime(), owner, false
-    );
-    return ResponseEntity.status(HttpStatus.CREATED).body(EventMapper.toDto(eventRepo.save(event)));
+    final User owner = getUserOrThrow(resolveUserId());
+
+    final Event event =
+            new Event(
+                    body.getTitle(),
+                    body.getDescription(),
+                    body.getLocation(),
+                    body.getCapacity(),
+                    body.getDateTime(),
+                    owner,
+                    false);
+
+    return ResponseEntity.status(HttpStatus.CREATED)
+            .body(EventMapper.toDto(eventRepo.save(event)));
   }
 
   /**
    * Updates an event.
    *
-   * @param eventUuid the string ID
-   * @param body      updated data
-   * @return updated event
+   * @param id event ID
+   * @param body updated event data
+   * @return updated event DTO
    */
-  @PutMapping(path = "/{id}")
+  @PutMapping("/{id}")
   public ResponseEntity<EventResponseDTO> updateEvent(
-          @PathVariable("id") final String eventUuid,
-          @RequestBody final EventRequestDTO body) {
-    final Event target = eventRepo.getEventById(UUID.fromString(eventUuid))
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND));
-    target.updateFromDto(body);
-    return ResponseEntity.ok(EventMapper.toDto(eventRepo.save(target)));
+          @PathVariable final UUID id, @RequestBody final EventRequestDTO body) {
+
+    final Event event = getEventOrThrow(id);
+    event.updateFromDto(body);
+    return ResponseEntity.ok(EventMapper.toDto(eventRepo.save(event)));
+  }
+
+  /**
+   * Updates localized fields of an event.
+   *
+   * @param id event ID
+   * @param lang language code
+   * @param dto localized update data
+   * @return localized event DTO
+   */
+  @PutMapping("/{id}/{lang}")
+  @Transactional
+  public ResponseEntity<EventResponseDTO> updateEventLocalized(
+          @PathVariable final UUID id,
+          @PathVariable final String lang,
+          @RequestBody final EventLocalRequestDTO dto) {
+
+    final Event event = getEventOrThrow(id);
+
+    final EventTranslation translation =
+            translationRepo
+                    .getByRefEventAndLanguage(event, lang)
+                    .orElseGet(
+                            () -> {
+                              final EventTranslation t = new EventTranslation();
+                              t.setLanguage(lang);
+                              t.setRefEvent(event);
+                              return t;
+                            });
+
+    translation.updateFromDTO(dto);
+    translationRepo.save(translation);
+
+    return ResponseEntity.ok(EventMapper.toDto(event, translation));
   }
 
   /**
    * Approves an event.
    *
-   * @param eventUuid the string ID
-   * @return approved event
+   * @param id event ID
+   * @return approved event DTO
    */
-  @PutMapping(path = "/{id}/approve")
+  @PutMapping("/{id}/approve")
   @Transactional
-  public ResponseEntity<EventResponseDTO> approveEvent(@PathVariable("id") final String eventUuid) {
-    final Event target = eventRepo.findById(UUID.fromString(eventUuid))
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND));
-    target.setApproved(true);
-    return ResponseEntity.ok(EventMapper.toDto(eventRepo.save(target)));
+  public ResponseEntity<EventResponseDTO> approveEvent(@PathVariable final UUID id) {
+    final Event event = getEventOrThrow(id);
+    event.setApproved(true);
+    return ResponseEntity.ok(EventMapper.toDto(eventRepo.save(event)));
   }
 
   /**
    * Deletes an event.
    *
-   * @param eventUuid the string ID
+   * @param id event ID
    * @return no content
    */
-  @DeleteMapping(path = "/{id}")
+  @DeleteMapping("/{id}")
   @Transactional
-  public ResponseEntity<?> deleteEvent(@PathVariable("id") final String eventUuid) {
-    final UUID uuid = UUID.fromString(eventUuid);
-    final Event target = eventRepo.getEventById(uuid)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND));
-    attendRepo.deleteAttendancesByEvent_Id(uuid);
-    eventRepo.delete(target);
+  public ResponseEntity<Void> deleteEvent(@PathVariable final UUID id) {
+    final Event event = getEventOrThrow(id);
+    attendanceRepo.deleteAttendancesByEvent_Id(id);
+    eventRepo.delete(event);
     return ResponseEntity.noContent().build();
   }
 
   /**
-   * Gets approved events.
+   * Retrieves all approved events.
    *
-   * @return list of events
+   * @return list of approved event DTOs
    */
   @GetMapping("/approved")
   public ResponseEntity<List<EventResponseDTO>> getApprovedEvents() {
-    final List<Event> list = eventRepo.findByApprovedTrue();
-    ResponseEntity<List<EventResponseDTO>> response =
-            ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-    if (!list.isEmpty()) {
-      response = ResponseEntity.ok(list.stream().map(EventMapper::toDto).toList());
+    final List<Event> events = eventRepo.findByApprovedTrue();
+    if (events.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
-    return response;
+    return ResponseEntity.ok(events.stream().map(EventMapper::toDto).toList());
   }
 
   /**
-   * Gets events for the admin.
+   * Retrieves localized approved events.
    *
-   * @return owner events
+   * @param lang language code
+   * @return list of localized approved event DTOs
    */
-  @GetMapping(path = "/admin")
-  public ResponseEntity<List<EventResponseDTO>> getEventByOwner() {
-    final User owner = userRepo.getUserById(resolveId())
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Forbidden"));
-    return ResponseEntity.ok(eventRepo.getEventsByEventOwner(owner)
-            .stream().map(EventMapper::toDto).toList());
+  @GetMapping("/approved/{lang}")
+  public ResponseEntity<List<EventResponseDTO>> getApprovedEventsLocalized(
+          @PathVariable final String lang) {
+
+    final List<Event> events = eventRepo.findByApprovedTrue();
+    if (events.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
+
+    final List<EventResponseDTO> response =
+            events.stream()
+                    .map(
+                            event ->
+                                    translationRepo
+                                            .getByRefEventAndLanguage(event, lang)
+                                            .map(t -> EventMapper.toDto(event, t))
+                                            .orElseGet(() -> EventMapper.toDto(event)))
+                    .toList();
+
+    return ResponseEntity.ok(response);
   }
 
   /**
-   * Gets specific owner event.
+   * Retrieves events owned by the authenticated user.
    *
-   * @param eventUuid the string ID
+   * @return list of owned event DTOs
+   */
+  @GetMapping("/admin")
+  public ResponseEntity<List<EventResponseDTO>> getEventsByOwner() {
+    final User owner = getUserOrThrow(resolveUserId());
+    final List<Event> events = eventRepo.getEventsByEventOwner(owner);
+    return ResponseEntity.ok(events.stream().map(EventMapper::toDto).toList());
+  }
+
+  /**
+   * Retrieves a specific event owned by the authenticated user.
+   *
+   * @param id event ID
    * @return event DTO
    */
-  @GetMapping(path = "/admin/{id}")
+  @GetMapping("/admin/{id}")
   public ResponseEntity<EventResponseDTO> getEventByOwnerAndId(
-          @PathVariable("id") final String eventUuid) {
-    final User owner = userRepo.getUserById(resolveId())
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Forbidden"));
-    final Event event = eventRepo.getEventByEventOwnerAndId(owner, UUID.fromString(eventUuid))
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, NOT_FOUND));
+          @PathVariable final UUID id) {
+
+    final User owner = getUserOrThrow(resolveUserId());
+
+    final Event event =
+            eventRepo
+                    .getEventByEventOwnerAndId(owner, id)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            ERR_NOT_FOUND));
+
     return ResponseEntity.ok(EventMapper.toDto(event));
   }
 
   /**
-   * Resolves ID by interacting only with immediate dependencies.
-   * * @return UUID of the principal
+   * Adds a new localization for an event owned by the authenticated user.
+   *
+   * @param id event ID
+   * @param lang language code
+   * @param dto localization data
+   * @return OK response
    */
-  private UUID resolveId() {
-    final SecurityContext context = SecurityContextHolder.getContext();
-    final Authentication authentication = context.getAuthentication();
+  @PostMapping("/admin/{id}/{lang}")
+  @Transactional
+  public ResponseEntity<Void> addEventLocalization(
+          @PathVariable final UUID id,
+          @PathVariable final String lang,
+          @RequestBody final EventLocalRequestDTO dto) {
 
-    if (authentication == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, NO_AUTH);
+    final User owner = getUserOrThrow(resolveUserId());
+
+    final Event event =
+            eventRepo
+                    .getEventByEventOwnerAndId(owner, id)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            ERR_NOT_FOUND));
+
+    if (translationRepo.existsByRefEventAndLanguage(event, lang)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Localization exists");
     }
 
-    final Object principal = authentication.getPrincipal();
-    return (UUID) principal;
+    translationRepo.save(EventTranslation.createFromDTO(dto, event, lang));
+    return ResponseEntity.ok().build();
   }
 }
