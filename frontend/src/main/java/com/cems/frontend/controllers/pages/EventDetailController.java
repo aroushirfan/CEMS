@@ -5,6 +5,7 @@ import com.cems.frontend.models.Event;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.models.User;
 import com.cems.frontend.services.*;
+import com.cems.frontend.utils.Language;
 import com.cems.frontend.utils.LocalHttpClientHelper;
 import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.utils.RbacUtil;
@@ -14,6 +15,7 @@ import com.cems.frontend.view.SceneNavigator;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.chrono.ThaiBuddhistChronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Optional;
@@ -74,8 +76,9 @@ public class EventDetailController {
       LocalHttpClientHelper.getClient(), LocalHttpClientHelper.getMapper());
   private LocaleUtil localeService = LocaleUtil.getInstance();
   private ResourceBundle rb;
+  private ApiEventService apiEventService;
 
-  /**
+    /**
    * Initializes the controller. This method is called after the FXML
    * fields have been injected. It sets up the initial state of the UI,
    * binds button text and disable properties to the user's registration
@@ -101,6 +104,7 @@ public class EventDetailController {
                 : rb.getString("eventDetail.check_in"))
     );
     buttonLayout.getChildren().remove(viewAttendanceButton);
+    User user;
     try {
         user = userService.getCurrentUser();
     } catch (Exception ignored) {
@@ -170,7 +174,12 @@ public class EventDetailController {
         ? currentEvent.getDescription()
         : rb.getString("eventDetail.no_description"));
 
-    DateTimeFormatter formatter = localeService.dateTime(FormatStyle.FULL, FormatStyle.SHORT);
+    DateTimeFormatter formatter;
+    if (LocaleUtil.getInstance().getLanguage().equals(Language.TH)) {
+        formatter = localeService.dateTime(FormatStyle.FULL, FormatStyle.SHORT).withChronology(ThaiBuddhistChronology.INSTANCE);
+    } else {
+        formatter = localeService.dateTime(FormatStyle.FULL, FormatStyle.SHORT);
+    }
     if (currentEvent.getDateTime() != null) {
       dateLabel.setText(currentEvent.getDateTime()
           .atZone(ZoneId.systemDefault()).format(formatter));
