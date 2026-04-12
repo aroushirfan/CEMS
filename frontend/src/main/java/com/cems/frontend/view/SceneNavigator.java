@@ -150,7 +150,7 @@ public class SceneNavigator {
    * Reloads the current navigation view UI.
    */
   public static void reloadNavigationView() {
-    navigationController.reloadUI();
+    navigationController.reloadUi();
   }
 
   /**
