@@ -1,235 +1,214 @@
-//package com.cems.cemsbackend.model;
-//
-//import jakarta.persistence.*;
-//import org.hibernate.annotations.JdbcTypeCode;
-//import org.hibernate.type.SqlTypes;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.UUID;
-//
-//@Entity
-//@Table(
-//        indexes = {
-//                @Index(name = "idx_user_email", columnList = "email")
-//        }
-//)
-//public class User {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.UUID)
-//    @JdbcTypeCode(SqlTypes.BINARY)
-//    private UUID id;
-//
-//    @Column(nullable = false, unique = true)
-//    private String email;
-//
-//    @Column(nullable = false)
-//    private String hashedPassword;
-//
-//    @Column(nullable = false)
-//    private int accessLevel;
-//
-//    @Column(nullable = false)
-//    private String firstName;
-//
-//    @Column(nullable = true)
-//    private String middleName;
-//
-//    @Column(nullable = true)
-//    private String lastName;
-//
-//    @ManyToMany(mappedBy = "attendees")
-//    private List<Event> attendingEvents = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "eventOwner")
-//    private List<Event> ownedEvents;
-//
-//    public User(String email, String hashedPassword, int accessLevel, String firstName, String middleName, String lastName) {
-//        this.email = email;
-//        this.hashedPassword = hashedPassword;
-//        this.accessLevel = accessLevel;
-//        this.firstName = firstName;
-//        this.middleName = middleName;
-//        this.lastName = lastName;
-//    }
-//
-//    public User() {}
-//
-//    public List<Event> getOwnedEvents() {
-//        return ownedEvents;
-//    }
-//
-//    public List<Event> getAttendingEvents() {
-//        return attendingEvents;
-//    }
-//
-//    public boolean addAttendingEvent(Event event) {
-//        return attendingEvents.add(event);
-//    }
-//
-//    public UUID getId() {
-//        return id;
-//    }
-//
-//    public String getEmail() {
-//        return email;
-//    }
-//
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
-//
-//    public String getHashedPassword() {
-//        return hashedPassword;
-//    }
-//
-//    public void setHashedPassword(String hashedPassword) {
-//        this.hashedPassword = hashedPassword;
-//    }
-//
-//    public int getAccessLevel() {
-//        return accessLevel;
-//    }
-//
-//    public void setAccessLevel(int accessLevel) {
-//        this.accessLevel = accessLevel;
-//    }
-//
-//    public String getFirstName() {
-//        return firstName;
-//    }
-//
-//    public void setFirstName(String firstName) {
-//        this.firstName = firstName;
-//    }
-//
-//    public String getLastName() {
-//        return lastName;
-//    }
-//
-//    public void setLastName(String lastName) {
-//        this.lastName = lastName;
-//    }
-//
-//    public String getMiddleName() {
-//        return middleName;
-//    }
-//
-//    public void setMiddleName(String middleName) {
-//        this.middleName = middleName;
-//    }
-//}
 package com.cems.cemsbackend.model;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
+/**
+ * Represents a user entity stored in the system.
+ */
+@SuppressWarnings({
+    "PMD.DataClass",
+    "PMD.ShortClassName",
+    "PMD.ImmutableField",
+    "PMD.UnnecessaryConstructor"
+})
 @Entity
 @Table(
         indexes = {
-                @Index(name = "idx_user_email", columnList = "email")
+          @Index(name = "idx_user_email", columnList = User.COLUMN_EMAIL)
         }
 )
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @JdbcTypeCode(SqlTypes.BINARY)
-    private UUID id;
+  /** Constant for email column name to avoid duplicate literals. */
+  public static final String COLUMN_EMAIL = "email";
 
-    @Column(nullable = false, unique = true)
-    private String email;
+  /** Unique identifier for the user. */
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  @JdbcTypeCode(SqlTypes.BINARY)
+  private UUID id;
 
-    @Column(nullable = false)
-    private String hashedPassword;
+  /** Email address of the user. */
+  @Column(nullable = false, unique = true)
+  private String email;
 
-    @Column(nullable = false)
-    private int accessLevel;
+  /** Hashed password of the user. */
+  @Column(nullable = false)
+  private String hashedPassword;
 
-    @Column(nullable = false)
-    private String firstName;
+  /** Access level of the user. */
+  @Column(nullable = false)
+  private int accessLevel;
 
-    @Column(nullable = true)
-    private String middleName;
+  /** First name of the user. */
+  @Column(nullable = false)
+  private String firstName;
 
-    @Column(nullable = true)
-    private String lastName;
+  /** Middle name of the user. */
+  @Column(nullable = true)
+  private String middleName;
 
+  /** Last name of the user. */
+  @Column(nullable = true)
+  private String lastName;
 
+  /** Phone number of the user. */
+  @Column(nullable = true)
+  private String phone;
 
-    @Column(nullable = true)
-    private String phone;
+  /** Date of birth of the user. */
+  @Column(nullable = true)
+  private LocalDate dob;
 
-    @Column(nullable = true)
-    private LocalDate dob;
+  /** Profile image URL of the user. */
+  @Column(nullable = true)
+  private String profileImageUrl;
 
+  /** Events the user is attending. */
+  @ManyToMany(mappedBy = "attendees")
+  private List<Event> attendingEvents = new ArrayList<>();
 
+  /** Events owned by the user. */
+  @OneToMany(mappedBy = "eventOwner")
+  private List<Event> ownedEvents = new ArrayList<>();
 
+  /**
+   * Default constructor required by JPA.
+   */
+  public User() {
+    // intentionally empty
+  }
 
-    @Column(nullable = true)
-    private String profileImageUrl;
+  // -------------------------
+  // Getters & Setters
+  // -------------------------
 
-    @ManyToMany(mappedBy = "attendees")
-    private List<Event> attendingEvents = new ArrayList<>();
+  /** Returns the user ID. */
+  public UUID getId() {
+    return id;
+  }
 
-    @OneToMany(mappedBy = "eventOwner")
-    private List<Event> ownedEvents = new ArrayList<>();
+  /** Sets the user ID. */
+  public void setId(final UUID id) {
+    this.id = id;
+  }
 
-    public User() {}
+  /** Returns the email. */
+  public String getEmail() {
+    return email;
+  }
 
-    // -------------------------
-    // Getters & Setters
-    // -------------------------
+  /** Sets the email. */
+  public void setEmail(final String email) {
+    this.email = email;
+  }
 
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
+  /** Returns the hashed password. */
+  public String getHashedPassword() {
+    return hashedPassword;
+  }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+  /** Sets the hashed password. */
+  public void setHashedPassword(final String hashedPassword) {
+    this.hashedPassword = hashedPassword;
+  }
 
-    public String getHashedPassword() { return hashedPassword; }
-    public void setHashedPassword(String hashedPassword) { this.hashedPassword = hashedPassword; }
+  /** Returns the access level. */
+  public int getAccessLevel() {
+    return accessLevel;
+  }
 
-    public int getAccessLevel() { return accessLevel; }
-    public void setAccessLevel(int accessLevel) { this.accessLevel = accessLevel; }
+  /** Sets the access level. */
+  public void setAccessLevel(final int accessLevel) {
+    this.accessLevel = accessLevel;
+  }
 
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
+  /** Returns the first name. */
+  public String getFirstName() {
+    return firstName;
+  }
 
-    public String getMiddleName() { return middleName; }
-    public void setMiddleName(String middleName) { this.middleName = middleName; }
+  /** Sets the first name. */
+  public void setFirstName(final String firstName) {
+    this.firstName = firstName;
+  }
 
-    public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
+  /** Returns the middle name. */
+  public String getMiddleName() {
+    return middleName;
+  }
 
+  /** Sets the middle name. */
+  public void setMiddleName(final String middleName) {
+    this.middleName = middleName;
+  }
 
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
+  /** Returns the last name. */
+  public String getLastName() {
+    return lastName;
+  }
 
-    public LocalDate getDob() { return dob; }
-    public void setDob(LocalDate dob) { this.dob = dob; }
+  /** Sets the last name. */
+  public void setLastName(final String lastName) {
+    this.lastName = lastName;
+  }
 
+  /** Returns the phone number. */
+  public String getPhone() {
+    return phone;
+  }
 
-    public String getProfileImageUrl() { return profileImageUrl; }
-    public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
+  /** Sets the phone number. */
+  public void setPhone(final String phone) {
+    this.phone = phone;
+  }
 
+  /** Returns the date of birth. */
+  public LocalDate getDob() {
+    return dob;
+  }
 
+  /** Sets the date of birth. */
+  public void setDob(final LocalDate dob) {
+    this.dob = dob;
+  }
 
-    public List<Event> getAttendingEvents() {
-        return attendingEvents;
-    }
+  /** Returns the profile image URL. */
+  public String getProfileImageUrl() {
+    return profileImageUrl;
+  }
 
-    public boolean addAttendingEvent(Event event) {
-        return attendingEvents.add(event);
-    }
+  /** Sets the profile image URL. */
+  public void setProfileImageUrl(final String profileImageUrl) {
+    this.profileImageUrl = profileImageUrl;
+  }
 
-    public List<Event> getOwnedEvents() {
-        return ownedEvents;
-    }
+  /** Returns the events the user is attending. */
+  public List<Event> getAttendingEvents() {
+    return attendingEvents;
+  }
+
+  /** Adds an event to the user's attending list. */
+  public boolean addAttendingEvent(final Event event) {
+    return attendingEvents.add(event);
+  }
+
+  /** Returns the events owned by the user. */
+  public List<Event> getOwnedEvents() {
+    return ownedEvents;
+  }
 }
