@@ -5,7 +5,7 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    url: ${DB_URL}
+    url: ${DB_URL}?useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
   jpa:
     hibernate:
       ddl-auto: update

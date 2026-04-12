@@ -9,6 +9,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface EventTranslationRepository extends JpaRepository<EventTranslation, UUID> {
-  Optional<EventTranslation> getByRefEventAndLanguage(Event refEvent, String language);
-  boolean existsByRefEventAndLanguage(Event refEvent, String language);
+    Optional<EventTranslation> getByRefEventAndLanguage(Event refEvent, String language);
+    boolean existsByRefEventAndLanguage(Event refEvent, String language);
 }

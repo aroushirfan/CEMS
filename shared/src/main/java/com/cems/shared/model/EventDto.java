@@ -188,7 +188,34 @@ public class EventDto {
     public String getLocation() {
       return location;
     }
-  }
+    static public class EventLocalRequestDTO {
+        private String title;
+
+        private String description;
+
+        private String location;
+
+        public EventLocalRequestDTO(String title, String description, String location) {
+            this.title = title;
+            this.description = description;
+            this.location = location;
+        }
+
+        public EventLocalRequestDTO() {
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+    }
 }
 
 /*

@@ -9,86 +9,86 @@ import java.util.UUID;
 
 @Entity
 public class EventTranslation {
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  @JdbcTypeCode(SqlTypes.BINARY)
-  private UUID id;
-  private String title;
-  private String description;
-  private String location;
-  private String language;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @JdbcTypeCode(SqlTypes.BINARY)
+    private UUID id;
+    private String title;
+    private String description;
+    private String location;
+    private String language;
 
-  @ManyToOne(optional = false)
-  private Event refEvent;
+    @ManyToOne(optional = false)
+    private Event refEvent;
 
-  public EventTranslation(String title, String description, String location, String language, Event refEvent) {
-    this.title = title;
-    this.description = description;
-    this.location = location;
-    this.refEvent = refEvent;
-    this.language = language;
-  }
+    public EventTranslation(String title, String description, String location, String language, Event refEvent) {
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.refEvent = refEvent;
+        this.language = language;
+    }
 
-  public EventTranslation() {
-  }
+    public EventTranslation() {
+    }
 
-  public UUID getId() {
-    return id;
-  }
+    public UUID getId() {
+        return id;
+    }
 
-  public String getTitle() {
-    return title;
-  }
+    public String getTitle() {
+        return title;
+    }
 
-  public String getDescription() {
-    return description;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public String getLocation() {
-    return location;
-  }
+    public String getLocation() {
+        return location;
+    }
 
-  public Event getRefEvent() {
-    return refEvent;
-  }
+    public Event getRefEvent() {
+        return refEvent;
+    }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public void setLocation(String location) {
-    this.location = location;
-  }
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-  public void setRefEvent(Event refEvent) {
-    this.refEvent = refEvent;
-  }
+    public void setRefEvent(Event refEvent) {
+        this.refEvent = refEvent;
+    }
 
-  public String getLanguage() {
-    return language;
-  }
+    public String getLanguage() {
+        return language;
+    }
 
-  public void setLanguage(String language) {
-    this.language = language;
-  }
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
-  public static EventTranslation createFromDTO(EventDto.EventLocalRequestDTO dto, Event refEvent, String lang) {
-    return new EventTranslation(
-            dto.getTitle(),
-            dto.getDescription(),
-            dto.getLocation(),
-            lang,
-            refEvent
-    );
-  }
+    public static EventTranslation createFromDTO(EventDto.EventLocalRequestDTO dto, Event refEvent, String lang) {
+        return new EventTranslation(
+                dto.getTitle(),
+                dto.getDescription(),
+                dto.getLocation(),
+                lang,
+                refEvent
+        );
+    }
 
-  public void updateFromDTO(EventDto.EventLocalRequestDTO dto) {
-    if (dto.getTitle() != null && !dto.getTitle().isBlank()) title = dto.getTitle();
-    if (dto.getDescription() != null && !dto.getDescription().isBlank()) description = dto.getDescription();
-    if (dto.getLocation() != null && !dto.getLocation().isBlank()) location = dto.getLocation();
-  }
+    public void updateFromDTO(EventDto.EventLocalRequestDTO dto) {
+        if (dto.getTitle() != null && !dto.getTitle().isBlank()) title = dto.getTitle();
+        if (dto.getDescription() != null && !dto.getDescription().isBlank()) description = dto.getDescription();
+        if (dto.getLocation() != null && !dto.getLocation().isBlank()) location = dto.getLocation();
+    }
 }

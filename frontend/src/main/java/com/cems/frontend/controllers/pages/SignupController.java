@@ -12,86 +12,101 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * Controller for the Signup view. Handles user input for signing up
+ * and interacts with the AuthService.
+ */
 public class SignupController {
 
-    @FXML
-    private TextField firstNameField;
-    @FXML
-    private TextField lastNameField;
-    @FXML
-    private TextField emailField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private PasswordField confirmPasswordField;
-    @FXML private AnchorPane rootView;
+  @FXML
+  private TextField firstNameField;
+  @FXML
+  private TextField lastNameField;
+  @FXML
+  private TextField emailField;
+  @FXML
+  private PasswordField passwordField;
+  @FXML
+  private PasswordField confirmPasswordField;
+  @FXML
+  private AnchorPane rootView;
 
-    private AuthService authService = AuthService.getInstance();
+  private AuthService authService = AuthService.getInstance();
 
-    @FXML
-    public void initialize() {
-        System.out.println("Signup view loaded");
-        setOrientation();
+  /**
+   * Initializes the controller. Sets the orientation of the view based on the
+   * current language.
+   */
+  @FXML
+  public void initialize() {
+    System.out.println("Signup view loaded");
+    setOrientation();
+  }
+
+  /**
+   * Sets the orientation of the view based on the current language. If the
+   * language is Urdu, it sets the orientation to right-to-left; otherwise, it
+   * sets it to left-to-right.
+   */
+  public void setOrientation() {
+    boolean ltr = LocaleUtil.getInstance().getLanguage().equals(Language.UR);
+    rootView.setNodeOrientation(!ltr ? NodeOrientation.LEFT_TO_RIGHT
+        : NodeOrientation.RIGHT_TO_LEFT);
+  }
+
+  /// signup button
+  @FXML
+  private void handleSignup(ActionEvent event) {
+    String firstName = firstNameField.getText();
+    String lastName = lastNameField.getText();
+    String email = emailField.getText();
+    String password = passwordField.getText();
+    String confirmPassword = confirmPasswordField.getText();
+
+    if (firstName.isEmpty() || email.isEmpty()) {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setContentText("Required fields missing");
+      alert.show();
+      return;
     }
 
-    public void setOrientation(){
-        boolean ltr = LocaleUtil.getInstance().getLanguage().equals(Language.UR);
-        rootView.setNodeOrientation(!ltr ? NodeOrientation.LEFT_TO_RIGHT:NodeOrientation.RIGHT_TO_LEFT);
+    try {
+      authService.signUp(firstName, lastName, email, password, confirmPassword);
+    } catch (Exception e) {
+      e.printStackTrace();
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setContentText(e.getLocalizedMessage());
+      alert.show();
+      clearFields();
+      return;
     }
 
-    /// signup button
-    @FXML
-    private void handleSignup(ActionEvent event) {
-        String firstName = firstNameField.getText();
-        String lastName = lastNameField.getText();
-        String email = emailField.getText();
-        String password = passwordField.getText();
-        String confirmPassword = confirmPasswordField.getText();
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setContentText("Sign Up Successful. Please login.");
+    alert.show();
 
-        if (firstName.isEmpty() || email.isEmpty() ) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Required fields missing");
-            alert.show();
-            return;
-        }
+    alert.setOnCloseRequest((dialogEvent) -> {
+      SceneNavigator.loadPage("Login.fxml");
+    });
+  }
 
-        try {
-            authService.signUp(firstName, lastName, email, password, confirmPassword);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText(e.getLocalizedMessage());
-            alert.show();
-            clearFields();
-            return;
-        }
+  //  Cancel button
+  @FXML
+  private void handleCancel(ActionEvent event) {
+    clearFields();
+  }
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText("Sign Up Successful. Please login.");
-        alert.show();
+  //  Redirect to login page
+  @FXML
+  private void goToLogin(ActionEvent event) {
+    SceneNavigator.loadPage("Login.fxml");
+  }
 
-        alert.setOnCloseRequest((dialogEvent) -> {
-            SceneNavigator.loadPage("Login.fxml");
-        });
-    }
-
-    //  Cancel button
-    @FXML
-    private void handleCancel(ActionEvent event) {
-        clearFields();
-    }
-
-    //  Redirect to login page
-    @FXML
-    private void goToLogin(ActionEvent event) {
-        SceneNavigator.loadPage("Login.fxml");
-    }
-
-    private void clearFields() {
-        firstNameField.clear();
-        lastNameField.clear();
-        emailField.clear();
-        passwordField.clear();
-        confirmPasswordField.clear();
-    }
+  private void clearFields() {
+    firstNameField.clear();
+    lastNameField.clear();
+    emailField.clear();
+    passwordField.clear();
+    confirmPasswordField.clear();
+  }
 }

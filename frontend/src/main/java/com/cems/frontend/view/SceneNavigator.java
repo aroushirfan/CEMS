@@ -155,7 +155,7 @@ public class SceneNavigator {
     }
 
     public static void reloadNavigationView() {
-        navigationController.reloadUI();
+        navigationController.reloadUi();
     }
 
     public static void loadEventDetail(Event event) {

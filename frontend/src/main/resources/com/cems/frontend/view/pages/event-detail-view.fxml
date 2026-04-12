@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="20.0" style="-fx-background-color: #F3F4F6;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.pages.EventDetailController">
+<VBox spacing="20.0" style="-fx-background-color: #F3F4F6;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.pages.EventDetailController">
     <padding>
         <Insets bottom="30" left="60" right="60" top="30" />
     </padding>
@@ -66,6 +66,7 @@
                     <HBox alignment="CENTER_RIGHT" spacing="15.0">
             <Button onAction="#handleDelete" style="-fx-background-color: #FEE2E2; -fx-text-fill: #DC2626; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10 20; -fx-cursor: hand;" text="%eventDetail.delete_event" />
             <Button onAction="#handleEdit" style="-fx-background-color: #4F46E5; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10 25; -fx-cursor: hand;" text="%eventDetail.edit_event" />
+         <Button fx:id="addLanguageButton" onAction="#onAddLanguage" style="-fx-background-color: #4F46E5; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-padding: 10 25; -fx-cursor: hand;" text="%eventDetail.addLanguage" />
         </HBox>
     </VBox>
 </VBox>
