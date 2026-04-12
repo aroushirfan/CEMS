@@ -16,7 +16,7 @@ import java.net.http.HttpRequest;
  * request objects with default headers.</p>
  */
 public class LocalHttpClientHelper {
-  private static String baseURL = System.getenv().getOrDefault("BACKEND_URL", "http://localhost:8080");
+  private static String baseURL = System.getenv().getOrDefault("BACKEND_URL", "http://localhost:8081");
   private static HttpClient httpClient = null;
   private static ObjectMapper objectMapper;
   private HttpRequest.Builder requestBuilder;
