@@ -7,109 +7,168 @@ import com.cems.frontend.utils.UserMapper;
 import com.cems.shared.model.UserDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
+/**
+ * Service for user-related API operations.
+ *
+ * <p>This service provides methods for managing the current user profile,
+ * querying users, and updating user access levels.</p>
+ */
 public class UserService {
 
-    private final HttpClient client;
-    private final AuthService authService = AuthService.getInstance();
+  private final HttpClient client;
+  private final AuthService authService = AuthService.getInstance();
 
-    private final ObjectMapper mapper = LocalHttpClientHelper.getMapper();
+  private final ObjectMapper mapper = LocalHttpClientHelper.getMapper();
 
-    private static final String BASE_URL = "users";
+  private static final String BASE_URL = "users";
 
-    public UserService() {
-        this.client = LocalHttpClientHelper.getClient();
+  /**
+   * Creates a user service using the shared local HTTP client.
+   */
+  public UserService() {
+    this.client = LocalHttpClientHelper.getClient();
+  }
+
+  /**
+   * Fetches the currently authenticated user.
+   *
+   * @return current user model
+   * @throws IOException          if the backend response is not successful or parsing fails
+   * @throws InterruptedException if the request thread is interrupted
+   */
+  public User getCurrentUser() throws IOException, InterruptedException {
+    HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/me")
+        .authorization(authService.getToken()).get();
+    HttpResponse<String> response = client.send(request,
+        HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() == HttpStatus.OK.code) {
+      UserDTO dto = mapper.readValue(response.body(), UserDTO.class);
+      return UserMapper.toModel(dto);
+    } else {
+      throw new IOException("Failed to load current user: " + response.statusCode());
     }
+  }
 
-    //  GET /users/me
-    public User getCurrentUser() throws IOException, InterruptedException {
-        HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/me").authorization(authService.getToken()).get();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+  /**
+   * Updates the currently authenticated user's profile.
+   *
+   * <p>Email and access level are not updated through this method and are reset
+   * before sending the request.</p>
+   *
+   * @param dto user payload containing profile fields to update
+   * @return updated user model
+   * @throws IOException if serialization, transport, or backend validation fails
+   */
+  public User updateCurrentUser(UserDTO dto) throws IOException, InterruptedException {
+    dto.setEmail(null);
+    dto.setAccessLevel(0);
+    String json = mapper.writeValueAsString(dto);
 
-        if (response.statusCode() == HttpStatus.OK.code) {
-            UserDTO dto = mapper.readValue(response.body(), UserDTO.class);
-            return UserMapper.toModel(dto);
-        } else {
-            throw new IOException("Failed to load current user: " + response.statusCode());
-        }
+    HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/me")
+            .authorization(authService.getToken())
+            .put(json);
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() == HttpStatus.OK.code) {
+      UserDTO updatedDto = mapper.readValue(response.body(), UserDTO.class);
+      return UserMapper.toModel(updatedDto);
+    } else {
+      throw new IOException("Failed to update user: " + response.body());
     }
+  }
 
-    //  PUT /users/me
-    public User updateCurrentUser(UserDTO dto) throws Exception {
-        dto.setEmail(null);
-        dto.setAccessLevel(0);
-        String json = mapper.writeValueAsString(dto);
+  /**
+   * Fetches all users.
+   *
+   * @return list of users, or an empty list when no users are returned
+   * @throws IOException if transport, parsing, or non-handled response handling fails
+   */
+  public List<User> getAllUsers() throws IOException, InterruptedException {
+    HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL)
+        .authorization(authService.getToken()).get();
 
-        HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/me").authorization(authService.getToken()).put(json);
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    HttpResponse<String> response = client.send(request,
+        HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == HttpStatus.OK.code) {
-            UserDTO updatedDto = mapper.readValue(response.body(), UserDTO.class);
-            return UserMapper.toModel(updatedDto);
-        } else {
-            throw new IOException("Failed to update user: " + response.body());
-        }
+    if (response.statusCode() == HttpStatus.OK.code) {
+      List<UserDTO> dtos = mapper.readValue(response.body(),
+          new TypeReference<>() {
+          });
+      return UserMapper.toModelList(dtos);
+    } else if (response.statusCode() == HttpStatus.NO_CONTENT.code) {
+      return List.of();
+    } else {
+      throw new IOException("Fetch users failed: " + response.statusCode());
     }
+  }
 
-    // GET all users
-    public List<User> getAllUsers() throws Exception {
-        HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL).authorization(authService.getToken()).get();
+  /**
+   * Fetches a single user by identifier.
+   *
+   * @param id user identifier
+   * @return user model for the given identifier
+   * @throws IOException if transport fails, parsing fails, or user retrieval is unsuccessful
+   */
+  public User getUserById(String id) throws IOException, InterruptedException {
+    HttpRequest request = LocalHttpClientHelper.buildRequest("users/" + id)
+        .authorization(authService.getToken()).get();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    HttpResponse<String> response = client.send(request,
+        HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == HttpStatus.OK.code) {
-            List<UserDTO> dtos = mapper.readValue(response.body(), new TypeReference<>() {});
-            return UserMapper.toModelList(dtos);
-        } else if (response.statusCode() == HttpStatus.NO_CONTENT.code) {
-            return List.of();
-        } else {
-            throw new IOException("Fetch users failed: " + response.statusCode());
-        }
+    if (response.statusCode() == HttpStatus.OK.code) {
+      UserDTO dto = mapper.readValue(response.body(), UserDTO.class);
+      return UserMapper.toModel(dto);
+    } else {
+      throw new IOException("User not found: " + id);
     }
+  }
 
-    // GET single user
-    public User getUserById(String id) throws Exception {
-        HttpRequest request = LocalHttpClientHelper.buildRequest("users/" + id).authorization(authService.getToken()).get();
+  /**
+   * Updates a user's access level.
+   *
+   * @param id       user identifier
+   * @param newLevel new access level value
+   * @throws IOException if serialization, transport, or backend update handling fails
+   */
+  public void updateAccessLevel(String id, int newLevel) throws IOException, InterruptedException {
+    UserDTO dto = new UserDTO();
+    dto.setAccessLevel(newLevel);
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    String json = mapper.writeValueAsString(dto);
 
-        if (response.statusCode() == HttpStatus.OK.code) {
-            UserDTO dto = mapper.readValue(response.body(), UserDTO.class);
-            return UserMapper.toModel(dto);
-        } else {
-            throw new IOException("User not found: " + id);
-        }
+    HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/" + id + "/access-level")
+        .authorization(authService.getToken()).put(json);
+
+    HttpResponse<String> response = client.send(request,
+        HttpResponse.BodyHandlers.ofString());
+
+    if (response.statusCode() != HttpStatus.OK.code) {
+      throw new IOException("Role update failed: " + response.body());
     }
+  }
 
-    // UPDATE access level (ADMIN)
-    public void updateAccessLevel(String id, int newLevel) throws Exception {
-        UserDTO dto = new UserDTO();
-        dto.setAccessLevel(newLevel);
+  /**
+   * Deletes the currently authenticated user.
+   *
+   * @throws IOException if transport fails or backend deletion response is unsuccessful
+   */
+  public void deleteCurrentUser() throws IOException, InterruptedException {
+    HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/me")
+        .authorization(authService.getToken()).delete();
+    HttpResponse<String> response = client.send(request,
+        HttpResponse.BodyHandlers.ofString());
 
-        String json = mapper.writeValueAsString(dto);
-
-        HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/" + id + "/access-level").authorization(authService.getToken()).put(json);
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() != HttpStatus.OK.code) {
-            throw new IOException("Role update failed: " + response.body());
-        }
+    if (response.statusCode() != HttpStatus.OK.code) {
+      throw new IOException("Failed to delete user: " + response.body());
     }
-    //  DELETE /users/me
-    public void deleteCurrentUser() throws Exception {
-        HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/me").authorization(authService.getToken()).delete();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() != HttpStatus.OK.code) {
-            throw new IOException("Failed to delete user: " + response.body());
-        }
-    }
+  }
 
 }
