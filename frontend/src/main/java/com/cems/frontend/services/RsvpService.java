@@ -7,6 +7,7 @@ import com.cems.shared.model.EventDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -27,13 +28,13 @@ public class RsvpService {
      * @return bool
      */
     public String checkRsvp(UUID eventId) throws Exception {
-        HttpRequest request = LocalHttpClientHelper.buildGetRequest("rsvp/" + eventId.toString(),AuthService.getInstance().getToken());
+        HttpRequest request = LocalHttpClientHelper.buildRequest("rsvp/" + eventId.toString()).authorization(AuthService.getInstance().getToken()).get();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
             return response.body();
         }else {
-            throw new RuntimeException("Post request failed with status code: " + response.statusCode());
+            throw new IOException("Post request failed with status code: " + response.statusCode());
         }
     }
 
@@ -42,14 +43,14 @@ public class RsvpService {
      * @return String
      */
     public List<Event> getRegisteredEvents() throws Exception {
-        HttpRequest request = LocalHttpClientHelper.buildGetRequest("rsvp/my-events",AuthService.getInstance().getToken());
+        HttpRequest request = LocalHttpClientHelper.buildRequest("rsvp/my-events").authorization(AuthService.getInstance().getToken()).get();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
             List<EventDto.EventResponseDTO> eventResponseDTOS = objectMapper.readValue(response.body(),  new TypeReference<>() {});
             return EventMapper.toModelList(eventResponseDTOS);
         }else {
-            throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
+            throw new IOException("Fetch request failed with status code: " + response.statusCode());
         }
     }
 
@@ -58,13 +59,13 @@ public class RsvpService {
      * @return boolean
      */
     public boolean checkUserRsvp(UUID eventId) throws Exception {
-        HttpRequest request = LocalHttpClientHelper.buildGetRequest(String.format("rsvp/%s/registered",eventId),AuthService.getInstance().getToken());
+        HttpRequest request = LocalHttpClientHelper.buildRequest(String.format("rsvp/%s/registered",eventId)).authorization(AuthService.getInstance().getToken()).get();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 200) {
             return objectMapper.readTree(response.body()).get("registered").asBoolean();
         }else {
-            throw new RuntimeException("Fetch request failed with status code: " + response.statusCode() + "error: "+ response.body());
+            throw new IOException("Fetch request failed with status code: " + response.statusCode() + "error: "+ response.body());
         }
     }
 
@@ -73,13 +74,12 @@ public class RsvpService {
      * @return String
      */
     public String register(UUID eventId) throws Exception {
-        HttpRequest request = LocalHttpClientHelper.buildPostRequest("rsvp/" + eventId.toString(),AuthService.getInstance().getToken());
+        HttpRequest request = LocalHttpClientHelper.buildRequest("rsvp/" + eventId.toString()).authorization(AuthService.getInstance().getToken()).post(null);
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 201) {
             return objectMapper.readTree(response.body()).get("message").asText();
         }else {
-            System.out.println(response.body());
-            throw new RuntimeException(objectMapper.readTree(response.body()).get("message").asText());
+            throw new IOException(objectMapper.readTree(response.body()).get("message").asText());
         }
     }
 
@@ -88,14 +88,13 @@ public class RsvpService {
      * @return String
      */
     public String cancelRegistration(UUID eventId) throws Exception {
-        HttpRequest request = LocalHttpClientHelper.buildDeleteRequest("rsvp/" + eventId.toString(),AuthService.getInstance().getToken());
+        HttpRequest request = LocalHttpClientHelper.buildRequest("rsvp/" + eventId.toString()).authorization(AuthService.getInstance().getToken()).delete();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 204 || response.statusCode() == 200) {
             return "Registration cancelled successfully";
         }else {
-            System.out.println(response.body());
-            throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
+            throw new IOException("Fetch request failed with status code: " + response.statusCode());
         }
     }
 }

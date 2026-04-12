@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 
 public class LocaleUtil {
     private Locale locale;
-    private static LocaleUtil localeUtil;
+    private static LocaleUtil localeUtil = null;
     private Language language;
     private Language latestLanguage;
 

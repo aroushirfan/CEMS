@@ -1,6 +1,8 @@
 package com.cems.frontend.utils;
 
 public class RbacUtil {
+    private RbacUtil() {}
+
     public static String getRole() {
         String role = LocalStorage.get("role");
         if (role == null || role.isEmpty()) {

@@ -2,11 +2,13 @@ package com.cems.frontend.services;
 
 import com.cems.frontend.models.Attendance;
 import com.cems.frontend.utils.AttendanceMapper;
+import com.cems.frontend.utils.HttpStatus;
 import com.cems.frontend.utils.LocalHttpClientHelper;
 import com.cems.shared.model.AttendanceDto.AttendanceResponseDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -26,16 +28,15 @@ public class AttendanceService {
      * Returns attendance list
      * @return List<Attendance>
      */
-    public List<Attendance> getEventAttendance(String eventId) throws Exception {
-        HttpRequest request = LocalHttpClientHelper.buildGetRequest("attendance/event/" + eventId,AuthService.getInstance().getToken());
+    public List<Attendance> getEventAttendance(String eventId) throws IOException, InterruptedException {
+        HttpRequest request = LocalHttpClientHelper.buildRequest("attendance/event/" + eventId).authorization(AuthService.getInstance().getToken()).get();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
+        if (response.statusCode() == HttpStatus.OK.code) {
             List<AttendanceResponseDTO> attendanceResponseDTOS = objectMapper.readValue(response.body(),  new TypeReference<>() {});
             return AttendanceMapper.toModelList(attendanceResponseDTOS);
         }else {
-            System.out.println(response.body());
-            throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
+            throw new IOException("Fetch request failed with status code: " + response.statusCode());
         }
     }
 
@@ -43,20 +44,15 @@ public class AttendanceService {
      * Returns attendance list
      * @return List<Attendance>
      */
-    public String checkInEvent(UUID eventId) throws Exception {
-        try {
-            String requestUrl = String.format("attendance/event/%s/check-in", eventId.toString());
-            HttpRequest request = LocalHttpClientHelper.buildPostRequest(requestUrl, AuthService.getInstance().getToken());
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    public String checkInEvent(UUID eventId) throws IOException, InterruptedException {
+        String requestUrl = String.format("attendance/event/%s/check-in", eventId.toString());
+        HttpRequest request = LocalHttpClientHelper.buildRequest(requestUrl).authorization(AuthService.getInstance().getToken()).post(null);
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200 || response.statusCode() == 201) {
-                return objectMapper.readTree(response.body()).get("message").asText();
-            } else {
-                throw new RuntimeException(objectMapper.readTree(response.body()).get("error").asText());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+        if (response.statusCode() == HttpStatus.OK.code || response.statusCode() == HttpStatus.CREATED.code) {
+            return objectMapper.readTree(response.body()).get("message").asText();
+        } else {
+            throw new IOException(objectMapper.readTree(response.body()).get("error").asText());
         }
     }
 
@@ -64,15 +60,15 @@ public class AttendanceService {
      * Returns True or false if a user has marked attendance
      * @return boolean
      */
-    public boolean hasCheckedIn(UUID eventId) throws Exception {
+    public boolean hasCheckedIn(UUID eventId) throws IOException, InterruptedException {
         String requestUrl = String.format("attendance/event/%s/checked-in", eventId.toString());
-        HttpRequest request = LocalHttpClientHelper.buildGetRequest(requestUrl,AuthService.getInstance().getToken());
+        HttpRequest request = LocalHttpClientHelper.buildRequest(requestUrl).authorization(AuthService.getInstance().getToken()).get();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
+        if (response.statusCode() == HttpStatus.OK.code) {
             return objectMapper.readTree(response.body()).get("checkedIn").asBoolean();
         }else {
-            throw new RuntimeException("Fetch request failed with status code: " + response.statusCode());
+            throw new IOException("Fetch request failed with status code: " + response.statusCode());
         }
     }
 }

@@ -7,6 +7,8 @@ import java.util.prefs.Preferences;
 
 public class LocalStorage {
 
+    private LocalStorage (){};
+
     public static final Preferences PREF = Preferences.userNodeForPackage(Launcher.class);
 
     public static void set(String key, String value) {
