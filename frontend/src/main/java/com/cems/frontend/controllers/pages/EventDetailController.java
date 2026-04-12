@@ -1,17 +1,21 @@
 package com.cems.frontend.controllers.pages;
 
+import com.cems.frontend.controllers.components.EventLocalizeController;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.Paths;
-import com.cems.frontend.services.ApiEventService;
-import com.cems.frontend.services.AttendanceService;
-import com.cems.frontend.services.RsvpService;
+import com.cems.frontend.models.User;
+import com.cems.frontend.services.*;
+import com.cems.frontend.utils.Language;
 import com.cems.frontend.utils.LocalHttpClientHelper;
 import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.utils.RbacUtil;
 import com.cems.frontend.view.AlertHelper;
 import com.cems.frontend.view.SceneNavigator;
+
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.chrono.ThaiBuddhistChronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Optional;
@@ -20,12 +24,16 @@ import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 /**
  * Controller for the Event Detail view. It manages the display
@@ -53,6 +61,8 @@ public class EventDetailController {
   @FXML
   private Button checkInButton;
   @FXML
+  private Button addLanguageButton;
+  @FXML
   private HBox buttonLayout;
 
   private final BooleanProperty registered = new SimpleBooleanProperty(false);
@@ -66,8 +76,9 @@ public class EventDetailController {
       LocalHttpClientHelper.getClient(), LocalHttpClientHelper.getMapper());
   private LocaleUtil localeService = LocaleUtil.getInstance();
   private ResourceBundle rb;
+  private ApiEventService apiEventService;
 
-  /**
+    /**
    * Initializes the controller. This method is called after the FXML
    * fields have been injected. It sets up the initial state of the UI,
    * binds button text and disable properties to the user's registration
@@ -75,6 +86,7 @@ public class EventDetailController {
    */
   @FXML
   public void initialize() {
+    UserService userService = new UserService();
     rb = localeService.getBundle(Paths.EVENT_DETAIL_VIEW);
     // Bind button text to the registered property
     registerNowButton.textProperty().bind(
@@ -92,6 +104,13 @@ public class EventDetailController {
                 : rb.getString("eventDetail.check_in"))
     );
     buttonLayout.getChildren().remove(viewAttendanceButton);
+    User user;
+    try {
+        user = userService.getCurrentUser();
+    } catch (Exception ignored) {
+        user = null;
+    }
+    addLanguageButton.setDisable(user == null || user.getAccessLevel() < 1);
   }
 
   /**
@@ -155,7 +174,12 @@ public class EventDetailController {
         ? currentEvent.getDescription()
         : rb.getString("eventDetail.no_description"));
 
-    DateTimeFormatter formatter = localeService.dateTime(FormatStyle.FULL, FormatStyle.SHORT);
+    DateTimeFormatter formatter;
+    if (LocaleUtil.getInstance().getLanguage().equals(Language.TH)) {
+        formatter = localeService.dateTime(FormatStyle.FULL, FormatStyle.SHORT).withChronology(ThaiBuddhistChronology.INSTANCE);
+    } else {
+        formatter = localeService.dateTime(FormatStyle.FULL, FormatStyle.SHORT);
+    }
     if (currentEvent.getDateTime() != null) {
       dateLabel.setText(currentEvent.getDateTime()
           .atZone(ZoneId.systemDefault()).format(formatter));
@@ -290,4 +314,25 @@ public class EventDetailController {
   private void handleBack() {
     SceneNavigator.loadContent(Paths.ALL_EVENTS);
   }
+  
+  @FXML
+    void onAddLanguage(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.EVENT_LOCALIZE.path), ResourceBundle.getBundle(Paths.EVENT_LOCALIZE.bundlePath, LocaleUtil.getInstance().getLocale()));
+        Scene scene = new Scene(loader.load());
+        EventLocalizeController eventLocalizeController = (EventLocalizeController) loader.getController();
+        eventLocalizeController.setEventId(currentEvent.getId().toString());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+        if (apiEventService == null) {
+            apiEventService = new ApiEventService();
+        }
+        try {
+            initData(apiEventService.getLocalEventById(currentEvent.getId().toString(), LocaleUtil.getInstance().getLanguage()));
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("An error occurred: " + e.getMessage());
+        }
+    }
 }

@@ -165,6 +165,9 @@ public class Event {
     @Column(nullable = false)
     private boolean approved = false;
 
+    @OneToMany(mappedBy = "refEvent")
+    private List<EventTranslation> translations;
+
     @ManyToMany
     @JoinTable(
             name = "event_attendees",
@@ -272,5 +275,9 @@ public class Event {
 
     public void setCapacity(long capacity) {
         this.capacity = capacity;
+    }
+
+    public List<EventTranslation> getTranslations() {
+        return translations;
     }
 }

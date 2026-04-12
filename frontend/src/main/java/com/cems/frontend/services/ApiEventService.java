@@ -3,6 +3,8 @@ package com.cems.frontend.services;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.HttpClientObject;
 import com.cems.frontend.utils.EventMapper;
+import com.cems.frontend.utils.Language;
+import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.view.SceneNavigator;
 import com.cems.frontend.utils.LocalStorage;
 import com.cems.shared.model.EventDto;
@@ -38,7 +40,7 @@ public class ApiEventService implements IEventService {
     @Override
     public List<Event> getAllEvents() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL))
+                .uri(URI.create(API_URL + "/all/" + LocaleUtil.getInstance().getLocale().getLanguage()))
                 .header("Accept", "application/json")
                 //.header("Authorization", String.format("Bearer %s", authService.getToken()))
                 .GET()
@@ -59,7 +61,7 @@ public class ApiEventService implements IEventService {
     @Override
     public List<Event> getApprovedEvents() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/approved"))
+                .uri(URI.create(API_URL + "/approved/" + LocaleUtil.getInstance().getLocale().getLanguage()))
                 .header("Accept", "application/json")
                 //.header("Authorization", String.format("Bearer %s", authService.getToken()))
                 .GET()
@@ -121,6 +123,26 @@ public class ApiEventService implements IEventService {
         }
     }
 
+    public Event updateLocalEvent(String id, EventDto.EventLocalRequestDTO data, Language lang) throws Exception {
+        String json = mapper.writeValueAsString(data);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL + "/" + id + "/" + lang.getLocale().getLanguage()))
+                .header("Content-Type", "application/json")
+                .header("Authorization", String.format("Bearer %s", authService.getToken()))
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
+            return EventMapper.toModel(dto);
+        } else {
+            throw new Exception("Update Failed: " + response.body());
+        }
+    }
+
     @Override
     public void deleteEvent(String id) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
@@ -138,7 +160,7 @@ public class ApiEventService implements IEventService {
     @Override
     public Event getEventById(String id) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/" + id))
+                .uri(URI.create(API_URL + "/" + id + "/" + LocaleUtil.getInstance().getLocale().getLanguage()))
                 .header("Accept", "application/json")
                 .header("Authorization", String.format("Bearer %s", authService.getToken()))
                 .GET()
@@ -151,6 +173,24 @@ public class ApiEventService implements IEventService {
             return EventMapper.toModel(dto);
         } else {
             throw new RuntimeException("Event not found: " + id);
+        }
+    }
+
+    public Event getLocalEventById(String id, Language language) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL + "/" + id + "/" + language.getLocale().getLanguage()))
+                .header("Accept", "application/json")
+                .header("Authorization", String.format("Bearer %s", authService.getToken()))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
+            return EventMapper.toModel(dto);
+        } else {
+            throw new Exception("Event not found: " + response.body());
         }
     }
     @Override

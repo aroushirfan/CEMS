@@ -5,8 +5,8 @@ import java.util.Locale;
 public enum Language {
 
         EN("English",Locale.US),
-        TH("Thai",Locale.forLanguageTag("th-TH"), "/com/cems/frontend/view/css/thai.css"),
-        UR("Urdu",Locale.forLanguageTag("ur-PK"));
+        TH("ภาษาไทย",Locale.forLanguageTag("th-TH"), "/com/cems/frontend/view/css/thai.css"),
+        UR("اردو",Locale.forLanguageTag("ur-PK"));
 
         private final Locale locale;
         private final String displayName;
@@ -44,5 +44,14 @@ public enum Language {
             }
         }
         return EN;
+    }
+
+    @Override
+    public String toString() {
+        return displayName;
+    }
+
+    public static Language[] getAllLanguages() {
+            return new Language[]{Language.EN, Language.TH, Language.UR};
     }
 }
