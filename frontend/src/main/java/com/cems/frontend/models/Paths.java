@@ -10,6 +10,7 @@ public enum Paths {
     EVENT_MANAGEMENT("pages/admin-page.fxml","EventManagement"),
     CREATE_EVENT("pages/create-event-view.fxml","EventForm"),
     USER_MANAGEMENT("pages/user-management.fxml","UserManagement"),
+    EVENT_LOCALIZE("components/event-localize.fxml", "EventForm"),
     NAVIGATION("pages/navigation.fxml","Bundles");
 
     public final String path;

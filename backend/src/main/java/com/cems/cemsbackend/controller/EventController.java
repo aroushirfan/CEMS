@@ -45,7 +45,7 @@ public class EventController {
     }
 
     // get all
-    // GET /events
+    // GET /events/all
     @GetMapping()
     public ResponseEntity<List<EventResponseDTO>> getAllEvents() {
         try {
@@ -61,6 +61,9 @@ public class EventController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to fetch events");
         }
     }
+
+    // get all (localized)
+    // GET /events/all/{lang}
     @GetMapping(path = "all/{lang}")
     public ResponseEntity<List<EventResponseDTO>> getAllEventsLocal(
             @PathVariable String lang
@@ -96,6 +99,32 @@ public class EventController {
             return ResponseEntity.ok(EventMapper.toDto(event));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to fetch event");
+        }
+    }
+
+    // get by id (localized)
+    // GET /events/{id}/{lang}
+    @GetMapping(path = "/{id}/{lang}")
+    public ResponseEntity<EventResponseDTO> getEventByIdLocal(
+            @PathVariable UUID id,
+            @PathVariable String lang
+    ) {
+        try {
+            var event = eventRepository.getEventById(id).orElse(null);
+            if (event == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found");
+            }
+            var translation = eventTranslationRepository.getByRefEventAndLanguage(event, lang).orElse(null);
+            if (translation == null) {
+                return ResponseEntity.ok(EventMapper.toDto(event));
+            } else {
+                return ResponseEntity.ok(EventMapper.toDto(event, translation));
+            }
+        } catch (Exception e) {
+            if (e instanceof ResponseStatusException) {
+                throw e;
+            }
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -197,11 +226,18 @@ public class EventController {
             }
             Event event = eventOpt.get();
             Optional<EventTranslation> eventTranslationOptional = eventTranslationRepository.getByRefEventAndLanguage(event, lang);
+            EventResponseDTO response;
+            EventTranslation eventTranslate;
             if (eventTranslationOptional.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event localization with id not found");
+                eventTranslate = new EventTranslation();
+                eventTranslate.setLanguage(lang);
+                eventTranslate.setRefEvent(event);
+            } else {
+                eventTranslate = eventTranslationOptional.get();
             }
-            eventTranslationOptional.get().updateFromDTO(body);
-            return ResponseEntity.ok(EventMapper.toDto(event, eventTranslationOptional.get()));
+            eventTranslate.updateFromDTO(body);
+            response = EventMapper.toDto(event, eventTranslationRepository.save(eventTranslate));
+            return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Id");
         } catch (Exception e) {
@@ -267,6 +303,29 @@ public class EventController {
             }
             List<EventResponseDTO> response = events.stream()
                     .map(EventMapper::toDto)
+                    .toList();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to fetch approved events");
+        }
+    }
+
+    @GetMapping("/approved/{lang}")
+    public ResponseEntity<List<EventResponseDTO>> getLocalApprovedEvents(
+            @PathVariable String lang
+    ) {
+        try {
+            List<Event> events = eventRepository.findByApprovedTrue();
+            if (events.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            }
+            List<EventResponseDTO> response = events.stream()
+                    .map(event -> {
+                        var translationOpt = eventTranslationRepository.getByRefEventAndLanguage(event, lang);
+                        return translationOpt.map(eventTranslation -> {
+                            return EventMapper.toDto(event, eventTranslation);
+                        }).orElseGet(() -> EventMapper.toDto(event));
+                    })
                     .toList();
             return ResponseEntity.ok(response);
         } catch (Exception e) {

@@ -1,10 +1,10 @@
 package com.cems.frontend.controllers.pages;
 
+import com.cems.frontend.controllers.components.EventLocalizeController;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.Paths;
-import com.cems.frontend.services.ApiEventService;
-import com.cems.frontend.services.AttendanceService;
-import com.cems.frontend.services.RsvpService;
+import com.cems.frontend.models.User;
+import com.cems.frontend.services.*;
 import com.cems.frontend.utils.LocalHttpClientHelper;
 import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.utils.RbacUtil;
@@ -14,13 +14,18 @@ import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -38,6 +43,7 @@ public class EventDetailController {
     @FXML private Button registerNowButton;
     @FXML private Button viewAttendanceButton;
     @FXML private Button checkInButton;
+    @FXML private Button addLanguageButton;
     @FXML private HBox buttonLayout;
 
     private final BooleanProperty registered = new SimpleBooleanProperty(false);
@@ -49,9 +55,12 @@ public class EventDetailController {
     private final AttendanceService attendanceService = new AttendanceService(LocalHttpClientHelper.getClient(),LocalHttpClientHelper.getMapper());
     private LocaleUtil localeService = LocaleUtil.getInstance();
     private ResourceBundle rb;
+    private User user;
+    private ApiEventService apiEventService;
 
     @FXML
     public void initialize() {
+        var userService = new UserService();
         rb = localeService.getBundle(Paths.EVENT_DETAIL_VIEW);
         // Bind button text to the registered property
         registerNowButton.textProperty().bind(
@@ -65,6 +74,13 @@ public class EventDetailController {
                         .map(isCheckedIn -> isCheckedIn ? rb.getString("eventDetail.attended") : rb.getString("eventDetail.check_in"))
         );
         buttonLayout.getChildren().remove(viewAttendanceButton);
+
+        try {
+            user = userService.getCurrentUser();
+        } catch (Exception ignored) {
+            user = null;
+        }
+        addLanguageButton.setDisable(user == null || user.getAccessLevel() < 1);
     }
 
     public void initData(Event event) {
@@ -246,5 +262,26 @@ public class EventDetailController {
     @FXML
     private void handleBack() {
         SceneNavigator.loadContent(Paths.ALL_EVENTS);
+    }
+
+    @FXML
+    void onAddLanguage(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.EVENT_LOCALIZE.path), ResourceBundle.getBundle(Paths.EVENT_LOCALIZE.bundlePath, LocaleUtil.getInstance().getLocale()));
+        Scene scene = new Scene(loader.load());
+        EventLocalizeController eventLocalizeController = (EventLocalizeController) loader.getController();
+        eventLocalizeController.setEventId(currentEvent.getId().toString());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.showAndWait();
+        if (apiEventService == null) {
+            apiEventService = new ApiEventService();
+        }
+        try {
+            initData(apiEventService.getLocalEventById(currentEvent.getId().toString(), LocaleUtil.getInstance().getLanguage()));
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("An error occurred: " + e.getMessage());
+        }
     }
 }
