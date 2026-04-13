@@ -7,18 +7,18 @@ import java.util.prefs.Preferences;
 /**
  * Utility for storing and retrieving simple key-value data in user preferences.
  */
-public class LocalStorage {
+public final class LocalStorage {
+
+  /**
+   * Shared preferences node scoped to the application package.
+   */
+  public static final Preferences PREF = Preferences.userNodeForPackage(Launcher.class);
 
   /**
    * Utility class constructor.
    */
   private LocalStorage() {
   }
-
-  /**
-   * Shared preferences node scoped to the application package.
-   */
-  public static final Preferences PREF = Preferences.userNodeForPackage(Launcher.class);
 
   /**
    * Stores a key-value pair and flushes preferences to disk.
@@ -31,7 +31,7 @@ public class LocalStorage {
     try {
       PREF.flush();  // Explicitly flush changes to disk
     } catch (BackingStoreException e) {
-      e.printStackTrace();
+      System.err.println(e.getMessage());
     }
   }
 

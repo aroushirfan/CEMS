@@ -96,7 +96,7 @@ public class UserService {
 
     final HttpResponse<String> response = client.send(request,
         HttpResponse.BodyHandlers.ofString());
-    List<User> result;
+    final List<User> result;
     if (response.statusCode() == HttpStatus.OK.code) {
       final List<UserDTO> dtos = mapper.readValue(response.body(),
           new TypeReference<>() {

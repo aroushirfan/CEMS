@@ -143,6 +143,15 @@ public class ApiEventService implements IEventService {
     }
   }
 
+  /**
+   * Updates language-specific fields of an existing event.
+   *
+   * @param id   event identifier
+   * @param data request payload with localized values
+   * @param lang language whose localized values are being updated
+   * @return updated event model
+   * @throws IOException if serialization, transport, or update response handling fails
+   */
     public Event updateLocalEvent(String id, EventDto.EventLocalRequestDTO data, Language lang)
         throws IOException, InterruptedException {
         final String json = mapper.writeValueAsString(data);
@@ -204,6 +213,14 @@ public class ApiEventService implements IEventService {
     }
   }
 
+  /**
+   * Fetches a single event in a specific language.
+   *
+   * @param id       event identifier
+   * @param language language for localized event fields
+   * @return event model
+   * @throws IOException if transport fails or event retrieval is unsuccessful
+   */
     public Event getLocalEventById(String id, Language language) throws IOException, InterruptedException {
         final HttpRequest request = LocalHttpClientHelper.buildRequest(
             BASE_URL + "/" + id + "/" + language.getLocale().getLanguage())

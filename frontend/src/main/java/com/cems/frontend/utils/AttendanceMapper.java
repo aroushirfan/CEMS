@@ -15,20 +15,20 @@ public final class AttendanceMapper {
   /**
    * Converts a single attendance response DTO into an attendance model.
    *
-   * @param attendanceResponseDto source attendance DTO
+   * @param attendanceDto source attendance DTO
    * @return mapped attendance model, or {@code null} when input is {@code null}
    */
-  public static Attendance toModel(AttendanceResponseDTO attendanceResponseDto) {
-    if (attendanceResponseDto == null) {
+  public static Attendance toModel(AttendanceResponseDTO attendanceDto) {
+    if (attendanceDto == null) {
       return null;
     }
     return new Attendance(
-        attendanceResponseDto.getEventId(),
-        attendanceResponseDto.getFirstName(),
-        attendanceResponseDto.getLastName(),
-        attendanceResponseDto.getEmail(),
-        attendanceResponseDto.getCheckInTime(),
-        attendanceResponseDto.getStatus()
+        attendanceDto.getEventId(),
+        attendanceDto.getFirstName(),
+        attendanceDto.getLastName(),
+        attendanceDto.getEmail(),
+        attendanceDto.getCheckInTime(),
+        attendanceDto.getStatus()
 
     );
   }
@@ -36,12 +36,12 @@ public final class AttendanceMapper {
   /**
    * Converts a list of attendance response DTOs into attendance models.
    *
-   * @param attendanceResponseDtoList list of source attendance DTOs
+   * @param attendanceDtoList list of source attendance DTOs
    * @return mapped list of attendance models
    */
   public static List<Attendance> toModelList(List<AttendanceResponseDTO>
-                                                 attendanceResponseDtoList) {
-    return attendanceResponseDtoList.stream()
+                                                 attendanceDtoList) {
+    return attendanceDtoList.stream()
         .map(AttendanceMapper::toModel)
         .toList();
   }

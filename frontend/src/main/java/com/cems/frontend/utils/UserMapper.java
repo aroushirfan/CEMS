@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 /**
  * Utility mapper for converting user DTOs into frontend user models.
  */
-public class UserMapper {
+public final class UserMapper {
 
   /**
    * Utility class constructor.
@@ -23,7 +23,7 @@ public class UserMapper {
    * @return mapped user model
    */
   public static User toModel(UserDTO dto) {
-    User user = new User();
+    final User user = new User();
     user.setId(dto.getId());
 
     user.setFirstName(dto.getFirstName());
