@@ -1,215 +1,247 @@
 package com.cems.frontend.services;
 
 import com.cems.frontend.models.Event;
-import com.cems.frontend.models.HttpClientObject;
-import com.cems.frontend.utils.EventMapper;
-import com.cems.frontend.utils.Language;
-import com.cems.frontend.utils.LocaleUtil;
-import com.cems.frontend.view.SceneNavigator;
-import com.cems.frontend.utils.LocalStorage;
+import com.cems.frontend.utils.*;
 import com.cems.shared.model.EventDto;
 import com.cems.shared.model.EventDto.EventResponseDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import javafx.application.Platform;
-
-import java.net.URI;
+import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
+/**
+ * HTTP-backed implementation of {@link IEventService} for event operations.
+ *
+ * <p>This service calls backend event endpoints, maps DTO payloads to frontend
+ * models, and enforces status-code based error handling.</p>
+ */
 public class ApiEventService implements IEventService {
 
-    private final HttpClient client;
-    private final ObjectMapper mapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule())
-            .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+  private final HttpClient client;
+  private final ObjectMapper mapper = LocalHttpClientHelper.getMapper();
+  private final AuthService authService = AuthService.getInstance();
+  private static final String BASE_URL = "events";
 
-    private final String API_URL = String.format("%s/events", System.getenv().getOrDefault("BACKEND_URL","http://localhost:8081"));
+  /**
+   * Creates an event API service using the shared local HTTP client.
+   */
+  public ApiEventService() {
+    this.client = LocalHttpClientHelper.getClient();
+  }
 
-    private final AuthService authService = AuthService.getInstance();
+  /**
+   * Fetches all events from the backend.
+   *
+   * @return list of events, or an empty list when no events exist
+   * @throws IOException          if the request fails or returns an unexpected status
+   * @throws InterruptedException if the request thread is interrupted
+   */
+  @Override
+  public List<Event> getAllEvents() throws IOException, InterruptedException {
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(
+        BASE_URL+ "/all/" + LocaleUtil.getInstance().getLocale().getLanguage())
+        .get();
+    final HttpResponse<String> response = client.send(request,
+        HttpResponse.BodyHandlers.ofString());
+    final List<Event> result;
 
-    public ApiEventService() {
-        this.client = HttpClientObject.getClient();
+    if (response.statusCode() == HttpStatus.OK.code) {
+      final List<EventResponseDTO> eventDtos = mapper.readValue(response.body(),
+          new TypeReference<>() {
+          });
+      result = EventMapper.toModelList(eventDtos); // Convert DTOs to Models using the Mapper
+    } else if (response.statusCode() == HttpStatus.NO_CONTENT.code) {
+      result = List.of();
+    } else {
+      throw new IOException("Fetch failed: " + response.statusCode());
     }
-    @Override
-    public List<Event> getAllEvents() throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/all/" + LocaleUtil.getInstance().getLocale().getLanguage()))
-                .header("Accept", "application/json")
-                //.header("Authorization", String.format("Bearer %s", authService.getToken()))
-                .GET()
-                .build();
+    return result;
+  }
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+  /**
+   * Fetches only approved events.
+   *
+   * @return list of approved events, or an empty list when none exist or user is unauthorized
+   * @throws IOException if serialization, transport, or non-handled HTTP errors occur
+   */
+  @Override
+  public List<Event> getApprovedEvents() throws IOException, InterruptedException {
+    final HttpRequest request = LocalHttpClientHelper.buildRequest("events/approved/" + LocaleUtil.getInstance().getLocale().getLanguage()).get();
 
-        if (response.statusCode() == 200) {
-            List<EventResponseDTO> dtos = mapper.readValue(response.body(), new TypeReference<List<EventResponseDTO>>() {});
-            // Convert DTOs to Models using the Mapper
-            return EventMapper.toModelList(dtos);
-        } else if (response.statusCode() == 204) {
-            return List.of();
-        } else {
-            throw new RuntimeException("Fetch failed: " + response.statusCode());
-        }
-    }
-    @Override
-    public List<Event> getApprovedEvents() throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/approved/" + LocaleUtil.getInstance().getLocale().getLanguage()))
-                .header("Accept", "application/json")
-                //.header("Authorization", String.format("Bearer %s", authService.getToken()))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() == 200) {
-            List<EventResponseDTO> dtos = mapper.readValue(response.body(), new TypeReference<List<EventResponseDTO>>() {});
-            return EventMapper.toModelList(dtos);
-        } else if (response.statusCode() == 204) {
-            return List.of();
-        } else if (response.statusCode() == 401) {
-            AuthService.getInstance().logout();
-            return List.of();
-        } else {
-            throw new RuntimeException("Fetch failed: " + response.statusCode());
-        }
-    }
-    @Override
-    public Event createEvent(EventDto.EventRequestDTO data) throws Exception {
-        String json = mapper.writeValueAsString(data);
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL))
-                .header("Content-Type", "application/json")
-                .header("Authorization", String.format("Bearer %s", authService.getToken()))
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() == 201) {
-            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
-            return EventMapper.toModel(dto); // Return model
-        } else {
-            throw new RuntimeException("Creation failed: " + response.body());
-        }
+    final HttpResponse<String> response = client.send(request,
+        HttpResponse.BodyHandlers.ofString());
+    final List<Event> result;
+    if (response.statusCode() == HttpStatus.OK.code) {
+      final List<EventResponseDTO> eventDtos = mapper.readValue(response.body(),
+          new TypeReference<>() {
+          });
+      result = EventMapper.toModelList(eventDtos);
+    } else if (response.statusCode() == HttpStatus.NO_CONTENT.code) {
+      result = List.of();
+    } else if (response.statusCode() == HttpStatus.UNAUTHORIZED.code) {
+      AuthService.getInstance().logout();
+      result = List.of();
+    } else {
+      throw new IOException("Fetch failed: " + response.statusCode());
     }
 
-    @Override
-    public Event updateEvent(String id, EventDto.EventRequestDTO data) throws Exception {
-        String json = mapper.writeValueAsString(data);
+    return result;
+  }
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/" + id))
-                .header("Content-Type", "application/json")
-                .header("Authorization", String.format("Bearer %s", authService.getToken()))
-                .PUT(HttpRequest.BodyPublishers.ofString(json))
-                .build();
+  /**
+   * Creates a new event.
+   *
+   * @param data request payload used to create the event
+   * @return created event model
+   * @throws IOException if serialization, transport, or creation response handling fails
+   */
+  @Override
+  public Event createEvent(EventDto.EventRequestDTO data) throws IOException, InterruptedException {
+    final String json = mapper.writeValueAsString(data);
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL)
+        .authorization(authService.getToken())
+        .post(json);
+    final HttpResponse<String> response = client.send(request,
+        HttpResponse.BodyHandlers.ofString());
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() == 200) {
-            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
-            return EventMapper.toModel(dto); // Return model
-        } else {
-            throw new RuntimeException("Update failed: " + response.body());
-        }
+    if (response.statusCode() == HttpStatus.CREATED.code) {
+      final EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
+      return EventMapper.toModel(dto); // Return model
+    } else {
+      throw new IOException("Creation failed: " + response.body());
     }
+  }
 
-    public Event updateLocalEvent(String id, EventDto.EventLocalRequestDTO data, Language lang) throws Exception {
-        String json = mapper.writeValueAsString(data);
+  /**
+   * Updates an existing event.
+   *
+   * @param id   event identifier
+   * @param data request payload with updated values
+   * @return updated event model
+   * @throws IOException if serialization, transport, or update response handling fails
+   */
+  @Override
+  public Event updateEvent(String id, EventDto.EventRequestDTO data) throws IOException,
+      InterruptedException {
+    final String json = mapper.writeValueAsString(data);
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/" + id)
+        .authorization(authService.getToken())
+        .post(json);
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/" + id + "/" + lang.getLocale().getLanguage()))
-                .header("Content-Type", "application/json")
-                .header("Authorization", String.format("Bearer %s", authService.getToken()))
-                .PUT(HttpRequest.BodyPublishers.ofString(json))
-                .build();
+    final HttpResponse<String> response = client.send(request,
+        HttpResponse.BodyHandlers.ofString());
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    if (response.statusCode() == HttpStatus.OK.code) {
+      final EventResponseDTO dto = mapper.readValue(response.body(),
+          EventResponseDTO.class);
+      return EventMapper.toModel(dto); // Return model
+    } else {
+      throw new IOException("Update failed: " + response.body());
+    }
+  }
 
-        if (response.statusCode() == 200) {
-            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
+    public Event updateLocalEvent(String id, EventDto.EventLocalRequestDTO data, Language lang)
+        throws IOException, InterruptedException {
+        final String json = mapper.writeValueAsString(data);
+
+        final HttpRequest request = LocalHttpClientHelper.buildRequest(
+                BASE_URL + "/" + id + "/" + lang.getLocale().getLanguage())
+            .authorization(authService.getToken()).put(json);
+
+        final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == HttpStatus.OK.code) {
+            final EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
             return EventMapper.toModel(dto);
         } else {
-            throw new Exception("Update Failed: " + response.body());
+            throw new IOException("Update Failed: " + response.body());
         }
     }
 
-    @Override
-    public void deleteEvent(String id) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/" + id))
-                .header("Authorization", String.format("Bearer %s", authService.getToken()))
-                .DELETE()
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() != 204 && response.statusCode() != 200) {
-            throw new RuntimeException("Delete failed: " + response.body());
-        }
+  /**
+   * Deletes an event by identifier.
+   *
+   * @param id event identifier
+   * @throws IOException if transport fails or backend does not return a successful delete status
+   */
+  @Override
+  public void deleteEvent(String id) throws IOException, InterruptedException {
+    final String url = String.format("%s/%s", BASE_URL, id);
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(url)
+        .authorization(authService.getToken())
+        .delete();
+    final HttpResponse<String> response = client.send(request,
+        HttpResponse.BodyHandlers.ofString());
+    if (response.statusCode() != HttpStatus.NO_CONTENT.code && response.statusCode()
+        != HttpStatus.OK.code) {
+      throw new IOException("Delete failed: " + response.body());
     }
+  }
 
-    @Override
-    public Event getEventById(String id) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/" + id + "/" + LocaleUtil.getInstance().getLocale().getLanguage()))
-                .header("Accept", "application/json")
-                .header("Authorization", String.format("Bearer %s", authService.getToken()))
-                .GET()
-                .build();
+  /**
+   * Fetches a single event by identifier.
+   *
+   * @param id event identifier
+   * @return event model
+   * @throws IOException if transport fails or event retrieval is unsuccessful
+   */
+  @Override
+  public Event getEventById(String id) throws IOException, InterruptedException {
+    final String url = String.format("%s/%s/%s", BASE_URL, id,LocaleUtil.getInstance().getLocale().getLanguage());
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(url).get();
+    final HttpResponse<String> response = client.send(request,
+        HttpResponse.BodyHandlers.ofString());
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    if (response.statusCode() == HttpStatus.OK.code) {
+      final EventResponseDTO dto = mapper.readValue(response.body(),
+          EventResponseDTO.class);
+      return EventMapper.toModel(dto);
+    } else {
+      throw new IOException("Event not found: " + id);
+    }
+  }
 
-        if (response.statusCode() == 200) {
-            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
+    public Event getLocalEventById(String id, Language language) throws IOException, InterruptedException {
+        final HttpRequest request = LocalHttpClientHelper.buildRequest(
+            BASE_URL + "/" + id + "/" + language.getLocale().getLanguage())
+            .authorization(authService.getToken()).get();
+
+        final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == HttpStatus.OK.code) {
+            final EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
             return EventMapper.toModel(dto);
         } else {
-            throw new RuntimeException("Event not found: " + id);
+            throw new IOException("Event not found: " + response.body());
         }
     }
 
-    public Event getLocalEventById(String id, Language language) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/" + id + "/" + language.getLocale().getLanguage()))
-                .header("Accept", "application/json")
-                .header("Authorization", String.format("Bearer %s", authService.getToken()))
-                .GET()
-                .build();
+  /**
+   * Approves an event by identifier.
+   *
+   * @param id event identifier
+   * @return approved event model
+   * @throws IOException if transport fails or backend approval response is unsuccessful
+   */
+  @Override
+  public Event approveEvent(String id) throws IOException, InterruptedException {
+    final String url = String.format("%s/%s/approve", BASE_URL, id);
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(url)
+        .authorization(authService.getToken())
+        .put(null);
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    final HttpResponse<String> response = client.send(request,
+        HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
-            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
-            return EventMapper.toModel(dto);
-        } else {
-            throw new Exception("Event not found: " + response.body());
-        }
+    if (response.statusCode() == HttpStatus.OK.code) {
+      final EventResponseDTO dto = mapper.readValue(response.body(),
+          EventResponseDTO.class);
+      return EventMapper.toModel(dto);
+    } else {
+      throw new IOException("Approve failed: " + response.body());
     }
-    @Override
-    public Event approveEvent(String id) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/" + id + "/approve"))
-                .header("Authorization", "Bearer " + authService.getToken())
-                .PUT(HttpRequest.BodyPublishers.noBody())
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() == 200) {
-            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
-            return EventMapper.toModel(dto);
-        } else {
-            throw new RuntimeException("Approve failed: " + response.body());
-        }
-    }
-
-
+  }
 }

@@ -1,13 +1,12 @@
 package com.cems.frontend.services;
 
+import com.cems.frontend.utils.LocalHttpClientHelper;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
-import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +20,7 @@ class AuthServiceTest {
         server.start();
         int port = server.getPort();
         authService = AuthService.getInstance();
-        authService.setPort(String.valueOf(port));
+        LocalHttpClientHelper.setPort(String.valueOf(port));
     }
 
     @AfterEach
@@ -30,7 +29,7 @@ class AuthServiceTest {
     }
 
     @Test
-    void login() throws Exception {
+    void login() throws IOException, InterruptedException {
         server.enqueue(new MockResponse()
                 .setResponseCode(200)
                 .setBody("{\"token\":\"fake-token\", \"role\":\"ADMIN\"}"));
@@ -42,13 +41,13 @@ class AuthServiceTest {
     }
 
     @Test
-    void signUp() throws Exception {
+    void signUp() {
         server.enqueue(new MockResponse()
                 .setResponseCode(201));
         server.enqueue(new MockResponse()
                 .setResponseCode(400)
                 .setBody("{\"error\":\"user already exists\"}"));
         assertDoesNotThrow(() -> authService.signUp("asdf", "asdf", "asdf", "asdf", "asdf"));
-        assertThrowsExactly(Exception.class, () -> authService.signUp("asdf", "asdf", "asdf", "asdf", "asdf"), "user already exists");
+        assertThrowsExactly(IOException.class, () -> authService.signUp("asdf", "asdf", "asdf", "asdf", "asdf"), "user already exists");
     }
 }

@@ -1,64 +1,56 @@
-//package com.cems.frontend.utils;
-//
-//import com.cems.frontend.models.User;
-//import com.cems.shared.model.UserDTO;
-//
-//import java.util.List;
-//import java.util.stream.Collectors;
-//
-//public class UserMapper {
-//
-//    public static User toModel(UserDTO dto) {
-//        return new User(
-//                dto.getId(),
-//                dto.getEmail(),
-//                dto.getAccessLevel(),
-//                dto.getFirstName(),
-//                dto.getMiddleName(),
-//                dto.getLastName()
-//        );
-//    }
-//
-//    public static List<User> toModelList(List<UserDTO> dtos) {
-//        return dtos.stream()
-//                .map(UserMapper::toModel)
-//                .collect(Collectors.toList());
-//    }
-//}
-
 package com.cems.frontend.utils;
 
 import com.cems.frontend.models.User;
 import com.cems.shared.model.UserDTO;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Utility mapper for converting user DTOs into frontend user models.
+ */
 public class UserMapper {
 
-    public static User toModel(UserDTO dto) {
-        User user = new User();
-        user.setId(dto.getId());
+  /**
+   * Utility class constructor.
+   */
+  private UserMapper() {
+  }
 
-        user.setFirstName(dto.getFirstName());
-        user.setMiddleName(dto.getMiddleName());
-        user.setLastName(dto.getLastName());
-        user.setAccessLevel(dto.getAccessLevel());
+  /**
+   * Converts a single user DTO into a user model.
+   *
+   * @param dto source user DTO
+   * @return mapped user model
+   */
+  public static User toModel(UserDTO dto) {
+    User user = new User();
+    user.setId(dto.getId());
 
-        user.setPhone(dto.getPhone());
-        user.setDob(dto.getDob());
-        user.setEmail(dto.getEmail());
+    user.setFirstName(dto.getFirstName());
+    user.setMiddleName(dto.getMiddleName());
+    user.setLastName(dto.getLastName());
+    user.setAccessLevel(dto.getAccessLevel());
+
+    user.setPhone(dto.getPhone());
+    user.setDob(dto.getDob());
+    user.setEmail(dto.getEmail());
 
 
-        user.setProfileImageUrl(dto.getProfileImageUrl());
+    user.setProfileImageUrl(dto.getProfileImageUrl());
 
-        return user;
-    }
+    return user;
+  }
 
-    public static List<User> toModelList(List<UserDTO> dtos) {
-        return dtos.stream()
-                .map(UserMapper::toModel)
-                .collect(Collectors.toList());
-    }
+  /**
+   * Converts a list of user DTOs into user models.
+   *
+   * @param dtos list of source user DTOs
+   * @return mapped list of user models
+   */
+  public static List<User> toModelList(List<UserDTO> dtos) {
+    return dtos.stream()
+        .map(UserMapper::toModel)
+        .collect(Collectors.toList());
+  }
 }
 
