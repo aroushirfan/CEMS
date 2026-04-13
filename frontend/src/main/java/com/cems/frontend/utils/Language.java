@@ -14,11 +14,11 @@ public enum Language {
   /**
    * Thai language configuration with dedicated font stylesheet.
    */
-  TH("Thai", Locale.forLanguageTag("th-TH"), "/com/cems/frontend/view/css/thai.css"),
+  TH("ภาษาไทย", Locale.forLanguageTag("th-TH"), "/com/cems/frontend/view/css/thai.css"),
   /**
    * Urdu language configuration.
    */
-  UR("Urdu", Locale.forLanguageTag("ur-PK"));
+  UR("اردو", Locale.forLanguageTag("ur-PK"));
 
   private final Locale locale;
   private final String displayName;
@@ -91,4 +91,13 @@ public enum Language {
     }
     return EN;
   }
+
+    @Override
+    public String toString() {
+        return displayName;
+    }
+
+    public static Language[] getAllLanguages() {
+            return new Language[]{Language.EN, Language.TH, Language.UR};
+    }
 }

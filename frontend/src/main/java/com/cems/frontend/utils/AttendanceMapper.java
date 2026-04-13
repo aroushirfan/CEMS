@@ -9,7 +9,8 @@ import java.util.List;
  */
 public final class AttendanceMapper {
 
-    private AttendanceMapper() {}
+  private AttendanceMapper() {
+  }
 
   /**
    * Converts a single attendance response DTO into an attendance model.

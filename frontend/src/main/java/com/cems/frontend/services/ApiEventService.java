@@ -1,14 +1,15 @@
 package com.cems.frontend.services;
 
 import com.cems.frontend.models.Event;
-import com.cems.frontend.utils.EventMapper;
-import com.cems.frontend.utils.HttpStatus;
-import com.cems.frontend.utils.LocalHttpClientHelper;
+import com.cems.frontend.utils.*;
 import com.cems.shared.model.EventDto;
 import com.cems.shared.model.EventDto.EventResponseDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.bytebuddy.asm.Advice;
+
 import java.io.IOException;
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -43,7 +44,9 @@ public class ApiEventService implements IEventService {
    */
   @Override
   public List<Event> getAllEvents() throws IOException, InterruptedException {
-    final HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL).get();
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(
+        BASE_URL+ "/all/" + LocaleUtil.getInstance().getLocale().getLanguage())
+        .get();
     final HttpResponse<String> response = client.send(request,
         HttpResponse.BodyHandlers.ofString());
     final List<Event> result;
@@ -69,7 +72,7 @@ public class ApiEventService implements IEventService {
    */
   @Override
   public List<Event> getApprovedEvents() throws IOException, InterruptedException {
-    final HttpRequest request = LocalHttpClientHelper.buildRequest("events/approved").get();
+    final HttpRequest request = LocalHttpClientHelper.buildRequest("events/approved/" + LocaleUtil.getInstance().getLocale().getLanguage()).get();
 
     final HttpResponse<String> response = client.send(request,
         HttpResponse.BodyHandlers.ofString());
@@ -143,6 +146,24 @@ public class ApiEventService implements IEventService {
     }
   }
 
+    public Event updateLocalEvent(String id, EventDto.EventLocalRequestDTO data, Language lang)
+        throws IOException, InterruptedException {
+        String json = mapper.writeValueAsString(data);
+
+        HttpRequest request = LocalHttpClientHelper.buildRequest(
+                BASE_URL + "/" + id + "/" + lang.getLocale().getLanguage())
+            .authorization(authService.getToken()).put(json);
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == HttpStatus.OK.code) {
+            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
+            return EventMapper.toModel(dto);
+        } else {
+            throw new IOException("Update Failed: " + response.body());
+        }
+    }
+
   /**
    * Deletes an event by identifier.
    *
@@ -172,7 +193,7 @@ public class ApiEventService implements IEventService {
    */
   @Override
   public Event getEventById(String id) throws IOException, InterruptedException {
-    final String url = String.format("%s/%s", BASE_URL, id);
+    final String url = String.format("%s/%s/%s", BASE_URL, id,LocaleUtil.getInstance().getLocale().getLanguage());
     final HttpRequest request = LocalHttpClientHelper.buildRequest(url).get();
     final HttpResponse<String> response = client.send(request,
         HttpResponse.BodyHandlers.ofString());
@@ -186,6 +207,21 @@ public class ApiEventService implements IEventService {
     }
   }
 
+    public Event getLocalEventById(String id, Language language) throws IOException, InterruptedException {
+        HttpRequest request = LocalHttpClientHelper.buildRequest(
+            BASE_URL + "/" + id + "/" + language.getLocale().getLanguage())
+            .authorization(authService.getToken()).get();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == HttpStatus.OK.code) {
+            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
+            return EventMapper.toModel(dto);
+        } else {
+            throw new IOException("Event not found: " + response.body());
+        }
+    }
+
   /**
    * Approves an event by identifier.
    *
@@ -195,7 +231,7 @@ public class ApiEventService implements IEventService {
    */
   @Override
   public Event approveEvent(String id) throws IOException, InterruptedException {
-    final String url = String.format("%s/events/%s/approve", BASE_URL, id);
+    final String url = String.format("%s/%s/approve", BASE_URL, id);
     final HttpRequest request = LocalHttpClientHelper.buildRequest(url)
         .authorization(authService.getToken())
         .put(null);
