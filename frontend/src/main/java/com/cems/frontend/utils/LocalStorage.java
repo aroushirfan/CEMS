@@ -1,6 +1,7 @@
 package com.cems.frontend.utils;
 
 import com.cems.frontend.Launcher;
+import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -13,6 +14,7 @@ public final class LocalStorage {
    * Shared preferences node scoped to the application package.
    */
   public static final Preferences PREF = Preferences.userNodeForPackage(Launcher.class);
+  private static final Logger logger = Logger.getLogger(LocalStorage.class.getName());
 
   /**
    * Utility class constructor.
@@ -31,7 +33,7 @@ public final class LocalStorage {
     try {
       PREF.flush();  // Explicitly flush changes to disk
     } catch (BackingStoreException e) {
-      System.err.println(e.getMessage());
+      logger.warning(e.getMessage());
     }
   }
 

@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 
 /**
@@ -17,6 +19,7 @@ public final class LocaleUtil {
   private static LocaleUtil localeUtilInstance = null;
   private Language language;
   private Language latestLanguage;
+  private static final Logger logger = Logger.getLogger(LocaleUtil.class.getName());
 
   private LocaleUtil() {
     this.locale = Locale.US;
@@ -78,7 +81,7 @@ public final class LocaleUtil {
             .getScene().getStylesheets()
             .removeAll(resource.toExternalForm());
       } else {
-        System.err.println("Resource not found: " + fontCssPath);
+        logger.log(Level.WARNING,"Resource not found: {}",fontCssPath);
       }
     }
     if (language.getFontCss() != null) {

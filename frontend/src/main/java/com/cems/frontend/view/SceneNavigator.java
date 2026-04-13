@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -28,6 +31,7 @@ public class SceneNavigator {
   private static NavigationController navigationController;
   private static NavbarController navbarController;
   private static NavigationMemento currentState;
+  private static final Logger logger = Logger.getLogger(SceneNavigator.class.getName());
 
   /**
    * Utility class constructor.
@@ -112,8 +116,7 @@ public class SceneNavigator {
           .getResource("/com/cems/frontend/view/pages/" + fxmlPath);
 
       if (resource == null) {
-        System.err.println("Error: Could not find FXML file at: /com/cems/frontend/view/pages/"
-            + fxmlPath);
+        logger.log(Level.WARNING,"Error: Could not find FXML file at: /com/cems/frontend/view/pages/{0}",fxmlPath);
         return;
       }
 
@@ -142,7 +145,7 @@ public class SceneNavigator {
       mainStage.show();
 
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.warning(e.getMessage());
     }
   }
 
