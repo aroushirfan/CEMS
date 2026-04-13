@@ -43,13 +43,13 @@ public class UserService {
    * @throws InterruptedException if the request thread is interrupted
    */
   public User getCurrentUser() throws IOException, InterruptedException {
-    HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/me")
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/me")
         .authorization(authService.getToken()).get();
-    HttpResponse<String> response = client.send(request,
+    final HttpResponse<String> response = client.send(request,
         HttpResponse.BodyHandlers.ofString());
 
     if (response.statusCode() == HttpStatus.OK.code) {
-      UserDTO dto = mapper.readValue(response.body(), UserDTO.class);
+      final UserDTO dto = mapper.readValue(response.body(), UserDTO.class);
       return UserMapper.toModel(dto);
     } else {
       throw new IOException("Failed to load current user: " + response.statusCode());
@@ -69,15 +69,15 @@ public class UserService {
   public User updateCurrentUser(UserDTO dto) throws IOException, InterruptedException {
     dto.setEmail(null);
     dto.setAccessLevel(0);
-    String json = mapper.writeValueAsString(dto);
+    final String json = mapper.writeValueAsString(dto);
 
-    HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/me")
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/me")
             .authorization(authService.getToken())
             .put(json);
-    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
     if (response.statusCode() == HttpStatus.OK.code) {
-      UserDTO updatedDto = mapper.readValue(response.body(), UserDTO.class);
+      final UserDTO updatedDto = mapper.readValue(response.body(), UserDTO.class);
       return UserMapper.toModel(updatedDto);
     } else {
       throw new IOException("Failed to update user: " + response.body());
@@ -91,22 +91,23 @@ public class UserService {
    * @throws IOException if transport, parsing, or non-handled response handling fails
    */
   public List<User> getAllUsers() throws IOException, InterruptedException {
-    HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL)
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL)
         .authorization(authService.getToken()).get();
 
-    HttpResponse<String> response = client.send(request,
+    final HttpResponse<String> response = client.send(request,
         HttpResponse.BodyHandlers.ofString());
-
+    List<User> result;
     if (response.statusCode() == HttpStatus.OK.code) {
-      List<UserDTO> dtos = mapper.readValue(response.body(),
+      final List<UserDTO> dtos = mapper.readValue(response.body(),
           new TypeReference<>() {
           });
-      return UserMapper.toModelList(dtos);
+      result = UserMapper.toModelList(dtos);
     } else if (response.statusCode() == HttpStatus.NO_CONTENT.code) {
-      return List.of();
+      result = List.of();
     } else {
       throw new IOException("Fetch users failed: " + response.statusCode());
     }
+    return result;
   }
 
   /**
@@ -117,14 +118,14 @@ public class UserService {
    * @throws IOException if transport fails, parsing fails, or user retrieval is unsuccessful
    */
   public User getUserById(String id) throws IOException, InterruptedException {
-    HttpRequest request = LocalHttpClientHelper.buildRequest("users/" + id)
+    final HttpRequest request = LocalHttpClientHelper.buildRequest("users/" + id)
         .authorization(authService.getToken()).get();
 
-    HttpResponse<String> response = client.send(request,
+    final HttpResponse<String> response = client.send(request,
         HttpResponse.BodyHandlers.ofString());
 
     if (response.statusCode() == HttpStatus.OK.code) {
-      UserDTO dto = mapper.readValue(response.body(), UserDTO.class);
+      final UserDTO dto = mapper.readValue(response.body(), UserDTO.class);
       return UserMapper.toModel(dto);
     } else {
       throw new IOException("User not found: " + id);
@@ -139,15 +140,15 @@ public class UserService {
    * @throws IOException if serialization, transport, or backend update handling fails
    */
   public void updateAccessLevel(String id, int newLevel) throws IOException, InterruptedException {
-    UserDTO dto = new UserDTO();
+    final UserDTO dto = new UserDTO();
     dto.setAccessLevel(newLevel);
 
-    String json = mapper.writeValueAsString(dto);
+    final String json = mapper.writeValueAsString(dto);
 
-    HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/" + id + "/access-level")
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/" + id + "/access-level")
         .authorization(authService.getToken()).put(json);
 
-    HttpResponse<String> response = client.send(request,
+    final HttpResponse<String> response = client.send(request,
         HttpResponse.BodyHandlers.ofString());
 
     if (response.statusCode() != HttpStatus.OK.code) {
@@ -161,9 +162,9 @@ public class UserService {
    * @throws IOException if transport fails or backend deletion response is unsuccessful
    */
   public void deleteCurrentUser() throws IOException, InterruptedException {
-    HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/me")
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/me")
         .authorization(authService.getToken()).delete();
-    HttpResponse<String> response = client.send(request,
+    final HttpResponse<String> response = client.send(request,
         HttpResponse.BodyHandlers.ofString());
 
     if (response.statusCode() != HttpStatus.OK.code) {

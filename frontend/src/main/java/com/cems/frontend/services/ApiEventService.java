@@ -6,10 +6,7 @@ import com.cems.shared.model.EventDto;
 import com.cems.shared.model.EventDto.EventResponseDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.bytebuddy.asm.Advice;
-
 import java.io.IOException;
-import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -148,16 +145,16 @@ public class ApiEventService implements IEventService {
 
     public Event updateLocalEvent(String id, EventDto.EventLocalRequestDTO data, Language lang)
         throws IOException, InterruptedException {
-        String json = mapper.writeValueAsString(data);
+        final String json = mapper.writeValueAsString(data);
 
-        HttpRequest request = LocalHttpClientHelper.buildRequest(
+        final HttpRequest request = LocalHttpClientHelper.buildRequest(
                 BASE_URL + "/" + id + "/" + lang.getLocale().getLanguage())
             .authorization(authService.getToken()).put(json);
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == HttpStatus.OK.code) {
-            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
+            final EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
             return EventMapper.toModel(dto);
         } else {
             throw new IOException("Update Failed: " + response.body());
@@ -208,14 +205,14 @@ public class ApiEventService implements IEventService {
   }
 
     public Event getLocalEventById(String id, Language language) throws IOException, InterruptedException {
-        HttpRequest request = LocalHttpClientHelper.buildRequest(
+        final HttpRequest request = LocalHttpClientHelper.buildRequest(
             BASE_URL + "/" + id + "/" + language.getLocale().getLanguage())
             .authorization(authService.getToken()).get();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == HttpStatus.OK.code) {
-            EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
+            final EventResponseDTO dto = mapper.readValue(response.body(), EventResponseDTO.class);
             return EventMapper.toModel(dto);
         } else {
             throw new IOException("Event not found: " + response.body());

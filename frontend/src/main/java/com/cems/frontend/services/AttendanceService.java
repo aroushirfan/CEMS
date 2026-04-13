@@ -45,17 +45,17 @@ public class AttendanceService {
    */
   public List<Attendance> getEventAttendance(String eventId) throws IOException,
       InterruptedException {
-    HttpRequest request = LocalHttpClientHelper.buildRequest("attendance/event/" + eventId)
+    final HttpRequest request = LocalHttpClientHelper.buildRequest("attendance/event/" + eventId)
         .authorization(AuthService.getInstance().getToken())
         .get();
-    HttpResponse<String> response = httpClient.send(request,
+    final HttpResponse<String> response = httpClient.send(request,
         HttpResponse.BodyHandlers.ofString());
 
     if (response.statusCode() == HttpStatus.OK.code) {
-      List<AttendanceResponseDTO> attendanceResponseDtos = objectMapper.readValue(response.body(),
+      final List<AttendanceResponseDTO> attendanceDtos = objectMapper.readValue(response.body(),
           new TypeReference<>() {
           });
-      return AttendanceMapper.toModelList(attendanceResponseDtos);
+      return AttendanceMapper.toModelList(attendanceDtos);
     } else {
       throw new IOException("Fetch request failed with status code: " + response.statusCode());
     }
@@ -70,11 +70,11 @@ public class AttendanceService {
    * @throws InterruptedException if the request thread is interrupted
    */
   public String checkInEvent(UUID eventId) throws IOException, InterruptedException {
-    String requestUrl = String.format("attendance/event/%s/check-in", eventId.toString());
-    HttpRequest request = LocalHttpClientHelper.buildRequest(requestUrl)
+    final String requestUrl = String.format("attendance/event/%s/check-in", eventId.toString());
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(requestUrl)
         .authorization(AuthService.getInstance().getToken())
         .post(null);
-    HttpResponse<String> response = httpClient.send(request,
+    final HttpResponse<String> response = httpClient.send(request,
         HttpResponse.BodyHandlers.ofString());
 
     if (response.statusCode() == HttpStatus.OK.code || response.statusCode()
@@ -94,11 +94,11 @@ public class AttendanceService {
    * @throws InterruptedException if the request thread is interrupted
    */
   public boolean hasCheckedIn(UUID eventId) throws IOException, InterruptedException {
-    String requestUrl = String.format("attendance/event/%s/checked-in", eventId.toString());
-    HttpRequest request = LocalHttpClientHelper.buildRequest(requestUrl)
+    final String requestUrl = String.format("attendance/event/%s/checked-in", eventId.toString());
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(requestUrl)
         .authorization(AuthService.getInstance().getToken())
         .get();
-    HttpResponse<String> response = httpClient.send(request,
+    final HttpResponse<String> response = httpClient.send(request,
         HttpResponse.BodyHandlers.ofString());
 
     if (response.statusCode() == HttpStatus.OK.code) {

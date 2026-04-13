@@ -2,6 +2,7 @@ package com.cems.frontend.services;
 
 import com.cems.frontend.models.Event;
 import com.cems.frontend.utils.EventMapper;
+import com.cems.frontend.utils.HttpStatus;
 import com.cems.frontend.utils.LocalHttpClientHelper;
 import com.cems.shared.model.EventDto;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -42,13 +43,13 @@ public class RsvpService {
    * @throws IOException if transport, parsing, or non-success response handling fails
    */
   public String checkRsvp(UUID eventId) throws IOException, InterruptedException {
-    HttpRequest request = LocalHttpClientHelper.buildRequest("rsvp/" + eventId.toString())
+    final HttpRequest request = LocalHttpClientHelper.buildRequest("rsvp/" + eventId.toString())
         .authorization(AuthService.getInstance().getToken())
         .get();
-    HttpResponse<String> response = httpClient.send(request,
+    final HttpResponse<String> response = httpClient.send(request,
         HttpResponse.BodyHandlers.ofString());
 
-    if (response.statusCode() == 200) {
+    if (response.statusCode() == HttpStatus.OK.code) {
       return response.body();
     } else {
       throw new IOException("Post request failed with status code: " + response.statusCode());
@@ -62,13 +63,13 @@ public class RsvpService {
    * @throws IOException if transport, parsing, or non-success response handling fails
    */
   public List<Event> getRegisteredEvents() throws IOException, InterruptedException {
-    HttpRequest request = LocalHttpClientHelper.buildRequest("rsvp/my-events")
+    final HttpRequest request = LocalHttpClientHelper.buildRequest("rsvp/my-events")
         .authorization(AuthService.getInstance().getToken()).get();
-    HttpResponse<String> response = httpClient.send(request,
+    final HttpResponse<String> response = httpClient.send(request,
         HttpResponse.BodyHandlers.ofString());
 
-    if (response.statusCode() == 200) {
-      List<EventDto.EventResponseDTO> eventDtos = objectMapper.readValue(response.body(),
+    if (response.statusCode() == HttpStatus.OK.code) {
+      final List<EventDto.EventResponseDTO> eventDtos = objectMapper.readValue(response.body(),
           new TypeReference<>() {
           });
       return EventMapper.toModelList(eventDtos);
@@ -86,12 +87,12 @@ public class RsvpService {
    */
   public boolean checkUserRsvp(UUID eventId) throws IOException, InterruptedException {
     final String url = String.format("rsvp/%s/registered", eventId);
-    HttpRequest request = LocalHttpClientHelper.buildRequest(url)
+    final HttpRequest request = LocalHttpClientHelper.buildRequest(url)
             .authorization(AuthService.getInstance().getToken()).get();
-    HttpResponse<String> response = httpClient.send(request,
+    final HttpResponse<String> response = httpClient.send(request,
         HttpResponse.BodyHandlers.ofString());
 
-    if (response.statusCode() == 200) {
+    if (response.statusCode() == HttpStatus.OK.code) {
       return objectMapper.readTree(response.body()).get("registered").asBoolean();
     } else {
       throw new IOException("Fetch request failed with status code: "
@@ -107,11 +108,11 @@ public class RsvpService {
    * @throws IOException if transport, parsing, or non-success response handling fails
    */
   public String register(UUID eventId) throws IOException, InterruptedException {
-    HttpRequest request = LocalHttpClientHelper.buildRequest("rsvp/" + eventId.toString())
+    final HttpRequest request = LocalHttpClientHelper.buildRequest("rsvp/" + eventId.toString())
         .authorization(AuthService.getInstance().getToken()).post(null);
-    HttpResponse<String> response = httpClient.send(request,
+    final HttpResponse<String> response = httpClient.send(request,
         HttpResponse.BodyHandlers.ofString());
-    if (response.statusCode() == 201) {
+    if (response.statusCode() == HttpStatus.CREATED.code) {
       return objectMapper.readTree(response.body()).get("message").asText();
     } else {
       throw new IOException(objectMapper.readTree(response.body()).get("message").asText());
@@ -126,9 +127,9 @@ public class RsvpService {
    * @throws IOException if transport or non-success response handling fails
    */
   public String cancelRegistration(UUID eventId) throws IOException, InterruptedException {
-    HttpRequest request = LocalHttpClientHelper.buildRequest("rsvp/" + eventId.toString())
+    final HttpRequest request = LocalHttpClientHelper.buildRequest("rsvp/" + eventId.toString())
         .authorization(AuthService.getInstance().getToken()).delete();
-    HttpResponse<String> response = httpClient.send(request,
+    final HttpResponse<String> response = httpClient.send(request,
         HttpResponse.BodyHandlers.ofString());
 
     if (response.statusCode() == 204 || response.statusCode() == 200) {

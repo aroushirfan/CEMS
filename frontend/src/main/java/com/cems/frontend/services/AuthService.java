@@ -54,17 +54,17 @@ public final class AuthService {
   public void signUp(String firstName, String lastName, String email,
                      String password, String confirmPassword) throws IOException,
       InterruptedException {
-    AuthDTO.RegisterRequestDTO registerRequestDto = new AuthDTO.RegisterRequestDTO(firstName,
+    final AuthDTO.RegisterRequestDTO registerDto = new AuthDTO.RegisterRequestDTO(firstName,
         null, lastName, email, password, confirmPassword);
 
-    String requestBody = mapper.writeValueAsString(registerRequestDto);
+    final String requestBody = mapper.writeValueAsString(registerDto);
 
-    HttpRequest request = LocalHttpClientHelper.buildRequest("auth/register").post(requestBody);
+    final HttpRequest request = LocalHttpClientHelper.buildRequest("auth/register").post(requestBody);
 
-    HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+    final HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
 
     if (httpResponse.statusCode() != HttpStatus.CREATED.code) {
-      ResponseError responseError = mapper.readValue(httpResponse.body(), ResponseError.class);
+      final ResponseError responseError = mapper.readValue(httpResponse.body(), ResponseError.class);
       throw new IOException(responseError.getError());
     }
   }
@@ -79,13 +79,13 @@ public final class AuthService {
    */
   public AuthDTO.AuthResponseDTO login(String email, String password) throws IOException,
       InterruptedException {
-    AuthDTO.LoginRequestDTO loginRequestDto = new AuthDTO.LoginRequestDTO(email, password);
+    final AuthDTO.LoginRequestDTO loginRequestDto = new AuthDTO.LoginRequestDTO(email, password);
 
-    String requestBody = mapper.writeValueAsString(loginRequestDto);
+    final String requestBody = mapper.writeValueAsString(loginRequestDto);
 
-    HttpRequest request = LocalHttpClientHelper.buildRequest("auth/login").post(requestBody);
+    final HttpRequest request = LocalHttpClientHelper.buildRequest("auth/login").post(requestBody);
 
-    HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+    final HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
     AuthDTO.AuthResponseDTO authResponseDto = null;
     if (httpResponse.statusCode() == HttpStatus.OK.code) {
       authResponseDto = mapper.readValue(httpResponse.body(), AuthDTO.AuthResponseDTO.class);
@@ -103,12 +103,11 @@ public final class AuthService {
    * @return token string, or empty string when no token is stored
    */
   public String getToken() {
-    String token = LocalStorage.get(TOKEN);
+    final String token = LocalStorage.get(TOKEN);
     if (token == null || token.isEmpty()) {
       return "";
-    } else {
-      return token;
     }
+    return token;
   }
 
   /**
