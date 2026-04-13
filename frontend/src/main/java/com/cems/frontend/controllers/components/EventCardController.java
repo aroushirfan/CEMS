@@ -3,11 +3,13 @@ package com.cems.frontend.controllers.components;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.RsvpService;
+import com.cems.frontend.utils.Language;
 import com.cems.frontend.utils.LocalHttpClientHelper;
 import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.utils.RbacUtil;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.chrono.ThaiBuddhistChronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ResourceBundle;
@@ -68,9 +70,14 @@ public class EventCardController {
     this.currentEvent = event;
     titleLabel.textProperty().bind(event.titleProperty());
     if (event.getDateTime() != null) {
-      DateTimeFormatter formatter =
-          localeService.dateTime(FormatStyle.MEDIUM, FormatStyle.SHORT)
-              .withZone(ZoneId.systemDefault());
+      DateTimeFormatter formatter;
+      if (LocaleUtil.getInstance().getLanguage().equals(Language.TH)) {
+        formatter = localeService.dateTime(FormatStyle.MEDIUM, FormatStyle.SHORT).withChronology(ThaiBuddhistChronology.INSTANCE)
+                .withZone(ZoneId.systemDefault());
+      } else {
+        formatter = localeService.dateTime(FormatStyle.MEDIUM, FormatStyle.SHORT)
+                .withZone(ZoneId.systemDefault());
+      }
 
       dateTimeLabel.setText(formatter.format(event.getDateTime()));
     }

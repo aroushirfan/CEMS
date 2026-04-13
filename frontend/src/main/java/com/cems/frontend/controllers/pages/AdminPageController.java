@@ -3,11 +3,13 @@ package com.cems.frontend.controllers.pages;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.ApiEventService;
+import com.cems.frontend.utils.Language;
 import com.cems.frontend.utils.LocalStorage;
 import com.cems.frontend.utils.LocaleUtil;
 import com.cems.frontend.view.AlertHelper;
 import com.cems.frontend.view.SceneNavigator;
 import java.time.ZoneId;
+import java.time.chrono.ThaiBuddhistChronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
@@ -92,7 +94,12 @@ public class AdminPageController {
         return new SimpleStringProperty("");
       }
 
-      DateTimeFormatter formatter = localeService.dateTime(FormatStyle.FULL, FormatStyle.SHORT);
+      DateTimeFormatter formatter;
+      if (LocaleUtil.getInstance().getLanguage().equals(Language.TH)) {
+         formatter = localeService.dateTime(FormatStyle.SHORT, FormatStyle.SHORT).withChronology(ThaiBuddhistChronology.INSTANCE);
+      } else {
+         formatter = localeService.dateTime(FormatStyle.SHORT, FormatStyle.SHORT);
+      }
       return new SimpleStringProperty(
           formatter.format(cell.getValue().getDateTime().atZone(ZoneId.systemDefault()))
       );
