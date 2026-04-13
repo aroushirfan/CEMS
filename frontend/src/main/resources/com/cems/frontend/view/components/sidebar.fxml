@@ -21,7 +21,7 @@
             <Label style="-fx-font-size: 12; -fx-text-fill: #757575;" text="%sidebar.logo" />
         </VBox>
         <Region HBox.hgrow="ALWAYS" />
-        <Label style="-fx-font-size: 20; -fx-cursor: hand;" text="«" />
+        <Label style="-fx-font-size: 20; -fx-cursor: hand;" />
     </HBox>
 
     <Region prefHeight="40.0" />
