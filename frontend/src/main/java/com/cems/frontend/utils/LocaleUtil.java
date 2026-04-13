@@ -7,16 +7,19 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 
 /**
  * Singleton utility for managing application locale, language resources, and localized formatters.
  */
-public class LocaleUtil {
+public final class LocaleUtil {
   private Locale locale;
-  private static LocaleUtil localeUtil = null;
+  private static LocaleUtil localeUtilInstance = null;
   private Language language;
   private Language latestLanguage;
+  private static final Logger logger = Logger.getLogger(LocaleUtil.class.getName());
 
   private LocaleUtil() {
     this.locale = Locale.US;
@@ -30,10 +33,10 @@ public class LocaleUtil {
    * @return shared {@link LocaleUtil} instance
    */
   public static LocaleUtil getInstance() {
-    if (localeUtil == null) {
-      localeUtil = new LocaleUtil();
+    if (localeUtilInstance == null) {
+      localeUtilInstance = new LocaleUtil();
     }
-    return localeUtil;
+    return localeUtilInstance;
   }
 
   /**
@@ -51,7 +54,7 @@ public class LocaleUtil {
    * @param language target language configuration
    */
   public void setLocale(Language language) {
-    if (this.language.equals(language)) {
+    if (this.language == language) {
       return;
     }
     this.language = language;
@@ -70,15 +73,15 @@ public class LocaleUtil {
    */
   public void setFont(Language language) {
     if (latestLanguage.getFontCss() != null) {
-      String fontCssPath = latestLanguage.getFontCss();
-      URL resource = getClass().getResource(fontCssPath);
+      final String fontCssPath = latestLanguage.getFontCss();
+      final URL resource = getClass().getResource(fontCssPath);
       if (resource != null) {
         // Proceed with your code
         SceneNavigator.getNavigationController().getContentArea()
             .getScene().getStylesheets()
             .removeAll(resource.toExternalForm());
       } else {
-        System.out.println("Resource not found: " + fontCssPath);
+        logger.log(Level.WARNING,"Resource not found: {}",fontCssPath);
       }
     }
     if (language.getFontCss() != null) {

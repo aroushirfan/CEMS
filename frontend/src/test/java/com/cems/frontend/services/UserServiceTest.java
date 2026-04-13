@@ -1,11 +1,15 @@
 package com.cems.frontend.services;
 
 import com.cems.frontend.models.User;
+import com.cems.frontend.utils.LocalHttpClientHelper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.*;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.http.HttpClient;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,11 +24,8 @@ class UserServiceTest {
         server = new MockWebServer();
         server.start();
 
+        LocalHttpClientHelper.setPort(String.valueOf(server.getPort()));
         userService = new UserService();
-
-        Field apiUrlField = UserService.class.getDeclaredField("API_URL");
-        apiUrlField.setAccessible(true);
-        apiUrlField.set(userService, server.url("/users").toString());
     }
 
     @AfterEach
@@ -66,11 +67,11 @@ class UserServiceTest {
     }
 
     @Test
-    void updateAccessLevel() throws Exception {
+    void updateAccessLevel() {
         server.enqueue(new MockResponse().setResponseCode(200));
         server.enqueue(new MockResponse().setResponseCode(400));
 
         assertDoesNotThrow(() -> userService.updateAccessLevel("123", 1));
-        assertThrows(RuntimeException.class, () -> userService.updateAccessLevel("123", 1));
+        assertThrows(IOException.class, () -> userService.updateAccessLevel("123", 1));
     }
 }

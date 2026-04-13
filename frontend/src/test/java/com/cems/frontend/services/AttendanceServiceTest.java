@@ -8,6 +8,8 @@ import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 import java.net.http.HttpClient;
 import java.util.List;
 import java.util.UUID;
@@ -93,7 +95,7 @@ class AttendanceServiceTest {
                 new MockResponse().setResponseCode(403)
         );
 
-        RuntimeException ex = assertThrows(RuntimeException.class, () ->
+        IOException ex = assertThrows(IOException.class, () ->
                 attendanceService.getEventAttendance(eventId)
         );
 

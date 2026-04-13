@@ -15,13 +15,13 @@ import java.net.http.HttpRequest;
  * {@link HttpClient} and {@link ObjectMapper}, plus a fluent API for creating
  * request objects with default headers.</p>
  */
-public class LocalHttpClientHelper {
+public final class LocalHttpClientHelper {
   private static String baseURL = System.getenv().getOrDefault("BACKEND_URL", "http://localhost:8081");
   private static HttpClient httpClient = null;
   private static ObjectMapper objectMapper;
   private HttpRequest.Builder requestBuilder;
 
-  private static final String AUTHORIZATION_HEADER = "Authorization";
+  private static final String AUTH_HEADER = "Authorization";
   private static final String BEARER_PREFIX = "Bearer %s";
   private static final String APPLICATION_JSON = "application/json";
   private static final String ACCEPT_HEADER = "Accept";
@@ -92,7 +92,7 @@ public class LocalHttpClientHelper {
    * @return current helper instance for fluent chaining
    */
   public LocalHttpClientHelper authorization(String token) {
-    this.requestBuilder = this.requestBuilder.header(AUTHORIZATION_HEADER,
+    this.requestBuilder = this.requestBuilder.header(AUTH_HEADER,
             String.format(BEARER_PREFIX, token));
     return this;
   }

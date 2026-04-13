@@ -84,7 +84,7 @@ public enum Language {
    * @return matching language, or {@link #EN} when no match is found
    */
   public static Language fromDisplayName(String name) {
-    for (Language lang : values()) {
+    for (final Language lang : values()) {
       if (lang.displayName.equalsIgnoreCase(name)) {
         return lang;
       }
@@ -98,6 +98,6 @@ public enum Language {
     }
 
     public static Language[] getAllLanguages() {
-            return new Language[]{Language.EN, Language.TH, Language.UR};
+            return new Language[]{EN, TH, UR};
     }
 }
