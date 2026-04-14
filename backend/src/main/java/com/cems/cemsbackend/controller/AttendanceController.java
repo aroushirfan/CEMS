@@ -102,6 +102,7 @@ public class AttendanceController {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
+    }
     UUID userId = (UUID) auth.getPrincipal();
     User user = userRepository.getUserById(userId)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
