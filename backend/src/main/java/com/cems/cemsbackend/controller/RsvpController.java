@@ -1,5 +1,6 @@
 package com.cems.cemsbackend.controller;
 
+import com.cems.cemsbackend.mappers.EventMapper;
 import com.cems.cemsbackend.model.Attendance;
 import com.cems.cemsbackend.model.AttendanceId;
 import com.cems.cemsbackend.model.Event;
@@ -7,128 +8,167 @@ import com.cems.cemsbackend.model.User;
 import com.cems.cemsbackend.repository.AttendanceRepository;
 import com.cems.cemsbackend.repository.EventRepository;
 import com.cems.cemsbackend.repository.UserRepository;
-import com.cems.cemsbackend.mappers.EventMapper;
+import java.util.Map;
+import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Map;
-import java.util.UUID;
-
+/**
+ * Controller for managing event RSVP operations.
+ */
 @RestController
 @RequestMapping("/rsvp")
 public class RsvpController {
 
-    private final EventRepository eventRepository;
-    private final UserRepository userRepository;
-    private final AttendanceRepository attendanceRepository;
+  private final EventRepository eventRepository;
+  private final UserRepository userRepository;
+  private final AttendanceRepository attendanceRepository;
 
-    public RsvpController(EventRepository eventRepository, UserRepository userRepository, AttendanceRepository attendanceRepository) {
-        this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
-        this.attendanceRepository = attendanceRepository;
+  /**
+   * Constructor for RsvpController.
+   *
+   * @param eventRepository      repository for event data.
+   * @param userRepository       repository for user data.
+   * @param attendanceRepository repository for attendance data.
+   */
+  public RsvpController(EventRepository eventRepository,
+                        UserRepository userRepository,
+                        AttendanceRepository attendanceRepository) {
+    this.eventRepository = eventRepository;
+    this.userRepository = userRepository;
+    this.attendanceRepository = attendanceRepository;
+  }
+
+  /**
+   * Registers the authenticated user for an event.
+   *
+   * @param eventId the unique identifier of the event.
+   * @return a success message.
+   */
+  @PostMapping("/{eventId}")
+  @Transactional
+  public ResponseEntity<?> rsvp(@PathVariable UUID eventId) {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth == null) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
     }
 
-    @PostMapping("/{eventId}")
-    @Transactional
-    public ResponseEntity<?> rsvp(@PathVariable UUID eventId) {
+    UUID userId = (UUID) auth.getPrincipal();
+    User user = userRepository.getUserById(userId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
+    Event event = eventRepository.findById(eventId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
 
-        UUID userId = (UUID) auth.getPrincipal();
-        User user = userRepository.getUserById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
-
-        if (event.getAttendees().contains(user)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already RSVPed");
-        }
-
-        if (event.getCapacity() > 0 && event.getAttendees().size() >= event.getCapacity()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event is full");
-        }
-
-        event.addAttendee(user);
-
-
-        eventRepository.save(event);
-
-        var attendance = new Attendance();
-        attendance.setId(new AttendanceId(userId, eventId));
-        attendance.setStatus("ABSENT");
-        attendance.setUser(user);
-        attendance.setEvent(event);
-        attendanceRepository.save(attendance);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", "RSVP successful"));
+    if (event.getAttendees().contains(user)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already RSVPed");
     }
 
-    @DeleteMapping("/{eventId}")
-    @Transactional
-    public ResponseEntity<?> cancel(@PathVariable UUID eventId) {
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
-
-        UUID userId = (UUID) auth.getPrincipal();
-        User user = userRepository.getUserById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
-
-        if (!event.getAttendees().contains(user)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You have not RSVPed to this event");
-        }
-
-        attendanceRepository.deleteAttendanceByUser_IdAndEvent_Id(userId, eventId);
-
-        event.removeAttendee(user);
-        eventRepository.save(event);
-
-        return ResponseEntity.noContent().build();
+    if (event.getCapacity() > 0 && event.getAttendees().size() >= event.getCapacity()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event is full");
     }
 
-    @GetMapping("/my-events")
-    public ResponseEntity<?> myRsvps() {
+    event.addAttendee(user);
+    eventRepository.save(event);
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
+    var attendance = new Attendance();
+    attendance.setId(new AttendanceId(userId, eventId));
+    attendance.setStatus("ABSENT");
+    attendance.setUser(user);
+    attendance.setEvent(event);
+    attendanceRepository.save(attendance);
 
-        UUID userId = (UUID) auth.getPrincipal();
-        User user = userRepository.getUserById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(Map.of("message", "RSVP successful"));
+  }
 
-        var dtos = user.getAttendingEvents()
-                .stream()
-                .map(EventMapper::toDto)
-                .toList();
-
-        return ResponseEntity.ok(dtos);
+  /**
+   * Cancels the authenticated user's RSVP for an event.
+   *
+   * @param eventId the unique identifier of the event.
+   * @return a no-content response.
+   */
+  @DeleteMapping("/{eventId}")
+  @Transactional
+  public ResponseEntity<?> cancel(@PathVariable UUID eventId) {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth == null) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
     }
 
-    @GetMapping("/{eventId}/registered")
-    public ResponseEntity<?> checkUserEventRsvp(@PathVariable UUID eventId) {
+    UUID userId = (UUID) auth.getPrincipal();
+    User user = userRepository.getUserById(userId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
+    Event event = eventRepository.findById(eventId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
 
-        UUID userId = (UUID) auth.getPrincipal();
-        User user = userRepository.getUserById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
-
-        return ResponseEntity.ok(Map.of("registered",event.getAttendees().contains(user)));
+    if (!event.getAttendees().contains(user)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not RSVPed to this event");
     }
+
+    attendanceRepository.deleteAttendanceByUser_IdAndEvent_Id(userId, eventId);
+
+    event.removeAttendee(user);
+    eventRepository.save(event);
+
+    return ResponseEntity.noContent().build();
+  }
+
+  /**
+   * Retrieves all events the authenticated user has RSVPed to.
+   *
+   * @return a list of event DTOs.
+   */
+  @GetMapping("/my-events")
+  public ResponseEntity<?> myRsvps() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth == null) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
+    }
+
+    UUID userId = (UUID) auth.getPrincipal();
+    User user = userRepository.getUserById(userId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+    var dtos = user.getAttendingEvents()
+        .stream()
+        .map(EventMapper::toDto)
+        .toList();
+
+    return ResponseEntity.ok(dtos);
+  }
+
+  /**
+   * Checks if the authenticated user is registered for a specific event.
+   *
+   * @param eventId the unique identifier of the event.
+   * @return a map containing the registration status.
+   */
+  @GetMapping("/{eventId}/registered")
+  public ResponseEntity<?> checkUserEventRsvp(@PathVariable UUID eventId) {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth == null) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
+    }
+
+    UUID userId = (UUID) auth.getPrincipal();
+    User user = userRepository.getUserById(userId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+    Event event = eventRepository.findById(eventId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+
+    return ResponseEntity.ok(Map.of("registered", event.getAttendees().contains(user)));
+  }
 }
-
