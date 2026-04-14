@@ -16,7 +16,7 @@
 
 ## Acceptance Criteria
 
-CEMS acceptance criteria:
+CEMS acceptance criteria by user stories:
 
 **US-1: Add Events**
 
@@ -134,7 +134,7 @@ Acceptance Criteria:
     - Valid user credentials must produce successful login and session token.
     - Invalid credentials must be rejected with clear error feedback.
 - Authorization/RBAC:
-    - Student, faculty, and admin users must only see actions permitted for their role.
+    - Student, faculty, and admin users should only see actions permitted for their role.
 - Add Event:
     - Admin can create an event with required fields.
     - Newly created events are persisted and visible in management views.
@@ -152,8 +152,6 @@ Acceptance Criteria:
     - Users can view and update profile details with validation.
 - Event Notifications:
     - Notification events are generated for users signed up to events when configured triggers occur.
-- CI/CD Integration:
-    - Jenkins pipeline automatically runs build, tests, and coverage reporting.
 
 ### Usability Acceptance Criteria
 
@@ -163,12 +161,6 @@ Acceptance Criteria:
 
 ### Performance and Reliability Acceptance Criteria
 
-- Performance:
-    - Event list load time happens in less than 10.0 seconds under nominal conditions.
-- Performance:
-    - Login, signup and event creation response happens in less than 5 seconds for valid data under nominal conditions.
-- Reliability:
-    - API and client remain stable for 60 minutes of mixed operations (event CRUD, attendance, profile) without crash.
 - Reliability:
     - Notification trigger do not crash the system.
 - Deployability Reliability:
