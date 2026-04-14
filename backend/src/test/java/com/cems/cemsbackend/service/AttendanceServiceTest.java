@@ -61,14 +61,16 @@ class AttendanceServiceTest {
         event.getAttendees().add(user);
 
         Attendance attendance = new Attendance();
-        attendance.setStatus("ABSENT");
+        attendance.setStatus("RSVP_CONFIRMED"); // Use a realistic pre-checkin status
 
         when(attendanceRepository.findByUserAndEvent(user, event)).thenReturn(Optional.of(attendance));
-        when(attendanceRepository.saveAndFlush(attendance)).thenReturn(attendance);
+        when(attendanceRepository.saveAndFlush(any(Attendance.class))).thenReturn(attendance);
 
         Attendance result = attendanceService.createCheckIn(user, event);
 
         assertEquals("PRESENT", result.getStatus());
         assertNotNull(result.getCheckInTime());
+        verify(attendanceRepository).saveAndFlush(attendance);
     }
+
 }
