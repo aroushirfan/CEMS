@@ -1,12 +1,18 @@
 package com.cems.cemsbackend.model;
 
 import com.cems.shared.model.EventDto;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import java.util.UUID;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.UUID;
-
+/**
+ * Entity representing translated event details for multi-language support.
+ */
 @Entity
 public class EventTranslation {
   @Id
@@ -21,7 +27,17 @@ public class EventTranslation {
   @ManyToOne(optional = false)
   private Event refEvent;
 
-  public EventTranslation(String title, String description, String location, String language, Event refEvent) {
+  /**
+   * Constructs a new EventTranslation.
+   *
+   * @param title       translated title.
+   * @param description translated description.
+   * @param location    translated location.
+   * @param language    language code.
+   * @param refEvent    reference to the parent event.
+   */
+  public EventTranslation(String title, String description, String location,
+                          String language, Event refEvent) {
     this.title = title;
     this.description = description;
     this.location = location;
@@ -29,6 +45,9 @@ public class EventTranslation {
     this.language = language;
   }
 
+  /**
+   * Default constructor for JPA.
+   */
   public EventTranslation() {
   }
 
@@ -76,7 +95,12 @@ public class EventTranslation {
     this.language = language;
   }
 
-  public static EventTranslation createFromDTO(EventDto.EventLocalRequestDTO dto, Event refEvent, String lang) {
+  /**
+   * Creates a translation entity from a DTO.
+   */
+  @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
+  public static EventTranslation createFromDTO(EventDto.EventLocalRequestDTO dto,
+                                               Event refEvent, String lang) {
     return new EventTranslation(
             dto.getTitle(),
             dto.getDescription(),
@@ -86,9 +110,19 @@ public class EventTranslation {
     );
   }
 
+  /**
+   * Updates fields from the provided DTO if values are present.
+   */
+  @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
   public void updateFromDTO(EventDto.EventLocalRequestDTO dto) {
-    if (dto.getTitle() != null && !dto.getTitle().isBlank()) title = dto.getTitle();
-    if (dto.getDescription() != null && !dto.getDescription().isBlank()) description = dto.getDescription();
-    if (dto.getLocation() != null && !dto.getLocation().isBlank()) location = dto.getLocation();
+    if (dto.getTitle() != null && !dto.getTitle().isBlank()) {
+      title = dto.getTitle();
+    }
+    if (dto.getDescription() != null && !dto.getDescription().isBlank()) {
+      description = dto.getDescription();
+    }
+    if (dto.getLocation() != null && !dto.getLocation().isBlank()) {
+      location = dto.getLocation();
+    }
   }
 }
