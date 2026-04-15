@@ -10,16 +10,16 @@
   - [2. Statistical Code Review](#2-statistical-code-review)
   - [3. Code Clean-up and Refactoring](#3-code-clean-up-and-refactoring)
     - [Backend Cleanup \& Improvements](#backend-cleanup--improvements)
-    - [Key Improvements:](#key-improvements)
-    - [Module Cleanup](#module-cleanup)
-    - [New Test Suites](#new-test-suites)
-    - [Better API Standards](#better-api-standards)
-    - [Documentation \& Constants](#documentation--constants)
-    - [General Codebase Cleanup](#general-codebase-cleanup)
-    - [Final Metrics](#final-metrics)
+      - [Key Improvements:](#key-improvements)
+      - [Module Cleanup](#module-cleanup)
+      - [New Test Suites](#new-test-suites)
+      - [Better API Standards](#better-api-standards)
+      - [Documentation \& Constants](#documentation--constants)
+      - [General Codebase Cleanup](#general-codebase-cleanup)
+      - [Final Metrics](#final-metrics)
     - [Frontend](#frontend)
-    - [HTTP Request Handling and Code Reuse](#http-request-handling-and-code-reuse)
-    - [Attendance Service Refactor and Improvements (AttendanceService.java):](#attendance-service-refactor-and-improvements-attendanceservicejava)
+      - [HTTP Request Handling and Code Reuse](#http-request-handling-and-code-reuse)
+      - [Attendance Service Refactor and Improvements (AttendanceService.java):](#attendance-service-refactor-and-improvements-attendanceservicejava)
   - [4. Acceptance Test Planning](#4-acceptance-test-planning)
   - [5. Architecture Design Documentation](#5-architecture-design-documentation)
   - [6. Contributions](#6-contributions)
@@ -115,7 +115,7 @@ Graphical Summary:
 
 Resolved **170+ Checkstyle violations** across **17 core backend files**. The branch is now fully compliant with the Google Java Style guide, ensuring a zero-warning build for the Attendance and Event modules.
 
-### Key Improvements:
+#### Key Improvements:
 
 - **Namespace Integrity:** Replaced all wildcard (.\*) imports with explicit declarations to avoid namespace pollution and improve build performance.
 
@@ -125,35 +125,35 @@ Resolved **170+ Checkstyle violations** across **17 core backend files**. The br
 
 - **Documentation Debt:** Added Javadoc headers to all 17 classes and their public methods, significantly improving the maintainability of the codebase.
 
-### Module Cleanup
+#### Module Cleanup
 
 - Performed a full cleanup across the **Event**, **Auth**, and **User** modules.
 - Improved logic structure, removed code smell, and reorganized components for better maintainability.
 - Result: a cleaner, more consistent backend architecture.
 
-### New Test Suites
+#### New Test Suites
 
 - Added new test suites for **Event** and **RSVP** flows.
 - Strengthened validation around registration, event management, and edge-case handling.
 - Increased reliability of two core application features.
 
-### Better API Standards
+#### Better API Standards
 
 - Improved type‑safety, security, and consistency across endpoints.
 - Converted mappers into **utility classes** to streamline data flow.
 
-### Documentation & Constants
+#### Documentation & Constants
 
 - Added **JavaDocs** to services and repositories for clearer onboarding and future maintenance.
 - Moved hardcoded values into **constants** to reduce duplication and improve consistency.
 
-### General Codebase Cleanup
+#### General Codebase Cleanup
 
 - Cleaned up ~17 files across the project.
 - Standardized imports, naming conventions, and formatting.
 - Ensured consistent structure and readability throughout the codebase.
 
-### Final Metrics
+#### Final Metrics
 
 - **Initial Violations:** ~172
 
@@ -163,7 +163,7 @@ Resolved **170+ Checkstyle violations** across **17 core backend files**. The br
 
 ### Frontend
 
-### HTTP Request Handling and Code Reuse
+#### HTTP Request Handling and Code Reuse
 
 - Replaces direct use of HttpRequest.newBuilder() and manual header management with the centralized LocalHttpClientHelper.buildRequest utility for all HTTP operations. This reduces duplication and ensures consistent request construction.
 - Uses a shared, pre-configured ObjectMapper from LocalHttpClientHelper for consistent JSON serialization.
@@ -174,7 +174,7 @@ Resolved **170+ Checkstyle violations** across **17 core backend files**. The br
 - Adds detailed Javadoc comments to all public methods, clarifying their behavior, parameters, and error handling.
 - Refactors variable names and code structure for clarity and maintainability.
 
-### Attendance Service Refactor and Improvements (AttendanceService.java):
+#### Attendance Service Refactor and Improvements (AttendanceService.java):
 
 - **HTTP Request Handling and Error Management**
 - Refactors all HTTP operations to use LocalHttpClientHelper.buildRequest and the HttpStatus enum for clearer, less error-prone status handling.
@@ -194,9 +194,9 @@ See: [Diagrams and Resources](../../resources/README.md)
 ## 6. Contributions
 
 | Team Member Name        | Assigned Tasks                                  | Time Spent (hours) | In-class tasks |
-| ----------------------- | ----------------------------------------------- |--------------------| -------------- |
+| ----------------------- | ----------------------------------------------- | ------------------ | -------------- |
 | Puntawat (Scrum master) | Database localization & Statistical code review | 21                 | Submitted      |
 | Aroush                  | Frontend code cleanup                           | 12                 | Submitted      |
-| Ayokunle                | Frontend code cleanup, Acceptance test planning | 18                   | Submitted      |
+| Ayokunle                | Frontend code cleanup, Acceptance test planning | 18                 | Submitted      |
 | Jiya Jameela            | Backend code cleanup, Acceptance test planning  | 17                 | Submitted      |
 | Sailesh                 | Backend code cleanup                            | 18                 | Submitted      |
