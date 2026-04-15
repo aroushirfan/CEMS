@@ -193,10 +193,10 @@ See: [Diagrams and Resources](../../resources/README.md)
 
 ## 6. Contributions
 
-| Team Member Name        | Assigned Tasks                                  | Time Spent (hours) | In-class tasks |
-| ----------------------- | ----------------------------------------------- |--------------------| -------------- |
-| Puntawat (Scrum master) | Database localization & Statistical code review | 21                 | Submitted      |
-| Aroush                  | Frontend code cleanup                           | 12                 | Submitted      |
-| Ayokunle                | Frontend code cleanup, Acceptance test planning |                    | Submitted      |
-| Jiya Jameela            | Backend code cleanup, Acceptance test planning  | 17                 | Submitted      |
-| Sailesh                 | Backend code cleanup                            | 18                 | Submitted      |
+| Team Member Name        | Assigned Tasks                                              | Time Spent (hours) | In-class tasks |
+| ----------------------- |-------------------------------------------------------------|--------------------| -------------- |
+| Puntawat (Scrum master) | Database localization & Statistical code review             | 21                 | Submitted      |
+| Aroush                  | Frontend code cleanup                                       | 12                 | Submitted      |
+| Ayokunle                | Frontend code cleanup, Acceptance test planning             |                    | Submitted      |
+| Jiya Jameela            | Backend code cleanup, Acceptance test planning              | 17                 | Submitted      |
+| Sailesh                 | Backend code cleanup,SonarQube and Acceptance test planning | 18                 | Submitted      |
