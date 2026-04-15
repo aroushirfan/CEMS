@@ -197,6 +197,6 @@ See: [Diagrams and Resources](../../resources/README.md)
 | ----------------------- |-------------------------------------------------------------|--------------------| -------------- |
 | Puntawat (Scrum master) | Database localization & Statistical code review             | 21                 | Submitted      |
 | Aroush                  | Frontend code cleanup                                       | 12                 | Submitted      |
-| Ayokunle                | Frontend code cleanup, Acceptance test planning             |                    | Submitted      |
+| Ayokunle                | Frontend code cleanup, Acceptance test planning             | 18                 | Submitted      |
 | Jiya Jameela            | Backend code cleanup, Acceptance test planning              | 17                 | Submitted      |
 | Sailesh                 | Backend code cleanup,SonarQube and Acceptance test planning | 18                 | Submitted      |
