@@ -4,6 +4,7 @@ import com.cems.frontend.models.Event;
 import com.cems.frontend.utils.*;
 import com.cems.shared.model.EventDto;
 import com.cems.shared.model.EventDto.EventResponseDTO;
+import com.cems.shared.model.EventDto.EventLocalRequestDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -152,7 +153,7 @@ public class ApiEventService implements IEventService {
    * @return updated event model
    * @throws IOException if serialization, transport, or update response handling fails
    */
-    public Event updateLocalEvent(String id, EventDto.EventLocalRequestDTO data, Language lang)
+    public Event updateLocalEvent(String id, EventLocalRequestDTO data, Language lang)
         throws IOException, InterruptedException {
         final String json = mapper.writeValueAsString(data);
 

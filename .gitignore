@@ -11,3 +11,5 @@ target/
 frontend/src/main/java/com/cems/frontend/services/MockEventService.java
 .env
 sqldata
+/.scannerwork
+/backend/.scannerwork

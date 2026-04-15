@@ -19,7 +19,7 @@ class LanguageTest {
     @Test
     void fromDisplayName() {
         assertEquals(Language.EN,Language.fromDisplayName("English"));
-        assertEquals(Language.TH,Language.fromDisplayName("THai"));
-        assertEquals(Language.UR,Language.fromDisplayName("UrDu"));
+        assertEquals(Language.TH,Language.fromDisplayName("ภาษาไทย"));
+        assertEquals(Language.UR,Language.fromDisplayName("اردو"));
     }
 }

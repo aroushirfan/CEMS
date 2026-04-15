@@ -3,7 +3,7 @@ package com.cems.cemsbackend.helper;
 import com.cems.cemsbackend.model.Event;
 import com.cems.cemsbackend.repository.EventRepository;
 import com.cems.cemsbackend.service.EventNotificationService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
