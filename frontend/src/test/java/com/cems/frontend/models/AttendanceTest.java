@@ -31,7 +31,7 @@ class AttendanceTest {
     }
 
     @Test
-    void constructor_setsAllFieldsCorrectly() {
+    void testConstructorSetsAllFieldsCorrectly() {
         Attendance attendance = new Attendance(eventId,firstName,lastName,email,checkInTime,status);
         assertEquals(name, attendance.getName());
         assertEquals(email, attendance.getEmail());
@@ -50,14 +50,14 @@ class AttendanceTest {
     }
 
     @Test
-    void testConstructor_withFutureCheckInTime_setsCorrectly() {
+    void testConstructorWithFutureCheckInTimeSetsCorrectly() {
         Instant future = Instant.now().plusSeconds(3600);
         Attendance attendance = new Attendance(eventId,firstName,lastName,email,future, status);
         assertEquals(future, attendance.getCheckInTime());
     }
 
     @Test
-    void testConstructor_withPastCheckInTime_setsCorrectly() {
+    void testConstructorWithPastCheckInTimeSetsCorrectly() {
         Instant past = Instant.now().minusSeconds(3600);
         Attendance attendance = new Attendance(eventId,firstName,lastName,email,past, status);
         assertEquals(past, attendance.getCheckInTime());
