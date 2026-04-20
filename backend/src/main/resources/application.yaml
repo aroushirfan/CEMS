@@ -1,50 +1,17 @@
-#spring:
-#  application:
-#    name: cems_backend
-#  datasource:
-#    driver-class-name: org.mariadb.jdbc.Driver
-#    username: ${DB_USERNAME}
-#    password: ${DB_PASSWORD}
-#    url: ${DB_URL}?useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: true
-#  jackson:
-#    property-naming-strategy: SNAKE_CASE
-#  mail:
-#    host: smtp.gmail.com
-#    port: ${email_port:587}
-#    username: ${admin_email:admin@gmail.com}
-#    password: ${email_password:password}
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
-#jwt:
-#  secret: ${JWT_SECRET}
-#server:
-#  port: ${PORT}
 spring:
   application:
     name: cems_backend
-
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: ${DB_URL:jdbc:mariadb://localhost:3306/cems_db}?useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
-    username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:password}
-
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}?useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-
   jackson:
     property-naming-strategy: SNAKE_CASE
-
   mail:
     host: smtp.gmail.com
     port: ${email_port:587}
@@ -56,9 +23,7 @@ spring:
           auth: true
           starttls:
             enable: true
-
 jwt:
-  secret: ${JWT_SECRET:b4f8c2e1d9a7f6c3b2e1d9f8c4a6b8d7e9f1c3a5b7d9e2f4a6c8e0f2b4d6a8c0}
-
+  secret: ${JWT_SECRET}
 server:
-  port: ${PORT:8081}
+  port: ${PORT}
