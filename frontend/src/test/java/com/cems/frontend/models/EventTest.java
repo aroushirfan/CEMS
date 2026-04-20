@@ -8,10 +8,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EventTest {
     private Event event;
+    private User owner;
 
     @BeforeEach
     void setUp() {
         event = new Event();
+        owner = new User();
+        owner.setFirstName("Owner");
     }
 
     @Test
@@ -63,15 +66,24 @@ class EventTest {
     void testConstructorWithArguments() {
         UUID id = UUID.randomUUID();
         Instant now = Instant.now();
-        User owner = new User();
 
         Event fullEvent = new Event(id, "Title", "Desc", "Loc", 50L, now, true, owner);
 
         assertAll("Verify all constructor arguments match",
                 () -> assertEquals(id, fullEvent.getId()),
+                () -> assertEquals("Desc", fullEvent.getDescription()),
+                () -> assertEquals("Loc", fullEvent.getLocation()),
                 () -> assertEquals("Title", fullEvent.getTitle()),
                 () -> assertEquals(50L, fullEvent.getCapacity()),
+                () -> assertEquals(now, fullEvent.getDateTime()),
+                () -> assertEquals(owner, fullEvent.eventOwnerProperty().get()),
                 () -> assertTrue(fullEvent.isApproved())
         );
+    }
+
+    @Test
+    void testEventOwnerProperty() {
+        event.setEventOwner(owner);
+        assertEquals(owner, event.eventOwnerProperty().get());
     }
 }
