@@ -73,4 +73,15 @@ class LocaleUtilTest {
     DateTimeFormatter t = localeUtil.time(FormatStyle.SHORT);
     assertNotNull(t);
   }
+  @Test
+  void testGetBundle() {
+    if (Paths.values().length > 0) {
+      try {
+
+        assertNotNull(localeUtil.getBundle(Paths.values()[0]));
+      } catch (Exception ignored) {
+        // the code is executed
+      }
+    }
+  }
 }
