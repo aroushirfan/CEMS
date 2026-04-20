@@ -12,6 +12,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Controller for the Signup view. Handles user input for signing up
  * and interacts with the AuthService.
@@ -31,7 +34,8 @@ public class SignupController {
   @FXML
   private AnchorPane rootView;
 
-  private AuthService authService = AuthService.getInstance();
+  private final AuthService authService = AuthService.getInstance();
+  private final Logger logger = Logger.getLogger(getClass().getName());
 
   /**
    * Initializes the controller. Sets the orientation of the view based on the
@@ -39,7 +43,7 @@ public class SignupController {
    */
   @FXML
   public void initialize() {
-    System.out.println("Signup view loaded");
+    logger.log(Level.INFO,"Signup view loaded");
     setOrientation();
   }
 
@@ -54,7 +58,7 @@ public class SignupController {
         : NodeOrientation.RIGHT_TO_LEFT);
   }
 
-  /// signup button
+  // signup button
   @FXML
   private void handleSignup(ActionEvent event) {
     String firstName = firstNameField.getText();
@@ -73,7 +77,9 @@ public class SignupController {
     try {
       authService.signUp(firstName, lastName, email, password, confirmPassword);
     } catch (Exception e) {
-      e.printStackTrace();
+      if (e instanceof InterruptedException) {
+        Thread.currentThread().interrupt();
+      }
       Alert alert = new Alert(Alert.AlertType.ERROR);
       alert.setContentText(e.getLocalizedMessage());
       alert.show();
@@ -85,9 +91,9 @@ public class SignupController {
     alert.setContentText("Sign Up Successful. Please login.");
     alert.show();
 
-    alert.setOnCloseRequest((dialogEvent) -> {
-      SceneNavigator.loadPage("Login.fxml");
-    });
+    alert.setOnCloseRequest(dialogEvent ->
+      SceneNavigator.loadPage("Login.fxml")
+    );
   }
 
   //  Cancel button

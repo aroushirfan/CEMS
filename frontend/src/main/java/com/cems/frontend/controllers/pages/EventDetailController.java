@@ -74,7 +74,7 @@ public class EventDetailController {
       LocalHttpClientHelper.getMapper());
   private final AttendanceService attendanceService = new AttendanceService(
       LocalHttpClientHelper.getClient(), LocalHttpClientHelper.getMapper());
-  private LocaleUtil localeService = LocaleUtil.getInstance();
+  private final LocaleUtil localeService = LocaleUtil.getInstance();
   private ResourceBundle rb;
   private ApiEventService apiEventService;
 
@@ -107,7 +107,10 @@ public class EventDetailController {
     User user;
     try {
         user = userService.getCurrentUser();
-    } catch (Exception ignored) {
+    } catch (Exception e) {
+      if (e instanceof InterruptedException) {
+        Thread.currentThread().interrupt();
+      }
         user = null;
     }
     addLanguageButton.setDisable(user == null || user.getAccessLevel() < 1);
@@ -160,6 +163,9 @@ public class EventDetailController {
           updateStaticLabels();
         });
       } catch (Exception e) {
+        if (e instanceof InterruptedException) {
+          Thread.currentThread().interrupt();
+        }
         System.err.println("Background refresh failed: "
             + e.getMessage());
       }
@@ -304,6 +310,9 @@ public class EventDetailController {
             rb.getString("eventDetail.delete_success_message"));
         SceneNavigator.loadContent(Paths.HOME);
       } catch (Exception e) {
+        if (e instanceof InterruptedException) {
+          Thread.currentThread().interrupt();
+        }
         AlertHelper.showError(rb.getString("eventDetail.delete_error"),
             rb.getString("eventDetail.delete_error_message") + e.getMessage());
       }
@@ -319,7 +328,7 @@ public class EventDetailController {
     void onAddLanguage(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(Paths.EVENT_LOCALIZE.path), ResourceBundle.getBundle(Paths.EVENT_LOCALIZE.bundlePath, LocaleUtil.getInstance().getLocale()));
         Scene scene = new Scene(loader.load());
-        EventLocalizeController eventLocalizeController = (EventLocalizeController) loader.getController();
+        EventLocalizeController eventLocalizeController = loader.getController();
         eventLocalizeController.setEventId(currentEvent.getId().toString());
         Stage stage = new Stage();
         stage.setScene(scene);
@@ -330,6 +339,9 @@ public class EventDetailController {
         try {
             initData(apiEventService.getLocalEventById(currentEvent.getId().toString(), LocaleUtil.getInstance().getLanguage()));
         } catch (Exception e) {
+          if (e instanceof InterruptedException) {
+            Thread.currentThread().interrupt();
+          }
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText("An error occurred: " + e.getMessage());

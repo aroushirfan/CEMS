@@ -5,6 +5,9 @@ import com.cems.frontend.models.User;
 import com.cems.frontend.services.UserService;
 import com.cems.frontend.utils.LocaleUtil;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -42,6 +45,7 @@ public class UserManagementController {
   private final UserService userService = new UserService();
   private final ObservableList<User> masterData = FXCollections.observableArrayList();
   private ResourceBundle rb;
+  private final Logger logger = Logger.getLogger(getClass().getName());
 
   /**
    * Initializes the controller by setting up table columns, search functionality,
@@ -83,7 +87,10 @@ public class UserManagementController {
           userService.updateAccessLevel(user.getId().toString(), newRole);
           loadUsers();
         } catch (Exception ex) {
-          ex.printStackTrace();
+          if (ex instanceof InterruptedException) {
+            Thread.currentThread().interrupt();
+          }
+          logger.log(Level.WARNING, ex.getMessage(), ex);
         }
       }
 
@@ -103,7 +110,9 @@ public class UserManagementController {
           case 0 -> box.getChildren().addAll(makeFaculty, makeAdmin);
           case 1 -> box.getChildren().addAll(removeFaculty, makeAdmin);
           case 2 -> box.getChildren().addAll(removeAdmin);
-          default -> {}
+          default -> {
+            // leave empty due to no role assigned
+          }
         }
 
         setGraphic(box);
@@ -127,7 +136,10 @@ public class UserManagementController {
       masterData.setAll(userService.getAllUsers());
       userTable.setItems(masterData);
     } catch (Exception e) {
-      e.printStackTrace();
+      if (e instanceof InterruptedException) {
+        Thread.currentThread().interrupt();
+      }
+      logger.log(Level.WARNING, e.getMessage(), e);
     }
   }
 }

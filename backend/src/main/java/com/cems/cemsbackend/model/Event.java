@@ -60,7 +60,7 @@ public class Event {
 
   /** Localized translations for this event. */
   @OneToMany(mappedBy = "refEvent")
-  private List<EventTranslation> translations = new ArrayList<>();
+  private final List<EventTranslation> translations = new ArrayList<>();
 
   /** List of attendees. */
   @ManyToMany
@@ -69,7 +69,7 @@ public class Event {
           joinColumns = @JoinColumn(name = "event_id"),
           inverseJoinColumns = @JoinColumn(name = "user_id")
   )
-  private List<User> attendees = new ArrayList<>();
+  private final List<User> attendees = new ArrayList<>();
 
   /** Owner of the event. */
   @ManyToOne(optional = false)

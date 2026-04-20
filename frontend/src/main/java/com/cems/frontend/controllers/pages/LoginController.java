@@ -9,6 +9,7 @@ import com.cems.shared.model.AuthDTO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.NodeOrientation;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -73,7 +74,6 @@ public class LoginController {
 
     try {
       AuthDTO.AuthResponseDTO response = authService.login(username, password);
-
       if (response != null) {
         LocalStorage.set("token", response.getToken());
         LocalStorage.set("role", response.getRole());
@@ -82,7 +82,12 @@ public class LoginController {
         System.out.println("Invalid credentials");
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      if (e instanceof InterruptedException) {
+        Thread.currentThread().interrupt();
+      }
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setTitle("Error");
+      alert.setContentText(e.getMessage());
     }
   }
 

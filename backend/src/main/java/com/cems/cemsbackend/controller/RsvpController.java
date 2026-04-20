@@ -8,8 +8,12 @@ import com.cems.cemsbackend.model.User;
 import com.cems.cemsbackend.repository.AttendanceRepository;
 import com.cems.cemsbackend.repository.EventRepository;
 import com.cems.cemsbackend.repository.UserRepository;
+
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import com.cems.shared.model.EventDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -33,6 +37,9 @@ public class RsvpController {
   private final EventRepository eventRepository;
   private final UserRepository userRepository;
   private final AttendanceRepository attendanceRepository;
+  
+  private static final String USER_NOT_FOUND_RESPONSE_TEXT = "User not found";
+  private static final String EVENT_NOT_FOUND_RESPONSE_TEXT = "Event not found";
 
   /**
    * Constructor for RsvpController.
@@ -57,7 +64,7 @@ public class RsvpController {
    */
   @PostMapping("/{eventId}")
   @Transactional
-  public ResponseEntity<?> rsvp(@PathVariable UUID eventId) {
+  public ResponseEntity<Map<String, String>> rsvp(@PathVariable UUID eventId) {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
@@ -65,10 +72,10 @@ public class RsvpController {
 
     UUID userId = (UUID) auth.getPrincipal();
     User user = userRepository.getUserById(userId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND_RESPONSE_TEXT));
 
     Event event = eventRepository.findById(eventId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, EVENT_NOT_FOUND_RESPONSE_TEXT));
 
     if (event.getAttendees().contains(user)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already RSVPed");
@@ -100,7 +107,7 @@ public class RsvpController {
    */
   @DeleteMapping("/{eventId}")
   @Transactional
-  public ResponseEntity<?> cancel(@PathVariable UUID eventId) {
+  public ResponseEntity<Map<String, String>> cancel(@PathVariable UUID eventId) {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
@@ -108,10 +115,10 @@ public class RsvpController {
 
     UUID userId = (UUID) auth.getPrincipal();
     User user = userRepository.getUserById(userId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND_RESPONSE_TEXT));
 
     Event event = eventRepository.findById(eventId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, EVENT_NOT_FOUND_RESPONSE_TEXT));
 
     if (!event.getAttendees().contains(user)) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not RSVPed to this event");
@@ -131,7 +138,7 @@ public class RsvpController {
    * @return a list of event DTOs.
    */
   @GetMapping("/my-events")
-  public ResponseEntity<?> myRsvps() {
+  public ResponseEntity<List<EventDto.EventResponseDTO>> myRsvps() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
@@ -139,7 +146,7 @@ public class RsvpController {
 
     UUID userId = (UUID) auth.getPrincipal();
     User user = userRepository.getUserById(userId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND_RESPONSE_TEXT));
 
     var dtos = user.getAttendingEvents()
         .stream()
@@ -156,7 +163,7 @@ public class RsvpController {
    * @return a map containing the registration status.
    */
   @GetMapping("/{eventId}/registered")
-  public ResponseEntity<?> checkUserEventRsvp(@PathVariable UUID eventId) {
+  public ResponseEntity<Map<String, Boolean>> checkUserEventRsvp(@PathVariable UUID eventId) {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
@@ -164,10 +171,10 @@ public class RsvpController {
 
     UUID userId = (UUID) auth.getPrincipal();
     User user = userRepository.getUserById(userId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND_RESPONSE_TEXT));
 
     Event event = eventRepository.findById(eventId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, EVENT_NOT_FOUND_RESPONSE_TEXT));
 
     return ResponseEntity.ok(Map.of("registered", event.getAttendees().contains(user)));
   }
