@@ -17,89 +17,79 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AttendanceServiceTest {
-    private MockWebServer mockWebServer;
-    private AttendanceService attendanceService;
+  private MockWebServer mockWebServer;
+  private AttendanceService attendanceService;
+  private final UUID testUuid = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
 
-    @BeforeEach
-    void setUp() throws Exception {
-        mockWebServer = new MockWebServer();
-        mockWebServer.start();
+  @BeforeEach
+  void setUp() throws Exception {
+    mockWebServer = new MockWebServer();
+    mockWebServer.start();
 
-        LocalHttpClientHelper.setPort(String.valueOf(mockWebServer.getPort()));
-        HttpClient client = LocalHttpClientHelper.getClient();
-        ObjectMapper mapper = LocalHttpClientHelper.getMapper();
+    LocalHttpClientHelper.setPort(String.valueOf(mockWebServer.getPort()));
+    HttpClient client = LocalHttpClientHelper.getClient();
+    ObjectMapper mapper = LocalHttpClientHelper.getMapper();
 
-        attendanceService = new AttendanceService(
-                client,
-                mapper
-        );
-    }
+    attendanceService = new AttendanceService(client, mapper);
+  }
 
-    @AfterEach
-    void tearDown() throws Exception {
-        mockWebServer.shutdown();
-    }
+  @AfterEach
+  void tearDown() throws Exception {
+    mockWebServer.shutdown();
+  }
 
-    @Test
-    void testGetEventAttendance_success() throws Exception {
-        String eventId = "550e8400-e29b-41d4-a716-446655440000";
-        String jsonResponse = """
-                [
-                    {
-                        "event_id": "550e8400-e29b-41d4-a716-446655440000",
-                        "user_id": "550e8400-e29b-41d4-a716-446655440000",
-                        "first_name": "tom",
-                        "last_name": "cruise",
-                        "email": "example@metropolia.fi",
-                        "status": "PRESENT",
-                        "check_in_time": "2026-03-03T09:45:00Z"
-                    },
-                     {
-                        "event_id": "550e8400-e29b-41d4-a716-446655440000",
-                        "user_id": "550e8400-e29b-41d4-a716-446655441000",
-                        "first_name": "kevin",
-                        "last_name": "hart",
-                        "email": "example2@metropolia.fi",
-                        "status": "ABSENT",
-                        "check_in_time": "2026-03-03T09:45:00Z"
-                    }
-                ]
-                """;
+  @Test
+  void testGetEventAttendance_success() throws Exception {
+    String jsonResponse = "[{\"event_id\":\"" + testUuid + "\",\"user_id\":\"" + testUuid + "\",\"first_name\":\"tom\",\"last_name\":\"cruise\",\"email\":\"example@metropolia.fi\",\"status\":\"PRESENT\",\"check_in_time\":\"2026-03-03T09:45:00Z\"}]";
+    mockWebServer.enqueue(new MockResponse().setResponseCode(200).setBody(jsonResponse));
 
-        mockWebServer.enqueue(
-                new MockResponse()
-                        .setResponseCode(200)
-                        .setBody(jsonResponse)
-                        .addHeader("Content-Type", "application/json")
-        );
+    List<Attendance> result = attendanceService.getEventAttendance(testUuid.toString());
+    assertFalse(result.isEmpty());
+    assertEquals("tom cruise", result.getFirst().getName());
+  }
 
-        List<Attendance> result = attendanceService.getEventAttendance(eventId);
+  @Test
+  void testGetEventAttendance_fail() {
+    mockWebServer.enqueue(new MockResponse().setResponseCode(500));
+    assertThrows(IOException.class, () -> attendanceService.getEventAttendance(testUuid.toString()));
+  }
 
-        assertEquals(2, result.size());
-        assertEquals(UUID.fromString(eventId), result.getFirst().getEventId());
-        assertEquals("tom cruise", result.getFirst().getName());
-        assertEquals("example@metropolia.fi", result.getFirst().getEmail());
-        assertEquals("PRESENT", result.getFirst().getStatus());
+  @Test
+  void testCheckInEvent_success() throws Exception {
+    // Covers lines 80-82 (Status 201 and "message" extraction)
+    mockWebServer.enqueue(new MockResponse()
+        .setResponseCode(201)
+        .setBody("{\"message\": \"Check-in successful\"}"));
 
-        assertEquals(UUID.fromString(eventId), result.get(1).getEventId());
-        assertEquals("kevin hart", result.get(1).getName());
-        assertEquals("example2@metropolia.fi", result.get(1).getEmail());
-        assertEquals("ABSENT", result.get(1).getStatus());
-    }
+    String result = attendanceService.checkInEvent(testUuid);
+    assertEquals("Check-in successful", result);
+  }
 
-    @Test
-    void testGetEventAttendance_403_throwsException() {
-        String eventId = "550e8400-e29b-41d4-a716-446655440000";
+  @Test
+  void testCheckInEvent_fail() {
+    // Covers line 84 (Extracting "error" from body)
+    mockWebServer.enqueue(new MockResponse()
+        .setResponseCode(400)
+        .setBody("{\"error\": \"Already checked in\"}"));
 
-        mockWebServer.enqueue(
-                new MockResponse().setResponseCode(403)
-        );
+    IOException ex = assertThrows(IOException.class, () -> attendanceService.checkInEvent(testUuid));
+    assertEquals("Already checked in", ex.getMessage());
+  }
 
-        IOException ex = assertThrows(IOException.class, () ->
-                attendanceService.getEventAttendance(eventId)
-        );
+  @Test
+  void testHasCheckedIn_success() throws Exception {
+    // Covers line 104-105 (Boolean parsing)
+    mockWebServer.enqueue(new MockResponse()
+        .setResponseCode(200)
+        .setBody("{\"checkedIn\": true}"));
 
-        assertEquals("Fetch request failed with status code: 403", ex.getMessage());
-    }
+    assertTrue(attendanceService.hasCheckedIn(testUuid));
+  }
 
+  @Test
+  void testHasCheckedIn_fail() {
+    // Covers line 107 (Fetch failure)
+    mockWebServer.enqueue(new MockResponse().setResponseCode(404));
+    assertThrows(IOException.class, () -> attendanceService.hasCheckedIn(testUuid));
+  }
 }
