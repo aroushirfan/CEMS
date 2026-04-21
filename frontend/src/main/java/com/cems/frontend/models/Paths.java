@@ -19,7 +19,7 @@ public enum Paths {
   public final String path;
   public final String bundlePath;
 
-  private Paths(String path, String bundlePath) {
+  Paths(String path, String bundlePath) {
     this.path = String.format("/com/cems/frontend/view/%s", path);
     this.bundlePath = String.format("com.cems.frontend.view.i18n.%s", bundlePath);
   }

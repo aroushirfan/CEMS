@@ -45,7 +45,7 @@ public class EventCardController {
       LocalHttpClientHelper.getClient(),
       LocalHttpClientHelper.getMapper());
   private ResourceBundle rb;
-  private LocaleUtil localeService = LocaleUtil.getInstance();
+  private final LocaleUtil localeService = LocaleUtil.getInstance();
   @FXML
   private Button learnMoreButton;
 

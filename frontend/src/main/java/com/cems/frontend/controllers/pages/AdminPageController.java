@@ -62,7 +62,9 @@ public class AdminPageController {
   private final ApiEventService eventService = new ApiEventService();
   private final ObservableList<Event> masterData = FXCollections.observableArrayList();
   private ResourceBundle rb;
-  private LocaleUtil localeService = LocaleUtil.getInstance();
+  private final LocaleUtil localeService = LocaleUtil.getInstance();
+  
+  private static final String ERROR_TITLE = "eventManagement.error_title";
 
   /**
    * Initializes the controller. Checks if the user is an admin, sets up table
@@ -203,11 +205,8 @@ public class AdminPageController {
       eventTable.setItems(masterData);
     });
 
-    task.setOnFailed(e -> {
-      task.getException().printStackTrace();
-      AlertHelper.showError(rb.getString("eventManagement.error_title"),
-          rb.getString("eventManagement.load_event_error_message"));
-    });
+    task.setOnFailed(e -> AlertHelper.showError(rb.getString(ERROR_TITLE),
+          rb.getString("eventManagement.load_event_error_message")));
 
     new Thread(task).start();
   }
@@ -226,7 +225,10 @@ public class AdminPageController {
           AlertHelper.showInfo(rb.getString("eventManagement.delete_success_title"),
               rb.getString("eventManagement.delete_success_content"));
         } catch (Exception ex) {
-          AlertHelper.showError(rb.getString("eventManagement.error_title"), ex.getMessage());
+          if (ex instanceof InterruptedException) {
+            Thread.currentThread().interrupt();
+          }
+          AlertHelper.showError(rb.getString(ERROR_TITLE), ex.getMessage());
         }
       }
     });
@@ -242,13 +244,16 @@ public class AdminPageController {
 
   private void handleApprove(Event event) {
     try {
-      Event updated = eventService.approveEvent(event.getId().toString());
+      eventService.approveEvent(event.getId().toString());
       event.setApproved(true); // update UI model
       eventTable.refresh();
       AlertHelper.showInfo(rb.getString("eventManagement.approve_success_tile"),
           rb.getString("eventManagement.approve_success_content"));
     } catch (Exception ex) {
-      AlertHelper.showError(rb.getString("eventManagement.error_title"), ex.getMessage());
+      if (ex instanceof InterruptedException) {
+        Thread.currentThread().interrupt();
+      }
+      AlertHelper.showError(rb.getString(ERROR_TITLE), ex.getMessage());
     }
   }
 }

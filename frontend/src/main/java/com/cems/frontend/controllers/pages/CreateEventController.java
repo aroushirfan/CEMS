@@ -44,6 +44,9 @@ public class CreateEventController {
     } catch (IllegalArgumentException e) {
       AlertHelper.showError(resourceBundle.getString("eventForm.missing_info"), e.getMessage());
     } catch (Exception e) {
+      if (e instanceof InterruptedException) {
+        Thread.currentThread().interrupt();
+      }
       AlertHelper.showError(resourceBundle.getString("eventForm.server_error"),
           resourceBundle.getString("eventForm.create_error_message") + e.getMessage());
     }

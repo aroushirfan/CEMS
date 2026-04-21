@@ -5,8 +5,8 @@ package com.cems.frontend.models;
  * and any associated payload.
  */
 public class NavigationMemento {
-  private Paths path;
-  private Object payload;
+  private final Paths path;
+  private final Object payload;
 
   /**
    * Constructs a NavigationMemento with the specified path and payload.

@@ -44,6 +44,9 @@ public class EditEventController {
           resourceBundle.getString("eventForm.update_success_message"));
       SceneNavigator.loadContent(Paths.ALL_EVENTS);
     } catch (Exception e) {
+      if (e instanceof InterruptedException) {
+        Thread.currentThread().interrupt();
+      }
       AlertHelper.showError(resourceBundle.getString("eventForm.update_fail_title"),
           e.getMessage());
     }
