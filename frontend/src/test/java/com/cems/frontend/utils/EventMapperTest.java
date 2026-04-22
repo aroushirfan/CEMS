@@ -2,10 +2,16 @@ package com.cems.frontend.utils;
 
 import com.cems.frontend.models.Event;
 import com.cems.shared.model.EventDto.EventResponseDTO;
+import com.cems.shared.model.EventDto.EventRequestDTO;
 import org.junit.jupiter.api.Test;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class EventMapperTest {
@@ -49,5 +55,46 @@ class EventMapperTest {
     void testNullHandling() {
         // null check in mapper for NullPointerExceptions
         assertNull(EventMapper.toModel(null), "Mapping a null DTO should return null");
+    }
+
+    @Test
+    void mapToDTO() {
+        for (int i = 0; i < 5; i++) {
+            Random random = new Random();
+            LocalDate date = LocalDate.ofEpochDay(
+                    ThreadLocalRandom.current().nextLong(
+                            LocalDate.of(2000, 1, 1).toEpochDay(),
+                            LocalDate.of(2025, 12, 31).toEpochDay()
+                    )
+            );
+            var randomHour = random.nextInt(0, 25);
+            var randomMinute = random.nextInt(0, 60);
+            var title = RandomString.generateRandomString(10);
+            var description = RandomString.generateRandomString(10);
+            var location = RandomString.generateRandomString(10);
+            var capacity = random.nextLong(1, 1000);
+
+            EventRequestDTO refDTO = new EventRequestDTO(
+                    title,
+                    description,
+                    location,
+                    capacity,
+                    date
+                            .atTime(randomHour, randomMinute)
+                            .atZone(ZoneId.systemDefault())
+                            .toInstant()
+            );
+            EventRequestDTO testDTO = EventMapper.mapToRequestDTO(
+                    date,
+                    randomHour,
+                    randomMinute,
+                    title,
+                    description,
+                    location,
+                    capacity
+            );
+
+            assertEquals(refDTO, testDTO);
+        }
     }
 }

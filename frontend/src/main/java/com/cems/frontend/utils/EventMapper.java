@@ -58,7 +58,7 @@ public final class EventMapper {
    * Create EventRequestDTO from raw form data
    * @return {@link EventDto.EventRequestDTO}
    */
-  public static EventDto.EventRequestDTO map(LocalDate date, int hour, int minute, String title, String description, String location, long capacity) {
+  public static EventDto.EventRequestDTO mapToRequestDTO(LocalDate date, int hour, int minute, String title, String description, String location, long capacity) {
     if (date == null) {
       throw new IllegalArgumentException("Date is required");
     }

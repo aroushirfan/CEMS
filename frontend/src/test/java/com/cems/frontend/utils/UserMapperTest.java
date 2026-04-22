@@ -2,14 +2,16 @@ package com.cems.frontend.utils;
 
 import com.cems.frontend.models.User;
 import com.cems.shared.model.UserDTO;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
-
+import java.util.concurrent.ThreadLocalRandom;
 
 
 class UserMapperTest {
@@ -81,5 +83,47 @@ class UserMapperTest {
     @Test
     void shouldThrowExceptionWhenDtoIsNull() {
         assertThrows(NullPointerException.class, () -> UserMapper.toModel(null));
+    }
+
+    @Test
+    @Disabled
+    void settingsToUserDTO() {
+        for (int i = 0; i < 10; i++) {
+            Random random = new Random();
+            UUID id = UUID.randomUUID();
+            String email = RandomString.generateRandomString(10);
+            int accessLevel = random.nextInt(0, 3);
+            String firstName = RandomString.generateRandomString(10);
+            String lastName = RandomString.generateRandomString(10);
+            String phone = RandomString.generateRandomString(8);
+            String profileImage = RandomString.generateRandomString(10);
+
+
+            User currentUser = new User(id, "email", accessLevel, "firstName", "middleName", "lastName");
+            currentUser.setProfileImageUrl("profile");
+            currentUser.setPhone("");
+            LocalDate date = LocalDate.ofEpochDay(
+                    ThreadLocalRandom.current().nextLong(
+                            LocalDate.of(2000, 1, 1).toEpochDay(),
+                            LocalDate.of(2025, 12, 31).toEpochDay()
+                    )
+            );
+
+
+            UserDTO refDTO = new UserDTO();
+            refDTO.setDob(date);
+            refDTO.setId(id);
+            refDTO.setEmail(email);
+            refDTO.setFirstName(firstName);
+            refDTO.setLastName(lastName);
+            refDTO.setAccessLevel(accessLevel);
+            refDTO.setPhone(phone);
+            refDTO.setProfileImageUrl(profileImage);
+
+
+            UserDTO testDTO = UserMapper.settingsToUserDTO(currentUser, email, phone, date, firstName + " " + lastName, profileImage);
+
+            assertEquals(refDTO, testDTO);
+        }
     }
 }

@@ -72,7 +72,7 @@ public class EventFormController {
     int hour = Integer.parseInt(hourComboBox.getValue());
     int minute = Integer.parseInt(minuteComboBox.getValue());
 
-    return EventMapper.map(
+    return EventMapper.mapToRequestDTO(
             datePicker.getValue(),
             hour,
             minute,
