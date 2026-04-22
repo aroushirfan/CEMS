@@ -1,7 +1,7 @@
 package com.cems.frontend.controller.components;
 
 import com.cems.frontend.models.Event;
-import com.cems.frontend.utils.EventFormMapper;
+import com.cems.frontend.utils.EventMapper;
 import com.cems.frontend.utils.LocaleUtil;
 import com.cems.shared.model.EventDto.EventRequestDTO;
 
@@ -72,7 +72,7 @@ public class EventFormController {
     int hour = Integer.parseInt(hourComboBox.getValue());
     int minute = Integer.parseInt(minuteComboBox.getValue());
 
-    return EventFormMapper.map(
+    return EventMapper.map(
             datePicker.getValue(),
             hour,
             minute,

@@ -2,6 +2,8 @@ package com.cems.frontend.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
+
+import javax.net.ssl.SSLSession;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.http.*;
@@ -77,24 +79,46 @@ class RsvpServiceTest {
     @Override public Optional<java.util.concurrent.Executor> executor() { return Optional.empty(); }
   }
 
-  private static class FakeResponse implements HttpResponse<String> {
-    private final HttpRequest request;
-    public FakeResponse(HttpRequest request) { this.request = request; }
-    @Override public int statusCode() { return stubStatusCode; }
-    @Override public String body() {
-      String uri = request.uri() != null ? request.uri().toString() : "";
-      // Fix for getRegisteredEvents
-      if (uri.contains("my-events")) return "[{\"id\":\"" + UUID.randomUUID() + "\", \"title\":\"Test\"}]";
-      // Fix for checkUserRsvp
-      if (uri.contains("registered")) return "{\"registered\": true}";
-      // Fix for register and errors
-      return "{\"message\": \"Processed\", \"error\": \"Fail\"}";
+  private record FakeResponse(HttpRequest request) implements HttpResponse<String> {
+    @Override
+    public int statusCode() {
+      return stubStatusCode;
     }
-    @Override public HttpRequest request() { return request; }
-    @Override public Optional<HttpResponse<String>> previousResponse() { return Optional.empty(); }
-    @Override public HttpHeaders headers() { return HttpHeaders.of(Collections.emptyMap(), (s1, s2) -> true); }
-    @Override public Optional<javax.net.ssl.SSLSession> sslSession() { return Optional.empty(); }
-    @Override public URI uri() { return URI.create("http://localhost"); }
-    @Override public HttpClient.Version version() { return HttpClient.Version.HTTP_2; }
-  }
+
+    @Override
+    public String body() {
+        String uri = request.uri() != null ? request.uri().toString() : "";
+        // Fix for getRegisteredEvents
+        if (uri.contains("my-events")) return "[{\"id\":\"" + UUID.randomUUID() + "\", \"title\":\"Test\"}]";
+        // Fix for checkUserRsvp
+        if (uri.contains("registered")) return "{\"registered\": true}";
+        // Fix for register and errors
+        return "{\"message\": \"Processed\", \"error\": \"Fail\"}";
+      }
+
+    @Override
+    public Optional<HttpResponse<String>> previousResponse() {
+      return Optional.empty();
+    }
+
+    @Override
+    public HttpHeaders headers() {
+      return HttpHeaders.of(Collections.emptyMap(), (s1, s2) -> true);
+    }
+
+    @Override
+    public Optional<SSLSession> sslSession() {
+      return Optional.empty();
+    }
+
+    @Override
+    public URI uri() {
+      return URI.create("http://localhost");
+    }
+
+    @Override
+    public HttpClient.Version version() {
+      return HttpClient.Version.HTTP_2;
+    }
+    }
 }
