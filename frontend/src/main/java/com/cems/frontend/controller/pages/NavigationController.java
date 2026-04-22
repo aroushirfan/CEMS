@@ -1,6 +1,6 @@
-package com.cems.frontend.controllers.pages;
+package com.cems.frontend.controller.pages;
 
-import com.cems.frontend.controllers.components.SidebarController;
+import com.cems.frontend.controller.components.SidebarController;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.NavigationMemento;
 import com.cems.frontend.models.Paths;

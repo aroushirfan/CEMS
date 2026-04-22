@@ -70,6 +70,17 @@ public class EventDto {
       this.dateTime = dateTime;
     }
 
+    @Override
+    public boolean equals(Object o) {
+      if (o == null || getClass() != o.getClass()) return false;
+      EventRequestDTO that = (EventRequestDTO) o;
+      return Objects.equals(getTitle(), that.getTitle()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getLocation(), that.getLocation()) && Objects.equals(getCapacity(), that.getCapacity()) && Objects.equals(getDateTime(), that.getDateTime());
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(getTitle(), getDescription(), getLocation(), getCapacity(), getDateTime());
+    }
   }
   static public class EventResponseDTO {
     private UUID id;

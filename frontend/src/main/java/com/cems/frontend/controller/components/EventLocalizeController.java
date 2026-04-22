@@ -1,4 +1,4 @@
-package com.cems.frontend.controllers.components;
+package com.cems.frontend.controller.components;
 
 import com.cems.frontend.models.Event;
 import com.cems.frontend.services.ApiEventService;

@@ -1,7 +1,12 @@
 package com.cems.frontend.utils;
 
 import com.cems.frontend.models.Event;
+import com.cems.shared.model.EventDto;
 import com.cems.shared.model.EventDto.EventResponseDTO;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 /**
@@ -47,5 +52,28 @@ public final class EventMapper {
     return dtos.stream()
         .map(EventMapper::toModel)
         .toList();
+  }
+
+  /**
+   * Create EventRequestDTO from raw form data
+   * @return {@link EventDto.EventRequestDTO}
+   */
+  public static EventDto.EventRequestDTO mapToRequestDTO(LocalDate date, int hour, int minute, String title, String description, String location, long capacity) {
+    if (date == null) {
+      throw new IllegalArgumentException("Date is required");
+    }
+
+    Instant eventInstant = date
+            .atTime(hour, minute)
+            .atZone(ZoneId.systemDefault())
+            .toInstant();
+
+    return new EventDto.EventRequestDTO(
+            title,
+            description,
+            location,
+            capacity,
+            eventInstant
+    );
   }
 }

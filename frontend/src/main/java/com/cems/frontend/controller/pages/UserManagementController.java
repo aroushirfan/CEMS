@@ -1,4 +1,4 @@
-package com.cems.frontend.controllers.pages;
+package com.cems.frontend.controller.pages;
 
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.models.User;

@@ -1,9 +1,10 @@
-package com.cems.frontend.controllers.pages;
+package com.cems.frontend.controller.pages;
 
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.models.User;
 import com.cems.frontend.services.UserService;
 import com.cems.frontend.utils.LocaleUtil;
+import com.cems.frontend.utils.UserMapper;
 import com.cems.frontend.view.SceneNavigator;
 import com.cems.shared.model.UserDTO;
 import java.io.File;
@@ -131,27 +132,14 @@ public class UserSettingsController {
   }
 
   private UserDTO getUserDTO() {
-    UserDTO dto = new UserDTO();
-    dto.setId(currentUser.getId());
-    dto.setEmail(emailField.getText());
-
-    dto.setPhone(phoneField.getText());
-    dto.setDob(dobPicker.getValue());
-
-    dto.setAccessLevel(currentUser.getAccessLevel());
-
-
-    String[] parts = fullNameField.getText().trim().split("\\s+", 2);
-    dto.setFirstName(parts.length > 0 ? parts[0] : "");
-    dto.setLastName(parts.length > 1 ? parts[1] : "");
-
-    // Profile image
-    dto.setProfileImageUrl(
-        selectedProfileImagePath != null
-            ? selectedProfileImagePath
-            : currentUser.getProfileImageUrl()
+    return UserMapper.settingsToUserDTO(
+            currentUser,
+            emailField.getText(),
+            phoneField.getText(),
+            dobPicker.getValue(),
+            fullNameField.getText(),
+            selectedProfileImagePath
     );
-    return dto;
   }
 
   private void loadDefaultProfileImage() {

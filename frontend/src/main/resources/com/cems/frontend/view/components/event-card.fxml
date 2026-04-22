@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefWidth="220.0" spacing="0.0" style="-fx-background-color: #E0E0E0; -fx-background-radius: 15; -fx-overflow: hidden;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.components.EventCardController">
+<VBox prefWidth="220.0" spacing="0.0" style="-fx-background-color: #E0E0E0; -fx-background-radius: 15; -fx-overflow: hidden;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controller.components.EventCardController">
 
     <StackPane prefHeight="120.0" style="-fx-background-color: #E6E1FF; -fx-background-radius: 15 15 0 0;">
         <children>
