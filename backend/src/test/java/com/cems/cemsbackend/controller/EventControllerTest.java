@@ -5,10 +5,7 @@ import com.cems.cemsbackend.repository.AttendanceRepository;
 import com.cems.cemsbackend.repository.EventRepository;
 import com.cems.cemsbackend.repository.EventTranslationRepository;
 import com.cems.cemsbackend.repository.UserRepository;
-import com.cems.shared.model.EventDto;
-import com.cems.shared.model.EventDto.EventLocalRequestDTO;
-import com.cems.shared.model.EventDto.EventRequestDTO;
-import com.cems.shared.model.EventDto.EventResponseDTO;
+import com.cems.shared.model.EventDto.*;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -217,6 +214,26 @@ class EventControllerTest {
   }
 
   @Test
+  void createEvent_nullBody_throwsBadRequest() {
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+        controller.createEvent(null)
+    );
+
+    assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+  }
+
+  @Test
+  void updateEvent_nullBody_throwsBadRequest() {
+    String id = firstEventResponse.getId().toString();
+
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+        controller.updateEvent(id, null)
+    );
+
+    assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
+  }
+
+  @Test
   @DisplayName("GET /events/all/{lang} returns localized events")
   void getAllEventsLocal() {
     var res = controller.getAllEventsLocal("en");
@@ -295,17 +312,128 @@ class EventControllerTest {
   }
 
   @Test
-  @DisplayName("POST /events/admin/{id}/{lang} fails when localization exists")
   void addEventLocalizationExists() {
     EventLocalRequestDTO dto =
         new EventLocalRequestDTO("Title", "Desc", "Loc");
-
-    controller.addEventLocalization(firstEventResponse.getId().toString(), "en", dto);
-
+    String id = firstEventResponse.getId().toString();
+    controller.addEventLocalization(id, "en", dto);
     ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
-        controller.addEventLocalization(firstEventResponse.getId().toString(), "en", dto)
+        controller.addEventLocalization(id, "en", dto)
     );
-
     assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusCode());
   }
+
+  @Test
+  void getAllEvents_empty_returnsNoContent() {
+    eventRepository.deleteAll();
+    var res = controller.getAllEvents();
+    assertEquals(HttpStatus.NO_CONTENT, res.getStatusCode());
+  }
+
+  @Test
+  void getAllEventsLocal_empty_returnsNoContent() {
+    eventRepository.deleteAll();
+    var res = controller.getAllEventsLocal("en");
+    assertEquals(HttpStatus.NO_CONTENT, res.getStatusCode());
+  }
+
+  @Test
+  void getEventByIdLocal_notFound() {
+    UUID id = UUID.randomUUID();
+
+    assertThrows(ResponseStatusException.class, () ->
+        controller.getEventByIdLocal(id, "en")
+    );
+  }
+
+
+  @Test
+  void updateEventLocal_invalidUuid() {
+    EventLocalRequestDTO dto = new EventLocalRequestDTO("t", "d", "l");
+    String id = "invalid";
+    String lang = "en";
+
+    assertThrows(ResponseStatusException.class, () ->
+        controller.updateEventLocal(id, lang, dto)
+    );
+  }
+
+
+  @Test
+  void approveEvent_invalidUuid() {
+    assertThrows(ResponseStatusException.class, () ->
+        controller.approveEvent("invalid")
+    );
+  }
+
+  @Test
+  void deleteEvent_invalidUuid() {
+    assertThrows(ResponseStatusException.class, () ->
+        controller.deleteEvent("invalid")
+    );
+  }
+
+  @Test
+  void getApprovedEvents_empty_returnsNoContent() {
+    var res = controller.getApprovedEvents();
+    assertEquals(HttpStatus.NO_CONTENT, res.getStatusCode());
+  }
+
+  @Test
+  void getApprovedEventsLocal_empty_returnsNoContent() {
+    var res = controller.getApprovedEventsLocal("en");
+    assertEquals(HttpStatus.NO_CONTENT, res.getStatusCode());
+  }
+
+  @Test
+  void getEventsByOwner_userNotFound() {
+    translationRepository.deleteAll();
+    attendanceRepository.deleteAll();
+    eventRepository.deleteAll();
+    userRepository.deleteAll();
+    assertThrows(ResponseStatusException.class, () ->
+        controller.getEventsByOwner()
+    );
+  }
+
+  @Test
+  void getEventByOwnerAndId_invalidUuid() {
+    assertThrows(ResponseStatusException.class, () ->
+        controller.getEventByOwnerAndId("invalid")
+    );
+  }
+
+  @Test
+  void addEventLocalization_invalidUuid() {
+    EventLocalRequestDTO dto = new EventLocalRequestDTO("t", "d", "l");
+    assertThrows(ResponseStatusException.class, () ->
+        controller.addEventLocalization("invalid", "en", dto)
+    );
+  }
+
+  @Test
+  void addEventLocalization_userNotFound() {
+    translationRepository.deleteAll();
+    attendanceRepository.deleteAll();
+    eventRepository.deleteAll();
+    userRepository.deleteAll();
+
+    EventLocalRequestDTO dto = new EventLocalRequestDTO("t", "d", "l");
+    String id = firstEventResponse.getId().toString();
+
+    assertThrows(ResponseStatusException.class, () ->
+        controller.addEventLocalization(id, "en", dto)
+    );
+  }
+
+  @Test
+  void addEventLocalization_eventNotFound() {
+    EventLocalRequestDTO dto = new EventLocalRequestDTO("t", "d", "l");
+    String id = UUID.randomUUID().toString(); // extract BEFORE lambda
+
+    assertThrows(ResponseStatusException.class, () ->
+        controller.addEventLocalization(id, "en", dto)
+    );
+  }
+
 }

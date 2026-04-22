@@ -14,9 +14,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,71 +27,158 @@ import static org.mockito.Mockito.*;
 
 class AttendanceControllerTest {
 
-    @Mock
-    private AttendanceService attendanceService;
-    @Mock
-    private UserRepository userRepository;
-    @Mock
-    private EventRepository eventRepository;
+  @Mock
+  private AttendanceService attendanceService;
+  @Mock
+  private UserRepository userRepository;
+  @Mock
+  private EventRepository eventRepository;
 
-    private AttendanceController attendanceController;
-    private UUID userId;
-    private UUID eventId;
+  private AttendanceController attendanceController;
+  private UUID userId;
+  private UUID eventId;
 
-    @BeforeEach
-    void setUp() throws Exception {
-        MockitoAnnotations.openMocks(this);
-        attendanceController = new AttendanceController(attendanceService, userRepository, eventRepository);
+  @BeforeEach
+  void setUp() throws Exception {
+    MockitoAnnotations.openMocks(this);
+    attendanceController = new AttendanceController(attendanceService, userRepository, eventRepository);
 
-        userId = UUID.randomUUID();
-        eventId = UUID.randomUUID();
+    userId = UUID.randomUUID();
+    eventId = UUID.randomUUID();
 
-        // Simulate JWT Authentication by putting the UUID in the security context
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userId, null);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-    }
+    // Simulate JWT Authentication by putting the UUID in the security context
+    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userId, null);
+    SecurityContextHolder.getContext().setAuthentication(auth);
+  }
 
-    private void setPrivateField(Object target, String fieldName, Object value) throws Exception {
-        Field field = target.getClass().getDeclaredField(fieldName);
-        field.setAccessible(true);
-        field.set(target, value);
-    }
+  private void setPrivateField(Object target, String fieldName, Object value) throws Exception {
+    Field field = target.getClass().getDeclaredField(fieldName);
+    field.setAccessible(true);
+    field.set(target, value);
+  }
 
-    @Test
-    void testCheckInSuccess() throws Exception {
-        User user = new User();
-        setPrivateField(user, "id", userId);
+  @Test
+  void testCheckInSuccess() throws Exception {
+    User user = new User();
+    setPrivateField(user, "id", userId);
 
-        Event event = new Event();
-        setPrivateField(event, "id", eventId);
+    Event event = new Event();
+    setPrivateField(event, "id", eventId);
 
-        Attendance attendance = new Attendance();
-        attendance.setUser(user);
-        attendance.setEvent(event);
-        attendance.setStatus("PRESENT");
+    Attendance attendance = new Attendance();
+    attendance.setUser(user);
+    attendance.setEvent(event);
+    attendance.setStatus("PRESENT");
 
-        // Mock the lookups and service call
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
-        when(attendanceService.createCheckIn(user, event)).thenReturn(attendance);
+    // Mock the lookups and service call
+    when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+    when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+    when(attendanceService.createCheckIn(user, event)).thenReturn(attendance);
 
-        var response = attendanceController.checkIn(eventId);
+    var response = attendanceController.checkIn(eventId);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
-    }
+    assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    assertNotNull(response.getBody());
+  }
 
-    @Test
-    void testGetEventAttendanceSuccess() throws Exception {
-        Event event = new Event();
-        setPrivateField(event, "id", eventId);
+  @Test
+  void testCheckIn_Unauthenticated() {
+    SecurityContextHolder.clearContext();
 
-        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
-        when(attendanceService.getAttendanceByEvent(event)).thenReturn(List.of());
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+        attendanceController.checkIn(eventId)
+    );
 
-        var response = attendanceController.getEventAttendance(eventId);
+    assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusCode());
+  }
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(attendanceService).getAttendanceByEvent(event);
-    }
+  @Test
+  void testCheckIn_UserNotFound() {
+    when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+    assertThrows(NoSuchElementException.class, () ->
+        attendanceController.checkIn(eventId)
+    );
+  }
+
+  @Test
+  void testCheckIn_EventNotFound() throws Exception {
+    User user = new User();
+    setPrivateField(user, "id", userId);
+
+    when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+    when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+    assertThrows(NoSuchElementException.class, () ->
+        attendanceController.checkIn(eventId)
+    );
+  }
+
+  @Test
+  void testGetEventAttendanceSuccess() throws Exception {
+    Event event = new Event();
+    setPrivateField(event, "id", eventId);
+
+    when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+    when(attendanceService.getAttendanceByEvent(event)).thenReturn(List.of());
+
+    var response = attendanceController.getEventAttendance(eventId);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    verify(attendanceService).getAttendanceByEvent(event);
+  }
+
+  @Test
+  void testGetEventAttendance_EventNotFound() {
+    when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+        attendanceController.getEventAttendance(eventId)
+    );
+
+    assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+  }
+
+  // ---------------------------------------------------------
+  // HAS CHECKED-IN TESTS
+  // ---------------------------------------------------------
+
+  @Test
+  void testHasCheckedIn_Unauthenticated() {
+    SecurityContextHolder.clearContext();
+
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+        attendanceController.hasCheckedIn(eventId)
+    );
+
+    assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusCode());
+  }
+
+  @Test
+  void testHasCheckedIn_UserNotFound() {
+    when(userRepository.getUserById(userId)).thenReturn(Optional.empty());
+
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+        attendanceController.hasCheckedIn(eventId)
+    );
+
+    assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+    assertEquals("User not found", ex.getReason());
+  }
+
+  @Test
+  void testHasCheckedIn_EventNotFound() throws Exception {
+    User user = new User();
+    setPrivateField(user, "id", userId);
+
+    when(userRepository.getUserById(userId)).thenReturn(Optional.of(user));
+    when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+        attendanceController.hasCheckedIn(eventId)
+    );
+
+    assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
+    assertEquals("Event not found", ex.getReason());
+  }
 }
