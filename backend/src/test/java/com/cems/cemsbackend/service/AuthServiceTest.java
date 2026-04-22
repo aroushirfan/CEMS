@@ -51,6 +51,42 @@ class AuthServiceTest {
     }
 
     @Test
+    void loginSuccess_WithFacultyUser_ReturnsFacultyRole() throws Exception {
+        LoginRequestDTO request = new LoginRequestDTO("faculty@mail.com", "pass");
+
+        User user = new User();
+        user.setEmail("faculty@mail.com");
+        user.setHashedPassword(encoder.encode("pass"));
+        user.setAccessLevel(AccessLevel.FACULTY);
+
+        when(userRepository.getUserByEmail("faculty@mail.com")).thenReturn(Optional.of(user));
+        when(jwtService.generateToken(user)).thenReturn("jwt456");
+
+        AuthResponseDTO response = authService.login(request);
+
+        assertEquals("jwt456", response.getToken());
+        assertEquals("FACULTY", response.getRole());
+    }
+
+    @Test
+    void loginSuccess_WithRegularUser_ReturnsUserRole() throws Exception {
+        LoginRequestDTO request = new LoginRequestDTO("user@mail.com", "pass");
+
+        User user = new User();
+        user.setEmail("user@mail.com");
+        user.setHashedPassword(encoder.encode("pass"));
+        user.setAccessLevel(AccessLevel.USER);
+
+        when(userRepository.getUserByEmail("user@mail.com")).thenReturn(Optional.of(user));
+        when(jwtService.generateToken(user)).thenReturn("jwt789");
+
+        AuthResponseDTO response = authService.login(request);
+
+        assertEquals("jwt789", response.getToken());
+        assertEquals("USER", response.getRole());
+    }
+
+    @Test
     void loginFails_WhenEmailNotFound() {
         LoginRequestDTO request = new LoginRequestDTO("missing@mail.com", "pass");
 
@@ -73,6 +109,42 @@ class AuthServiceTest {
     }
 
     @Test
+    void registerSuccess_CreatesNewUser() throws AuthService.AuthException {
+        RegisterRequestDTO request = new RegisterRequestDTO(
+                "John", "M", "Doe",
+                "john@mail.com",
+                "pass", "pass"
+        );
+
+        when(userRepository.existsUserByEmail("john@mail.com")).thenReturn(false);
+
+        assertDoesNotThrow(() -> authService.register(request));
+
+        verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    void registerSuccess_SetsDefaultAccessLevel() throws AuthService.AuthException {
+        RegisterRequestDTO request = new RegisterRequestDTO(
+                "Jane", null, "Smith",
+                "jane@mail.com",
+                "pass", "pass"
+        );
+
+        when(userRepository.existsUserByEmail("jane@mail.com")).thenReturn(false);
+
+        authService.register(request);
+
+        // Capture the user object that was saved
+        verify(userRepository).save(argThat(user ->
+                user.getAccessLevel() == AccessLevel.USER &&
+                user.getEmail().equals("jane@mail.com") &&
+                user.getFirstName().equals("Jane") &&
+                user.getLastName().equals("Smith")
+        ));
+    }
+
+    @Test
     void registerFails_WhenEmailAlreadyExists() {
         RegisterRequestDTO request = new RegisterRequestDTO(
                 "Aroush", null, "Irfan",
@@ -83,5 +155,24 @@ class AuthServiceTest {
         when(userRepository.existsUserByEmail("test@mail.com")).thenReturn(true);
 
         assertThrows(AuthService.AuthException.class, () -> authService.register(request));
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void register_EncryptsPassword() throws AuthService.AuthException {
+        RegisterRequestDTO request = new RegisterRequestDTO(
+                "Bob", null, "Builder",
+                "bob@mail.com",
+                "plainPassword", "plainPassword"
+        );
+
+        when(userRepository.existsUserByEmail("bob@mail.com")).thenReturn(false);
+
+        authService.register(request);
+
+        verify(userRepository).save(argThat(user ->
+                user.getHashedPassword() != null &&
+                !user.getHashedPassword().equals("plainPassword")
+        ));
     }
 }

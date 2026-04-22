@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,6 +58,18 @@ class AttendanceServiceTest {
     }
 
     @Test
+    void checkInFails_WhenUserNotInEventRoster() {
+        event.getAttendees().clear(); // User not in attendee list
+
+        Attendance attendance = new Attendance();
+        attendance.setStatus("RSVP_CONFIRMED");
+
+        when(attendanceRepository.findByUserAndEvent(user, event)).thenReturn(Optional.of(attendance));
+
+        assertThrows(ResponseStatusException.class, () -> attendanceService.createCheckIn(user, event));
+    }
+
+    @Test
     void checkInSuccess() {
         event.getAttendees().add(user);
 
@@ -71,6 +84,63 @@ class AttendanceServiceTest {
         assertEquals("PRESENT", result.getStatus());
         assertNotNull(result.getCheckInTime());
         verify(attendanceRepository).saveAndFlush(attendance);
+    }
+
+    @Test
+    void getAttendanceByEvent_ReturnsAllAttendance() {
+        Attendance attendance1 = new Attendance();
+        Attendance attendance2 = new Attendance();
+        List<Attendance> attendanceList = List.of(attendance1, attendance2);
+
+        when(attendanceRepository.findAllByEvent(event)).thenReturn(attendanceList);
+
+        List<Attendance> result = attendanceService.getAttendanceByEvent(event);
+
+        assertEquals(2, result.size());
+        verify(attendanceRepository).findAllByEvent(event);
+    }
+
+    @Test
+    void getAttendanceByEvent_ReturnsEmptyListWhenNoAttendance() {
+        when(attendanceRepository.findAllByEvent(event)).thenReturn(List.of());
+
+        List<Attendance> result = attendanceService.getAttendanceByEvent(event);
+
+        assertTrue(result.isEmpty());
+        verify(attendanceRepository).findAllByEvent(event);
+    }
+
+    @Test
+    void hasCheckedIn_ReturnsTrueWhenUserPresent() {
+        Attendance attendance = new Attendance();
+        attendance.setStatus("PRESENT");
+
+        when(attendanceRepository.findByUserAndEvent(user, event)).thenReturn(Optional.of(attendance));
+
+        boolean result = attendanceService.hasCheckedIn(user, event);
+
+        assertTrue(result);
+    }
+
+    @Test
+    void hasCheckedIn_ReturnsFalseWhenUserNotPresent() {
+        Attendance attendance = new Attendance();
+        attendance.setStatus("RSVP_CONFIRMED");
+
+        when(attendanceRepository.findByUserAndEvent(user, event)).thenReturn(Optional.of(attendance));
+
+        boolean result = attendanceService.hasCheckedIn(user, event);
+
+        assertFalse(result);
+    }
+
+    @Test
+    void hasCheckedIn_ReturnsFalseWhenNoAttendance() {
+        when(attendanceRepository.findByUserAndEvent(user, event)).thenReturn(Optional.empty());
+
+        boolean result = attendanceService.hasCheckedIn(user, event);
+
+        assertFalse(result);
     }
 
 }
