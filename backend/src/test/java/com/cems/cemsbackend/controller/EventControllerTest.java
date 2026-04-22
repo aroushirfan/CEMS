@@ -4,7 +4,7 @@ import com.cems.cemsbackend.model.User;
 import com.cems.cemsbackend.repository.AttendanceRepository;
 import com.cems.cemsbackend.repository.EventRepository;
 import com.cems.cemsbackend.repository.UserRepository;
-import com.cems.shared.model.EventDto;
+
 import com.cems.shared.model.EventDto.EventRequestDTO;
 import com.cems.shared.model.EventDto.EventResponseDTO;
 
@@ -17,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
@@ -26,6 +27,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class EventControllerTest {
 
   @Autowired
