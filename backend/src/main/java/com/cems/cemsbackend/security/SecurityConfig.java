@@ -29,6 +29,7 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthFilter authFilter) {
     return httpSecurity
+        // CSRF disabled because this is a stateless JWT-based API
         .csrf(csrf -> csrf.disable())
         .sessionManagement(session ->
             session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
