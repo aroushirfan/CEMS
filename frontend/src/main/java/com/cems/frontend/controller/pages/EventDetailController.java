@@ -1,6 +1,6 @@
-package com.cems.frontend.controllers.pages;
+package com.cems.frontend.controller.pages;
 
-import com.cems.frontend.controllers.components.EventLocalizeController;
+import com.cems.frontend.controller.components.EventLocalizeController;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.models.User;

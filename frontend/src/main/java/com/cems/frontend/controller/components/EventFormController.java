@@ -1,9 +1,10 @@
-package com.cems.frontend.controllers.components;
+package com.cems.frontend.controller.components;
 
 import com.cems.frontend.models.Event;
+import com.cems.frontend.utils.EventFormMapper;
 import com.cems.frontend.utils.LocaleUtil;
 import com.cems.shared.model.EventDto.EventRequestDTO;
-import java.time.Instant;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -62,7 +63,7 @@ public class EventFormController {
    * @return An EventRequestDTO containing the form data.
    * @throws IllegalArgumentException if the date is not selected.
    */
-  public EventRequestDTO getFormData() {
+  public EventRequestDTO getFormData() throws IllegalArgumentException {
     if (datePicker.getValue() == null) {
       throw new IllegalArgumentException("Date is required");
     }
@@ -71,17 +72,14 @@ public class EventFormController {
     int hour = Integer.parseInt(hourComboBox.getValue());
     int minute = Integer.parseInt(minuteComboBox.getValue());
 
-    Instant eventInstant = datePicker.getValue()
-        .atTime(hour, minute)
-        .atZone(ZoneId.systemDefault())
-        .toInstant();
-
-    return new EventRequestDTO(
-        titleField.getText(),
-        descriptionField.getText(),
-        locationField.getText(),
-        Long.parseLong(capacityField.getText()),
-        eventInstant
+    return EventFormMapper.map(
+            datePicker.getValue(),
+            hour,
+            minute,
+            titleField.getText(),
+            descriptionField.getText(),
+            locationField.getText(),
+            Long.parseLong(capacityField.getText())
     );
   }
   /**

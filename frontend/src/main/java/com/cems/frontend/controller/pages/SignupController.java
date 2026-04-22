@@ -1,4 +1,4 @@
-package com.cems.frontend.controllers.pages;
+package com.cems.frontend.controller.pages;
 
 import com.cems.frontend.services.AuthService;
 import com.cems.frontend.utils.Language;

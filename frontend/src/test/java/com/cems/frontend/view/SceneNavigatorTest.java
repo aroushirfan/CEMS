@@ -1,7 +1,7 @@
 package com.cems.frontend.view;
 
-import com.cems.frontend.controllers.components.NavbarController;
-import com.cems.frontend.controllers.pages.NavigationController;
+import com.cems.frontend.controller.components.NavbarController;
+import com.cems.frontend.controller.pages.NavigationController;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.NavigationMemento;
 import com.cems.frontend.models.Paths;
