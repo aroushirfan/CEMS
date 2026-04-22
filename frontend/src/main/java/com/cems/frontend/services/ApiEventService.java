@@ -130,7 +130,7 @@ public class ApiEventService implements IEventService {
     final String json = mapper.writeValueAsString(data);
     final HttpRequest request = LocalHttpClientHelper.buildRequest(BASE_URL + "/" + id)
         .authorization(authService.getToken())
-        .post(json);
+        .put(json);
 
     final HttpResponse<String> response = client.send(request,
         HttpResponse.BodyHandlers.ofString());

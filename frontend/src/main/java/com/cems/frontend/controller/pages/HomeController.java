@@ -1,12 +1,15 @@
-package com.cems.frontend.controllers.pages;
+package com.cems.frontend.controller.pages;
 
-import com.cems.frontend.controllers.components.EventCardController;
+import com.cems.frontend.controller.components.EventCardController;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.services.ApiEventService;
 import com.cems.frontend.services.IEventService;
 import com.cems.frontend.view.SceneNavigator;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -29,6 +32,7 @@ public class HomeController {
 
   private final IEventService eventService = new ApiEventService();
   private final ObservableList<Event> masterData = FXCollections.observableArrayList();
+  private final Logger logger = Logger.getLogger(getClass().getName());
 
   /**
    * Initializes the controller by setting up the search filter
@@ -93,7 +97,7 @@ public class HomeController {
 
         eventGrid.getChildren().add(card);
       } catch (IOException ex) {
-        ex.printStackTrace();
+        logger.log(Level.WARNING, ex.getMessage(), ex);
       }
     }
   }

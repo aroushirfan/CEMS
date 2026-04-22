@@ -1,6 +1,6 @@
-package com.cems.frontend.controllers.pages;
+package com.cems.frontend.controller.pages;
 
-import com.cems.frontend.controllers.components.SidebarController;
+import com.cems.frontend.controller.components.SidebarController;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.NavigationMemento;
 import com.cems.frontend.models.Paths;
@@ -10,6 +10,9 @@ import com.cems.frontend.view.SceneNavigator;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.NodeOrientation;
@@ -29,6 +32,7 @@ public class NavigationController {
   private AnchorPane rootView;
   @FXML
   private StackPane contentArea;
+  private final Logger logger = Logger.getLogger(getClass().getName());
 
   /**
    * Initializes the navigation controller by setting up the scene navigator,
@@ -36,7 +40,7 @@ public class NavigationController {
    * the current locale.
    */
   @FXML
-  public void initialize() throws IOException {
+  public void initialize() {
     SceneNavigator.setNavigationController(this);
     loadContent(Paths.HOME);
     setOrientation();
@@ -77,7 +81,7 @@ public class NavigationController {
       T controller = loader.getController();
       return controller;
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.log(Level.WARNING, e.getMessage(), e);
       return null;
     }
   }
@@ -99,7 +103,7 @@ public class NavigationController {
       updatedNavigationController.restoreState(currentState);
       contentArea.getScene().setRoot(contentRoot);
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.log(Level.WARNING, e.getMessage(), e);
     }
   }
 

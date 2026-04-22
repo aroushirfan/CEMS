@@ -1,6 +1,6 @@
-package com.cems.frontend.controllers.pages;
+package com.cems.frontend.controller.pages;
 
-import com.cems.frontend.controllers.components.EventCardController;
+import com.cems.frontend.controller.components.EventCardController;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.ApiEventService;
@@ -8,6 +8,9 @@ import com.cems.frontend.services.IEventService;
 import com.cems.frontend.view.SceneNavigator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -35,7 +38,8 @@ public class MainHomeController {
 
   private List<Event> allEvents = new ArrayList<>();
   private int currentIndex = 0;
-  private final int pageSize = 4; // number of events per page
+  private static final int PAGE_SIZE = 4; // number of events per page
+  private final Logger logger = Logger.getLogger(getClass().getName());
 
   /**
    * Initializes the controller by loading events and setting up the UI components.
@@ -63,7 +67,10 @@ public class MainHomeController {
     try {
       allEvents = eventService.getApprovedEvents();
     } catch (Exception e) {
-      e.printStackTrace();
+      if (e instanceof InterruptedException) {
+        Thread.currentThread().interrupt();
+      }
+      logger.log(Level.WARNING, e.getMessage(), e);
     }
   }
 
@@ -73,7 +80,7 @@ public class MainHomeController {
       return;
     }
 
-    int end = Math.min(currentIndex + pageSize, allEvents.size());
+    int end = Math.min(currentIndex + PAGE_SIZE, allEvents.size());
     List<Event> page = allEvents.subList(currentIndex, end);
 
     for (Event event : page) {
@@ -93,7 +100,7 @@ public class MainHomeController {
         eventGrid.getChildren().add(card);
 
       } catch (Exception e) {
-        e.printStackTrace();
+        logger.log(Level.WARNING, e.getMessage(), e);
       }
     }
 

@@ -1,4 +1,4 @@
-package com.cems.frontend.controllers.components;
+package com.cems.frontend.controller.components;
 
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.Paths;
@@ -45,7 +45,7 @@ public class EventCardController {
       LocalHttpClientHelper.getClient(),
       LocalHttpClientHelper.getMapper());
   private ResourceBundle rb;
-  private LocaleUtil localeService = LocaleUtil.getInstance();
+  private final LocaleUtil localeService = LocaleUtil.getInstance();
   @FXML
   private Button learnMoreButton;
 

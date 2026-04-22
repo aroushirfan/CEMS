@@ -1,4 +1,4 @@
-package com.cems.frontend.controllers.pages;
+package com.cems.frontend.controller.pages;
 
 import com.cems.frontend.models.Attendance;
 import com.cems.frontend.models.Event;
@@ -94,7 +94,7 @@ public class AttendanceController {
       LocalHttpClientHelper.getClient(), LocalHttpClientHelper.getMapper());
 
   private ResourceBundle resourceBundle;
-  private LocaleUtil localeService = LocaleUtil.getInstance();
+  private final LocaleUtil localeService = LocaleUtil.getInstance();
 
   /**
    * Loads the attendance records for the specified event and updates the UI components accordingly.

@@ -1,45 +1,105 @@
 package com.cems.cemsbackend.mappers;
 
 import com.cems.cemsbackend.model.Event;
+import com.cems.cemsbackend.model.EventTranslation;
 import com.cems.shared.model.EventDto.EventResponseDTO;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils; // The "Magic" utility
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import java.lang.reflect.Constructor;
 import java.time.Instant;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class EventMapperTest {
 
-    @Test
-    void shouldMapEventToEventResponseDTO() {
-        // 1. ARRANGE
-        UUID id = UUID.randomUUID();
-        Instant now = Instant.now();
-        Event event = new Event();
+  private Event createBaseEvent() {
+    UUID id = UUID.randomUUID();
+    Instant now = Instant.now();
+    Event event = new Event();
 
-        // Use Reflection to set private fields because there are no Setters
-        ReflectionTestUtils.setField(event, "id", id);
-        ReflectionTestUtils.setField(event, "title", "Annual Gala");
-        ReflectionTestUtils.setField(event, "description", "A formal evening event");
-        ReflectionTestUtils.setField(event, "location", "Grand Ballroom");
-        ReflectionTestUtils.setField(event, "capacity", 500L);
-        ReflectionTestUtils.setField(event, "dateTime", now);
-        ReflectionTestUtils.setField(event, "approved", true);
+    ReflectionTestUtils.setField(event, "id", id);
+    ReflectionTestUtils.setField(event, "title", "Base Title");
+    ReflectionTestUtils.setField(event, "description", "Base Description");
+    ReflectionTestUtils.setField(event, "location", "Base Location");
+    ReflectionTestUtils.setField(event, "capacity", 100L);
+    ReflectionTestUtils.setField(event, "dateTime", now);
+    ReflectionTestUtils.setField(event, "approved", true);
 
-        // 2. ACT
-        EventResponseDTO dto = EventMapper.toDto(event);
+    return event;
+  }
 
-        // 3. ASSERT
-        assertThat(dto).isNotNull();
+  @Test
+  void shouldMapEventToEventResponseDTO() {
+    Event event = createBaseEvent();
 
-        // Use the PUBLIC GETTERS from your EventResponseDTO class
-        assertThat(dto.getId()).isEqualTo(id);
-        assertThat(dto.getTitle()).isEqualTo("Annual Gala");
-        assertThat(dto.getDescription()).isEqualTo("A formal evening event");
-        assertThat(dto.getLocation()).isEqualTo("Grand Ballroom");
-        assertThat(dto.getCapacity()).isEqualTo(500L);
-        assertThat(dto.getDateTime()).isEqualTo(now);
-        assertThat(dto.isApproved()).isTrue();
-    }
+    EventResponseDTO dto = EventMapper.toDto(event);
+
+    assertThat(dto).isNotNull();
+    assertThat(dto.getId()).isEqualTo(event.getId());
+    assertThat(dto.getTitle()).isEqualTo("Base Title");
+    assertThat(dto.getDescription()).isEqualTo("Base Description");
+    assertThat(dto.getLocation()).isEqualTo("Base Location");
+    assertThat(dto.getCapacity()).isEqualTo(100L);
+    assertThat(dto.getDateTime()).isEqualTo(event.getDateTime());
+    assertThat(dto.isApproved()).isTrue();
+  }
+
+  @Test
+  void shouldMapLocalizedTranslation_WhenTranslationHasValues() {
+    Event event = createBaseEvent();
+
+    EventTranslation translation = new EventTranslation();
+    ReflectionTestUtils.setField(translation, "title", "Translated Title");
+    ReflectionTestUtils.setField(translation, "description", "Translated Description");
+    ReflectionTestUtils.setField(translation, "location", "Translated Location");
+
+    EventResponseDTO dto = EventMapper.toDto(event, translation);
+
+    assertThat(dto.getTitle()).isEqualTo("Translated Title");
+    assertThat(dto.getDescription()).isEqualTo("Translated Description");
+    assertThat(dto.getLocation()).isEqualTo("Translated Location");
+  }
+
+  @Test
+  void shouldFallbackToBaseEvent_WhenTranslationFieldsAreBlank() {
+    Event event = createBaseEvent();
+
+    EventTranslation translation = new EventTranslation();
+    ReflectionTestUtils.setField(translation, "title", "   "); // blank
+    ReflectionTestUtils.setField(translation, "description", "");
+    ReflectionTestUtils.setField(translation, "location", "   ");
+
+    EventResponseDTO dto = EventMapper.toDto(event, translation);
+
+    assertThat(dto.getTitle()).isEqualTo("Base Title");
+    assertThat(dto.getDescription()).isEqualTo("Base Description");
+    assertThat(dto.getLocation()).isEqualTo("Base Location");
+  }
+
+  @Test
+  void shouldFallbackToBaseEvent_WhenTranslationFieldsAreNull() {
+    Event event = createBaseEvent();
+
+    EventTranslation translation = new EventTranslation();
+    ReflectionTestUtils.setField(translation, "title", null);
+    ReflectionTestUtils.setField(translation, "description", null);
+    ReflectionTestUtils.setField(translation, "location", null);
+
+    EventResponseDTO dto = EventMapper.toDto(event, translation);
+
+    assertThat(dto.getTitle()).isEqualTo("Base Title");
+    assertThat(dto.getDescription()).isEqualTo("Base Description");
+    assertThat(dto.getLocation()).isEqualTo("Base Location");
+  }
+
+  @Test
+  void privateConstructor_CanBeInvokedForCoverage() throws Exception {
+    Constructor<EventMapper> constructor = EventMapper.class.getDeclaredConstructor();
+    constructor.setAccessible(true);
+
+    EventMapper instance = constructor.newInstance();
+    assertThat(instance).isNotNull();
+  }
 }

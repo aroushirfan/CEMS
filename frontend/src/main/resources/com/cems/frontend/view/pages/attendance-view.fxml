@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.pages.AttendanceController">
+<VBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controller.pages.AttendanceController">
    <children>
         <VBox maxHeight="1.7976931348623157E308" spacing="20.0" style="-fx-padding: 40;" stylesheets="@../css/attendance.css">
          <VBox spacing="5.0">

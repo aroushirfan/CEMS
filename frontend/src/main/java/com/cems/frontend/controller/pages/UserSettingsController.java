@@ -1,13 +1,17 @@
-package com.cems.frontend.controllers.pages;
+package com.cems.frontend.controller.pages;
 
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.models.User;
 import com.cems.frontend.services.UserService;
 import com.cems.frontend.utils.LocaleUtil;
+import com.cems.frontend.utils.UserMapper;
 import com.cems.frontend.view.SceneNavigator;
 import com.cems.shared.model.UserDTO;
 import java.io.File;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -42,6 +46,7 @@ public class UserSettingsController {
   private User currentUser;
   private String selectedProfileImagePath;
   private ResourceBundle resourceBundle;
+  private final Logger logger = Logger.getLogger(getClass().getName());
 
   /**
    * Initializes the controller by loading the current user's data
@@ -59,7 +64,10 @@ public class UserSettingsController {
       currentUser = userService.getCurrentUser();
       fillUiWithUser(currentUser);
     } catch (Exception e) {
-      e.printStackTrace();
+      if (e instanceof InterruptedException) {
+        Thread.currentThread().interrupt();
+      }
+      logger.log(Level.WARNING, e.getMessage(), e);
       new Alert(Alert.AlertType.ERROR, resourceBundle
           .getString("userSettings.profile_error")).show();
     }
@@ -102,26 +110,7 @@ public class UserSettingsController {
   @FXML
   private void handleSaveChanges() {
     try {
-      UserDTO dto = new UserDTO();
-      dto.setId(currentUser.getId());
-      dto.setEmail(emailField.getText());
-
-      dto.setPhone(phoneField.getText());
-      dto.setDob(dobPicker.getValue());
-
-      dto.setAccessLevel(currentUser.getAccessLevel());
-
-
-      String[] parts = fullNameField.getText().trim().split("\\s+", 2);
-      dto.setFirstName(parts.length > 0 ? parts[0] : "");
-      dto.setLastName(parts.length > 1 ? parts[1] : "");
-
-      // Profile image
-      dto.setProfileImageUrl(
-          selectedProfileImagePath != null
-              ? selectedProfileImagePath
-              : currentUser.getProfileImageUrl()
-      );
+      UserDTO dto = getUserDTO();
 
       // Update backend and use returned updated user
       currentUser = userService.updateCurrentUser(dto);
@@ -133,10 +122,24 @@ public class UserSettingsController {
           .getString("userSettings.update_success")).show();
 
     } catch (Exception e) {
-      e.printStackTrace();
+      if (e instanceof InterruptedException) {
+        Thread.currentThread().interrupt();
+      }
+      logger.log(Level.WARNING, e.getMessage(), e);
       new Alert(Alert.AlertType.ERROR, resourceBundle
           .getString("userSettings.update_failure")).show();
     }
+  }
+
+  private UserDTO getUserDTO() {
+    return UserMapper.settingsToUserDTO(
+            currentUser,
+            emailField.getText(),
+            phoneField.getText(),
+            dobPicker.getValue(),
+            fullNameField.getText(),
+            selectedProfileImagePath
+    );
   }
 
   private void loadDefaultProfileImage() {
@@ -159,10 +162,13 @@ public class UserSettingsController {
           userService.deleteCurrentUser();
           new Alert(Alert.AlertType.INFORMATION, resourceBundle
               .getString("userSettings.delete_success")).show();
-          // Redirect to login
+          // Redirect to log in
           SceneNavigator.loadPage("Login.fxml");
         } catch (Exception e) {
-          e.printStackTrace();
+          if (e instanceof InterruptedException) {
+            Thread.currentThread().interrupt();
+          }
+          logger.log(Level.WARNING, e.getMessage(), e);
           new Alert(Alert.AlertType.ERROR, resourceBundle
               .getString("userSettings.delete_failure")).show();
         }

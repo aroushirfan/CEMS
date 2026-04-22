@@ -1,4 +1,4 @@
-package com.cems.frontend.controllers.components;
+package com.cems.frontend.controller.components;
 
 import com.cems.frontend.models.Event;
 import com.cems.frontend.services.ApiEventService;
@@ -49,15 +49,13 @@ public class EventLocalizeController {
             }
         });
 
-        saveButton.setOnAction(event -> onSave(event, languageCombobox.getSelectionModel().getSelectedItem()));
+        saveButton.setOnAction(event -> onSave(languageCombobox.getSelectionModel().getSelectedItem()));
         cancelButton.setOnAction(this::onCancel);
         if (eventFormTitle.getText().isBlank()) {
             saveButton.setDisable(true);
         }
 
-        eventFormTitle.textProperty().addListener((obs, oldVal, newVal) -> {
-            saveButton.setDisable(newVal.isBlank());
-        });
+        eventFormTitle.textProperty().addListener((obs, oldVal, newVal) -> saveButton.setDisable(newVal.isBlank()));
     }
 
     public void setEventId(String id) {
@@ -67,6 +65,9 @@ public class EventLocalizeController {
             eventFormDescription.setText(selectedEvent.getDescription());
             eventFormLocation.setText(selectedEvent.getLocation());
         } catch (Exception e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             showAlert(e);
         }
     }
@@ -78,16 +79,22 @@ public class EventLocalizeController {
             eventFormDescription.setText(selectedEvent.getDescription());
             eventFormLocation.setText(selectedEvent.getLocation());
         } catch (Exception e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             showAlert(e);
         }
     }
 
-    private void onSave(ActionEvent event, Language language) {
+    private void onSave(Language language) {
         try {
             var data = new EventDto.EventLocalRequestDTO(eventFormTitle.getText(), eventFormDescription.getText().isBlank() ? null : eventFormDescription.getText(), eventFormLocation.getText().isBlank() ? null : eventFormLocation.getText());
             apiEventService.updateLocalEvent(selectedEvent.getId().toString(), data, language);
             closeWindow();
         } catch (Exception e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             showAlert(e);
         }
     }

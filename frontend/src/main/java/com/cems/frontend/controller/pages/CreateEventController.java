@@ -1,6 +1,6 @@
-package com.cems.frontend.controllers.pages;
+package com.cems.frontend.controller.pages;
 
-import com.cems.frontend.controllers.components.EventFormController;
+import com.cems.frontend.controller.components.EventFormController;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.ApiEventService;
 import com.cems.frontend.services.IEventService;
@@ -44,6 +44,9 @@ public class CreateEventController {
     } catch (IllegalArgumentException e) {
       AlertHelper.showError(resourceBundle.getString("eventForm.missing_info"), e.getMessage());
     } catch (Exception e) {
+      if (e instanceof InterruptedException) {
+        Thread.currentThread().interrupt();
+      }
       AlertHelper.showError(resourceBundle.getString("eventForm.server_error"),
           resourceBundle.getString("eventForm.create_error_message") + e.getMessage());
     }

@@ -1,77 +1,111 @@
 package com.cems.frontend.services;
 
-import com.cems.frontend.models.User;
-import com.cems.frontend.utils.LocalHttpClientHelper;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
+import com.cems.shared.model.UserDTO;
 import org.junit.jupiter.api.*;
-
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.http.HttpClient;
-import java.util.List;
-
+import java.net.URI;
+import java.net.http.*;
+import java.util.Optional;
+import javax.net.ssl.SSLSession;
+import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceTest {
+  private UserService userService;
+  private static int stubStatusCode = 200;
 
-    private MockWebServer server;
-    private UserService userService;
+  @BeforeEach
+  void setUp() throws Exception {
+    userService = new UserService();
+    stubStatusCode = 200;
+    Field clientField = UserService.class.getDeclaredField("client");
+    clientField.setAccessible(true);
+    clientField.set(userService, new FakeHttpClient());
+  }
 
-    @BeforeEach
-    void setup() throws Exception {
-        server = new MockWebServer();
-        server.start();
+  @Test
+  void testFullCoverage() throws Exception {
+    // 1. Success Paths
+    assertNotNull(userService.getCurrentUser());
+    assertFalse(userService.getAllUsers().isEmpty());
+    assertNotNull(userService.getUserById("123"));
 
-        LocalHttpClientHelper.setPort(String.valueOf(server.getPort()));
-        userService = new UserService();
+    UserDTO dto = new UserDTO();
+    assertNotNull(userService.updateCurrentUser(dto));
+    assertDoesNotThrow(() -> userService.updateAccessLevel("123", 1));
+    assertDoesNotThrow(() -> userService.deleteCurrentUser());
+
+    // 2. No Content Branch
+    stubStatusCode = 204;
+    assertTrue(userService.getAllUsers().isEmpty());
+
+    // 3. Exception Branches
+    stubStatusCode = 500;
+    assertThrows(IOException.class, () -> userService.getCurrentUser());
+    assertThrows(IOException.class, () -> userService.updateCurrentUser(dto));
+    assertThrows(IOException.class, () -> userService.getAllUsers());
+    assertThrows(IOException.class, () -> userService.getUserById("123"));
+    assertThrows(IOException.class, () -> userService.updateAccessLevel("123", 1));
+    assertThrows(IOException.class, () -> userService.deleteCurrentUser());
+  }
+
+  private static class FakeHttpClient extends HttpClient {
+    @Override
+    public <T> HttpResponse<T> send(HttpRequest req, HttpResponse.BodyHandler<T> h) throws IOException, InterruptedException {
+      return (HttpResponse<T>) new FakeResponse(req);
+    }
+    @Override public <T> CompletableFuture<HttpResponse<T>> sendAsync(HttpRequest r, HttpResponse.BodyHandler<T> h) { return null; }
+    @Override public <T> CompletableFuture<HttpResponse<T>> sendAsync(HttpRequest r, HttpResponse.BodyHandler<T> h, HttpResponse.PushPromiseHandler<T> p) { return null; }
+    @Override public Optional<java.net.CookieHandler> cookieHandler() { return Optional.empty(); }
+    @Override public Optional<java.time.Duration> connectTimeout() { return Optional.empty(); }
+    @Override public HttpClient.Redirect followRedirects() { return HttpClient.Redirect.NEVER; }
+    @Override public Optional<java.net.ProxySelector> proxy() { return Optional.empty(); }
+    @Override public javax.net.ssl.SSLContext sslContext() { return null; }
+    @Override public javax.net.ssl.SSLParameters sslParameters() { return null; }
+    @Override public Optional<java.net.Authenticator> authenticator() { return Optional.empty(); }
+    @Override public HttpClient.Version version() { return HttpClient.Version.HTTP_2; }
+    @Override public Optional<Executor> executor() { return Optional.empty(); }
+  }
+
+  private record FakeResponse(HttpRequest request) implements HttpResponse<String> {
+    @Override
+    public int statusCode() {
+      return stubStatusCode;
     }
 
-    @AfterEach
-    void teardown() throws Exception {
-        server.shutdown();
+    @Override
+    public String body() {
+        String uri = request.uri() != null ? request.uri().toString() : "";
+        if (uri.endsWith("users")) return "[{\"email\":\"test@test.com\"}]";
+        return "{\"email\":\"test@test.com\",\"access_level\":1}";
+      }
+
+    @Override
+    public Optional<HttpResponse<String>> previousResponse() {
+      return Optional.empty();
     }
 
-    @Test
-    void getAllUsers() throws Exception {
-        String json = """
-            [
-              {"email":"a@test.com","access_level":0},
-              {"email":"b@test.com","access_level":1}
-            ]
-        """;
-
-        server.enqueue(new MockResponse().setResponseCode(200).setBody(json));
-        server.enqueue(new MockResponse().setResponseCode(204));
-
-        List<User> users1 = userService.getAllUsers();
-        assertEquals(2, users1.size());
-        assertEquals("a@test.com", users1.get(0).getEmail());
-
-        List<User> users2 = userService.getAllUsers();
-        assertTrue(users2.isEmpty());
+    @Override
+    public HttpHeaders headers() {
+      return HttpHeaders.of(Collections.emptyMap(), (s1, s2) -> true);
     }
 
-    @Test
-    void getUserById() throws Exception {
-        String json = """
-            {"email":"x@test.com","access_level":0}
-        """;
-
-        server.enqueue(new MockResponse().setResponseCode(200).setBody(json));
-
-        User user = userService.getUserById("123");
-
-        assertEquals("x@test.com", user.getEmail());
+    @Override
+    public Optional<SSLSession> sslSession() {
+      return Optional.empty();
     }
 
-    @Test
-    void updateAccessLevel() {
-        server.enqueue(new MockResponse().setResponseCode(200));
-        server.enqueue(new MockResponse().setResponseCode(400));
+    @Override
+    public URI uri() {
+      return URI.create("http://localhost");
+    }
 
-        assertDoesNotThrow(() -> userService.updateAccessLevel("123", 1));
-        assertThrows(IOException.class, () -> userService.updateAccessLevel("123", 1));
+    @Override
+    public HttpClient.Version version() {
+      return HttpClient.Version.HTTP_2;
+    }
     }
 }

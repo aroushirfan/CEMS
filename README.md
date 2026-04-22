@@ -555,7 +555,7 @@ public enum Language {
     EN("English", Locale.US),
     TH("Thai", Locale.forLanguageTag("th-TH"), "/com/cems/frontend/view/css/thai.css"),
     UR("Urdu", Locale.forLanguageTag("ur-PK")),
-    IT("Italian", Locale.forLanguageTag("it-IT"));  // Add this line
+    IT("Italian", Locale.forLanguageTag("it-IT"))  // Add this line
 
     // Rest of enum code...
 }

@@ -1,6 +1,6 @@
-package com.cems.frontend.controllers.pages;
+package com.cems.frontend.controller.pages;
 
-import com.cems.frontend.controllers.components.EventFormController;
+import com.cems.frontend.controller.components.EventFormController;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.ApiEventService;
@@ -44,6 +44,9 @@ public class EditEventController {
           resourceBundle.getString("eventForm.update_success_message"));
       SceneNavigator.loadContent(Paths.ALL_EVENTS);
     } catch (Exception e) {
+      if (e instanceof InterruptedException) {
+        Thread.currentThread().interrupt();
+      }
       AlertHelper.showError(resourceBundle.getString("eventForm.update_fail_title"),
           e.getMessage());
     }
