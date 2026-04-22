@@ -4,7 +4,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <HBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.cems.frontend.controllers.pages.UserManagementController">
+      fx:controller="com.cems.frontend.controller.pages.UserManagementController">
 
     <VBox spacing="20" HBox.hgrow="ALWAYS" style="-fx-padding: 20;">
         <HBox spacing="10">

@@ -38,6 +38,7 @@
 package com.cems.shared.model;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.UUID;
 
 public class UserDTO {
@@ -89,4 +90,31 @@ public class UserDTO {
 
     public String getProfileImageUrl() { return profileImageUrl; }
     public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDTO userDTO = (UserDTO) o;
+        return getAccessLevel() == userDTO.getAccessLevel() && Objects.equals(getId(), userDTO.getId()) && Objects.equals(getEmail(), userDTO.getEmail()) && Objects.equals(getFirstName(), userDTO.getFirstName()) && Objects.equals(getMiddleName(), userDTO.getMiddleName()) && Objects.equals(getLastName(), userDTO.getLastName()) && Objects.equals(getPhone(), userDTO.getPhone()) && Objects.equals(getDob(), userDTO.getDob()) && Objects.equals(getProfileImageUrl(), userDTO.getProfileImageUrl());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getEmail(), getAccessLevel(), getFirstName(), getMiddleName(), getLastName(), getPhone(), getDob(), getProfileImageUrl());
+    }
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", accessLevel=" + accessLevel +
+                ", firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", dob=" + dob +
+                ", profileImageUrl='" + profileImageUrl + '\'' +
+                '}';
+    }
 }

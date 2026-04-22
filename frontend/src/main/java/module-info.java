@@ -14,8 +14,8 @@ module com.cems.frontend {
   requires net.bytebuddy;
   requires java.logging;
 
-  opens com.cems.frontend.controllers.pages to javafx.fxml;
-  opens com.cems.frontend.controllers.components to javafx.fxml;
+  opens com.cems.frontend.controller.pages to javafx.fxml;
+  opens com.cems.frontend.controller.components to javafx.fxml;
   opens com.cems.frontend to javafx.fxml;
   opens com.cems.frontend.models to com.fasterxml.jackson.databind, javafx.base, javafx.fxml;
 

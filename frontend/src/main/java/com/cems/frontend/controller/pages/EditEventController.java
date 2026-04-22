@@ -1,6 +1,6 @@
-package com.cems.frontend.controllers.pages;
+package com.cems.frontend.controller.pages;
 
-import com.cems.frontend.controllers.components.EventFormController;
+import com.cems.frontend.controller.components.EventFormController;
 import com.cems.frontend.models.Event;
 import com.cems.frontend.models.Paths;
 import com.cems.frontend.services.ApiEventService;

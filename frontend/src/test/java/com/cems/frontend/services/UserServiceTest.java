@@ -70,20 +70,42 @@ class UserServiceTest {
     @Override public Optional<Executor> executor() { return Optional.empty(); }
   }
 
-  private static class FakeResponse implements HttpResponse<String> {
-    private final HttpRequest request;
-    public FakeResponse(HttpRequest request) { this.request = request; }
-    @Override public int statusCode() { return stubStatusCode; }
-    @Override public String body() {
-      String uri = request.uri() != null ? request.uri().toString() : "";
-      if (uri.endsWith("users")) return "[{\"email\":\"test@test.com\"}]";
-      return "{\"email\":\"test@test.com\",\"access_level\":1}";
+  private record FakeResponse(HttpRequest request) implements HttpResponse<String> {
+    @Override
+    public int statusCode() {
+      return stubStatusCode;
     }
-    @Override public HttpRequest request() { return request; }
-    @Override public Optional<HttpResponse<String>> previousResponse() { return Optional.empty(); }
-    @Override public HttpHeaders headers() { return HttpHeaders.of(Collections.emptyMap(), (s1, s2) -> true); }
-    @Override public Optional<SSLSession> sslSession() { return Optional.empty(); }
-    @Override public URI uri() { return URI.create("http://localhost"); }
-    @Override public HttpClient.Version version() { return HttpClient.Version.HTTP_2; }
-  }
+
+    @Override
+    public String body() {
+        String uri = request.uri() != null ? request.uri().toString() : "";
+        if (uri.endsWith("users")) return "[{\"email\":\"test@test.com\"}]";
+        return "{\"email\":\"test@test.com\",\"access_level\":1}";
+      }
+
+    @Override
+    public Optional<HttpResponse<String>> previousResponse() {
+      return Optional.empty();
+    }
+
+    @Override
+    public HttpHeaders headers() {
+      return HttpHeaders.of(Collections.emptyMap(), (s1, s2) -> true);
+    }
+
+    @Override
+    public Optional<SSLSession> sslSession() {
+      return Optional.empty();
+    }
+
+    @Override
+    public URI uri() {
+      return URI.create("http://localhost");
+    }
+
+    @Override
+    public HttpClient.Version version() {
+      return HttpClient.Version.HTTP_2;
+    }
+    }
 }

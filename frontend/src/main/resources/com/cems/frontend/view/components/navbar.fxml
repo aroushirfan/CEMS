@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.shape.Line?>
 
-<HBox fx:id="navBarHbox" alignment="CENTER_RIGHT" spacing="20.0" style="-fx-padding: 8 20;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controllers.components.NavbarController">
+<HBox fx:id="navBarHbox" alignment="CENTER_RIGHT" spacing="20.0" style="-fx-padding: 8 20;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cems.frontend.controller.components.NavbarController">
 
           <Line endY="30.0" stroke="#E0E0E0" strokeWidth="2.0" />
 
