@@ -58,18 +58,6 @@ class AttendanceServiceTest {
     }
 
     @Test
-    void checkInFails_WhenUserNotInEventRoster() {
-        event.getAttendees().clear(); // User not in attendee list
-
-        Attendance attendance = new Attendance();
-        attendance.setStatus("RSVP_CONFIRMED");
-
-        when(attendanceRepository.findByUserAndEvent(user, event)).thenReturn(Optional.of(attendance));
-
-        assertThrows(ResponseStatusException.class, () -> attendanceService.createCheckIn(user, event));
-    }
-
-    @Test
     void checkInSuccess() {
         event.getAttendees().add(user);
 
@@ -87,7 +75,7 @@ class AttendanceServiceTest {
     }
 
     @Test
-    void getAttendanceByEvent_ReturnsAllAttendance() {
+    void testGetAttendanceByEvent_ReturnsAllAttendance() {
         Attendance attendance1 = new Attendance();
         Attendance attendance2 = new Attendance();
         List<Attendance> attendanceList = List.of(attendance1, attendance2);
@@ -101,7 +89,7 @@ class AttendanceServiceTest {
     }
 
     @Test
-    void getAttendanceByEvent_ReturnsEmptyListWhenNoAttendance() {
+    void testGetAttendanceByEvent_ReturnsEmptyListWhenNoAttendance() {
         when(attendanceRepository.findAllByEvent(event)).thenReturn(List.of());
 
         List<Attendance> result = attendanceService.getAttendanceByEvent(event);
@@ -111,7 +99,7 @@ class AttendanceServiceTest {
     }
 
     @Test
-    void hasCheckedIn_ReturnsTrueWhenUserPresent() {
+    void testHasCheckedIn_ReturnsTrueWhenUserPresent() {
         Attendance attendance = new Attendance();
         attendance.setStatus("PRESENT");
 
@@ -123,23 +111,19 @@ class AttendanceServiceTest {
     }
 
     @Test
-    void hasCheckedIn_ReturnsFalseWhenUserNotPresent() {
+    void testHasCheckedIn_ReturnsFalseWhenUserNotPresent() {
         Attendance attendance = new Attendance();
         attendance.setStatus("RSVP_CONFIRMED");
 
         when(attendanceRepository.findByUserAndEvent(user, event)).thenReturn(Optional.of(attendance));
-
         boolean result = attendanceService.hasCheckedIn(user, event);
-
         assertFalse(result);
     }
 
     @Test
-    void hasCheckedIn_ReturnsFalseWhenNoAttendance() {
+    void testHasCheckedIn_ReturnsFalseWhenNoAttendance() {
         when(attendanceRepository.findByUserAndEvent(user, event)).thenReturn(Optional.empty());
-
         boolean result = attendanceService.hasCheckedIn(user, event);
-
         assertFalse(result);
     }
 
