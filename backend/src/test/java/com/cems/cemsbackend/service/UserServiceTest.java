@@ -48,6 +48,32 @@ class UserServiceTest {
     }
 
     @Test
+    void getAllUsers_ReturnsEmptyListWhenNoUsers() {
+        when(userRepository.findAll()).thenReturn(List.of());
+
+        List<UserDTO> result = userService.getAllUsers();
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void getAllUsers_ReturnsMultipleUsers() {
+        User user1 = new User();
+        user1.setId(UUID.randomUUID());
+        user1.setEmail("user1@mail.com");
+
+        User user2 = new User();
+        user2.setId(UUID.randomUUID());
+        user2.setEmail("user2@mail.com");
+
+        when(userRepository.findAll()).thenReturn(List.of(user1, user2));
+
+        List<UserDTO> result = userService.getAllUsers();
+
+        assertEquals(2, result.size());
+    }
+
+    @Test
     void getUserById_ReturnsDTO() {
         User user = new User();
         user.setId(id);
@@ -66,6 +92,14 @@ class UserServiceTest {
         when(userRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> userService.getUserById(id));
+    }
+
+    @Test
+    void getUserById_ThrowsWithCorrectMessage() {
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.getUserById(id));
+        assertEquals("User not found", exception.getMessage());
     }
 
     @Test
@@ -89,6 +123,14 @@ class UserServiceTest {
     }
 
     @Test
+    void getUserByEmail_ThrowsWithCorrectMessage() {
+        when(userRepository.getUserByEmail("missing@mail.com")).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.getUserByEmail("missing@mail.com"));
+        assertEquals("User not found", exception.getMessage());
+    }
+
+    @Test
     void updateAccessLevel_UpdatesUser() {
         User user = new User();
         user.setId(id);
@@ -99,6 +141,27 @@ class UserServiceTest {
         userService.updateAccessLevel(id, 2);
 
         assertEquals(2, user.getAccessLevel());
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    void updateAccessLevel_ThrowsWhenUserNotFound() {
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> userService.updateAccessLevel(id, 2));
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void updateAccessLevel_VerifiesSaveIsCalled() {
+        User user = new User();
+        user.setId(id);
+        user.setAccessLevel(1);
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        userService.updateAccessLevel(id, 3);
+
         verify(userRepository).save(user);
     }
 
@@ -120,9 +183,61 @@ class UserServiceTest {
     }
 
     @Test
+    void updateCurrentUser_ThrowsWhenUserNotFound() {
+        UserDTO dto = new UserDTO();
+        dto.setFirstName("New");
+
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> userService.updateCurrentUser(id, dto));
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
     void deleteUser_DeletesById() {
         userService.deleteUser(id);
 
         verify(userRepository).deleteById(id);
+    }
+
+    @Test
+    void deleteUser_CanBeCalledMultipleTimes() {
+        UUID id2 = UUID.randomUUID();
+
+        userService.deleteUser(id);
+        userService.deleteUser(id2);
+
+        verify(userRepository).deleteById(id);
+        verify(userRepository).deleteById(id2);
+    }
+
+    @Test
+    void updateAccessLevel_WithHighAccessLevel() {
+        User user = new User();
+        user.setId(id);
+        user.setAccessLevel(0);
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        userService.updateAccessLevel(id, 10);
+
+        assertEquals(10, user.getAccessLevel());
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    void updateCurrentUser_PreservesUserId() {
+        User user = new User();
+        user.setId(id);
+        user.setEmail("original@mail.com");
+
+        UserDTO dto = new UserDTO();
+        dto.setFirstName("Updated");
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        UserDTO result = userService.updateCurrentUser(id, dto);
+
+        assertEquals(id, result.getId());
     }
 }
