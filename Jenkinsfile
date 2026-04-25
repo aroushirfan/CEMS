@@ -53,6 +53,14 @@ pipeline {
                 sh 'mvn clean install -DskipTests'
             }
         }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQubeServer') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+
 
         stage('Test') {
             steps {
