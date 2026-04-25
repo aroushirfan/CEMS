@@ -1,5 +1,6 @@
 package com.cems.frontend.utils;
 
+import com.cems.frontend.services.AuthHandlingClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -43,7 +44,7 @@ public final class LocalHttpClientHelper {
    */
   public static HttpClient getClient() {
     if (httpClient == null) {
-      httpClient = HttpClient.newHttpClient();
+      httpClient = new AuthHandlingClient(HttpClient.newHttpClient());
     }
     return httpClient;
   }

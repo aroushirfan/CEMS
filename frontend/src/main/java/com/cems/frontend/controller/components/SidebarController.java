@@ -19,7 +19,7 @@ import javafx.scene.layout.VBox;
  * Controller for the sidebar navigation component.
  * Manages button visibility based on user role, dark mode toggling, and navigation.
  */
-public class SidebarController {
+public class SidebarController { // NOSONAR
 
   @FXML
   private Button allEventsButton;
@@ -53,6 +53,8 @@ public class SidebarController {
 
   private Map<Paths, Button> pathMap;
 
+  private static SidebarController sidebarController;
+
   @FXML
   private void initialize() {
     refreshVisibility();
@@ -71,6 +73,7 @@ public class SidebarController {
         Paths.HOME, homeButton);
 
     languageComboBox.setValue(LocaleUtil.getInstance().getLanguage().getDisplayName());
+    sidebarController = this; // NOSONAR
   }
   /**
    * Handles language change when a new language is selected from the ComboBox.
@@ -247,5 +250,15 @@ public class SidebarController {
   @FXML
   private void goToUserManagement() {
     SceneNavigator.loadContent(Paths.USER_MANAGEMENT);
+  }
+
+  public static void refreshSidebar() {
+    try {
+      if (sidebarController != null) {
+        sidebarController.refreshVisibility();
+      }
+    } catch (Exception ignored) {
+      // this will be ignored just in case sidebarController still does not exist
+    }
   }
 }

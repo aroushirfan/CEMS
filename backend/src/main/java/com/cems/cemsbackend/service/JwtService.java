@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class JwtService {
 
   private final SecretKey jwtSecret;
-  private final long accessKeyExpiration = 1000L * 60L * 60L * 24L * 3L;
+  private static final long ACCESS_KEY_EXPIRATION = 1000L * 60L * 60L * 24L * 3L;
 
   /**
    * Initializes the JwtService with a secret key.
@@ -42,7 +42,7 @@ public class JwtService {
    */
   public String generateToken(User user) {
     final var now = new Date();
-    final var expiryDate = new Date(now.getTime() + accessKeyExpiration);
+    final var expiryDate = new Date(now.getTime() + ACCESS_KEY_EXPIRATION);
     String role;
     if (user.getAccessLevel() == AccessLevel.ADMIN) {
       role = "ADMIN";

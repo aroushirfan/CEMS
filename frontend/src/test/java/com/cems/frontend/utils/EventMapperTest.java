@@ -67,7 +67,7 @@ class EventMapperTest {
                             LocalDate.of(2025, 12, 31).toEpochDay()
                     )
             );
-            var randomHour = random.nextInt(0, 25);
+            var randomHour = random.nextInt(0, 24);
             var randomMinute = random.nextInt(0, 60);
             var title = RandomString.generateRandomString(10);
             var description = RandomString.generateRandomString(10);
