@@ -10,6 +10,8 @@ class CemsBackendApplicationTests {
 
 	@Test
 	void contextLoads() {
+    // This test intentionally left empty.
+    // It verifies that the Spring application context loads successfully.
 	}
 
 }

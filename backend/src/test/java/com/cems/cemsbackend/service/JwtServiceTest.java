@@ -207,8 +207,6 @@ class JwtServiceTest {
     @Test
     void getRoleFromClaims_WhenRoleClaimMissing_ReturnsNull() {
         user.setAccessLevel(AccessLevel.USER);
-        String token = jwtService.generateToken(user);
-        Claims claims = jwtService.parseAllClaims(token);
         
         // Create a claims object without the role claim
         Claims claimsWithoutRole = Jwts.claims().subject(userId.toString()).build();
