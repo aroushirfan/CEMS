@@ -56,11 +56,7 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.12</version>
                 <configuration>
-                    <excludes>
-                        <exclude>**/com/cems/frontend/controller/**</exclude>
-                        <exclude>**/com/cems/shared/model/**</exclude>
-                        <exclude>**/com/cems/frontend/services/AuthHandlingClient.java</exclude>
-                    </excludes>
+                    <excludes>**/controller/**</excludes>
                 </configuration>
                 <executions>
                     <!-- Prepare the agent before tests -->
