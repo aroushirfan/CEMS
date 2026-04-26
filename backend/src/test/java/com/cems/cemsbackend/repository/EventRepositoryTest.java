@@ -16,10 +16,13 @@ public class EventRepositoryTest {
 
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private AttendanceRepository attendanceRepository;
 
     @Test
     public void should_find_no_events_if_repository_is_empty() {
         // Clear anything that might be there (just in case)
+        attendanceRepository.deleteAll();
         eventRepository.deleteAll();
 
         List<Event> events = eventRepository.findAll();
