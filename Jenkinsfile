@@ -56,14 +56,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQubeServer') {
-                    sh '''
-                                   DB_USERNAME="${DB_USERNAME}" \
-                                   DB_PASSWORD="${DB_PASSWORD}" \
-                                   DB_URL="${DB_URL}" \
-                                   PORT="${PORT}" \
-                                   JWT_SECRET="${JWT_SECRET}" \
-                                   mvn clean verify sonar:sonar
-                               '''
+                    sh 'mvn clean verify sonar:sonar'
                 }
             }
         }
@@ -71,14 +64,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh '''
-                    DB_USERNAME="${DB_USERNAME}" \
-                    DB_PASSWORD="${DB_PASSWORD}" \
-                    DB_URL="${DB_URL}" \
-                    PORT="${PORT}" \
-                    JWT_SECRET="${JWT_SECRET}" \
-                    mvn test
-                '''
+                sh 'mvn test'
 
             }
         }
