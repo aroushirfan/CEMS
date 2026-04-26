@@ -56,7 +56,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQubeServer') {
-                    sh 'mvn clean verify sonar:sonar -Dproject.settings=sonar-project.properties'
+                    sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=cems_root -Dproject.settings=sonar-project.properties'
                 }
             }
         }
