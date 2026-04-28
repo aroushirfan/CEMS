@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
@@ -59,13 +57,16 @@ public class AttendanceController {
    * @return a success message upon successful check-in.
    */
   @PostMapping("/event/{eventId}/check-in")
-  public ResponseEntity<?> checkIn(@PathVariable UUID eventId) {
+  public ResponseEntity<Map<String, String>> checkIn(@PathVariable UUID eventId) {
     // Identity: Securely pull the UserID from the JWT
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null || auth.getPrincipal() == null) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not authenticated");
     }
     UUID userId = (UUID) auth.getPrincipal();
+    if (userId == null) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "userId is null");
+    }
     User user = userRepository.findById(userId).orElseThrow();
     Event event = eventRepository.findById(eventId).orElseThrow();
 
@@ -91,7 +92,7 @@ public class AttendanceController {
     List<AttendanceResponseDTO> response = attendanceService.getAttendanceByEvent(event)
         .stream()
         .map(AttendanceMapper::toDto)
-        .collect(Collectors.toList());
+        .toList();
 
     return ResponseEntity.ok(response);
   }
@@ -103,7 +104,7 @@ public class AttendanceController {
    * @return a map containing the check-in status.
    */
   @GetMapping("/event/{eventId}/checked-in")
-  public ResponseEntity<?> hasCheckedIn(
+  public ResponseEntity<Map<String, Boolean>> hasCheckedIn(
       @PathVariable UUID eventId) {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null) {
