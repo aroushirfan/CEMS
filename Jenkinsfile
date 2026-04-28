@@ -83,7 +83,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQubeServer') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=cems_root -Dproject.settings=sonar-project.properties'
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=cems_root'
                 }
             }
         }

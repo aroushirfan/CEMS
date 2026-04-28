@@ -15,6 +15,18 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sonar.projectKey>cems_root</sonar.projectKey>
+        <sonar.projectName>cems_root</sonar.projectName>
+        <sonar.projectVersion>1.0</sonar.projectVersion>
+
+        <sonar.coverage.exclusions>
+            **/controller/**,
+            **/shared/model/**,
+            **/frontend/services/AuthHandlingClient.java
+        </sonar.coverage.exclusions>
+        <sonar.host.url>
+            http://localhost:9000
+        </sonar.host.url>
     </properties>
 
     <modules>
