@@ -41,7 +41,7 @@
 | Aroush Irfan (Scrum Master)                    | Test plan creation, unit testing (FE controllers & BE views), heuristic evaluation, UAT execution, Jenkins update                                                    | 22               | Submitted      |
 | Ayokunle Ogunbiyi                              |                                                                                                                                                                      |                  | Submitted      |
 | Jiya Jameela Kanhirathan Poyil                 | unit testing ( FE utils & BE mappers and helpers), heuristic evaluation, UAT execution, SonarQube Static Analysis                                                    | 10               | Submitted      |
-| Puntawat Subhamani                             |                                                                                                                                                                      |                  | Submitted      |
+| Puntawat Subhamani                             |     Move logic out of controllers and test, ER/Relational Schema diagram/Heuristic Evaluation, User Acceptance Testing, Fix Security Hotspots and bugs on controllers                                                                                                                                                                 |    19               | Submitted      |
 | Sailesh Karki                                  | User Acceptance Testing (UAT), Front-end & Back-end Debugging, and added Tests, SonarQube Static Analysis, Checkstyle Code Refactoring Jenkins CI/CD Pipeline Setup. | 11               | Submitted      |
 
 
