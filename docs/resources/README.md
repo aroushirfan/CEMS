@@ -26,11 +26,11 @@
 
 ### ER Diagram
 
-![ER Diagram](./ErDiagram.png)
+![ER Diagram](./ErDiagramv2.png)
 
 ### Relational Schema
 
-![Relational Schema](./RelationalDataBase.png)
+![Relational Schema](./RelationalDatabasev2.png.png)
 
 ### Activity Diagram
 
