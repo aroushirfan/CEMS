@@ -27,6 +27,7 @@ public class SecurityConfig {
    * @throws Exception if an error occurs during configuration
    */
   @Bean
+  @SuppressWarnings("java:S4502") // suppress csrf.disabled() warning
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthFilter authFilter) {
     return httpSecurity
         // CSRF disabled because this is a stateless JWT-based API
