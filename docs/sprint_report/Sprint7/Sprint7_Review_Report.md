@@ -36,12 +36,12 @@
 
 ## 5. Contributions
 
-| Team Member Name                               | Assigned Tasks                                                                                                    | Time Spent (hrs) | In‑class Tasks |
-|------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|------------------|----------------|
-| Aroush Irfan (Scrum Master)                    | Test plan creation, unit testing (FE controllers & BE views), heuristic evaluation, UAT execution, Jenkins update | 22                | Submitted      |
-| Ayokunle Ogunbiyi                              |                                                                                                                   |                  | Submitted      |
-| Jiya Jameela Kanhirathan Poyil                 |                                                                                                                   |                  | Submitted      |
-| Puntawat Subhamani                             |                                                                                                                   |                  | Submitted      |
-| Sailesh Karki                                  |                                                                                                                   |                  | Submitted      |
+| Team Member Name                               | Assigned Tasks                                                                                                                                                       | Time Spent (hrs) | In‑class Tasks |
+|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------|----------------|
+| Aroush Irfan (Scrum Master)                    | Test plan creation, unit testing (FE controllers & BE views), heuristic evaluation, UAT execution, Jenkins update                                                    | 22               | Submitted      |
+| Ayokunle Ogunbiyi                              |                                                                                                                                                                      |                  | Submitted      |
+| Jiya Jameela Kanhirathan Poyil                 | unit testing ( FE utils & BE mappers and helpers), heuristic evaluation, UAT execution, SonarQube Static Analysis                                                    | 10               | Submitted      |
+| Puntawat Subhamani                             |                                                                                                                                                                      |                  | Submitted      |
+| Sailesh Karki                                  | User Acceptance Testing (UAT), Front-end & Back-end Debugging, and added Tests, SonarQube Static Analysis, Checkstyle Code Refactoring Jenkins CI/CD Pipeline Setup. | 11               | Submitted      |
 
 
