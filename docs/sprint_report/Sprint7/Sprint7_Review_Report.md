@@ -36,8 +36,6 @@
 
 ## 5. Contributions
 
-## Contributions
-
 | Team Member Name                               | Assigned Tasks                                                                                                    | Time Spent (hrs) | In‑class Tasks |
 |------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|------------------|----------------|
 | Aroush Irfan (Scrum Master)                    | Test plan creation, unit testing (FE controllers & BE views), heuristic evaluation, UAT execution, Jenkins update | 22                | Submitted      |
