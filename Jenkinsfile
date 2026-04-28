@@ -53,13 +53,6 @@ pipeline {
                 sh 'mvn clean install -DskipTests'
             }
         }
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQubeServer') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=cems_root -Dproject.settings=sonar-project.properties'
-                }
-            }
-        }
 
 
         stage('Test') {
@@ -86,6 +79,44 @@ pipeline {
                 jacoco()
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQubeServer') {
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=cems_root -Dproject.settings=sonar-project.properties'
+                }
+            }
+        }
+
+//        stage('SonarQube Quality Gate') {
+//            steps {
+//                timeout(time: 5, unit: 'MINUTES') {
+//                    script {
+//                        // Retry every 30 seconds for up to 5 minutes
+//                        def maxRetries = 10
+//                        def currentRetry = 0
+//
+//                        while (currentRetry < maxRetries) {
+//                            def qualityGateResult = waitForQualityGate abortPipeline: false
+//                            if (qualityGateResult.status == 'OK') {
+//                                echo "Quality Gate passed!"
+//                                break  // Exit the loop if the quality gate is passed
+//                            } else if (qualityGateResult.status == 'ERROR') {
+//                                error "Quality Gate failed!"
+//                            } else {
+//                                echo "Quality Gate is still PENDING. Retrying..."
+//                                currentRetry++
+//                                sleep(time: 30, unit: 'SECONDS')  // Wait for 30 seconds before retrying
+//                            }
+//                        }
+//
+//                        if (currentRetry == maxRetries) {
+//                            error "Quality Gate is still PENDING after multiple retries."
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
        stage('Build Frontend Docker Image') {
            steps {
