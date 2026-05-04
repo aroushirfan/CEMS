@@ -24,6 +24,14 @@
 
 ### **2.4 Sprint 4: CI/CD Integration and Final Delivery**
 
+### **2.5 Sprint 5: Localization Planning and implementation**
+
+### **2.6 Sprint 6: Database Localization, Code Review, Code Clean-Up, and Acceptance Testing**
+
+### **2.7 Sprint 7: Testing, Quality Assurance, and Final Validation Report**
+
+### **2.8 Sprint 8: Documentation**
+
 ## **3. System Architecture and Design**
 
 ### **3.1 High-Level Software Architecture (JavaFX & Spring Boot)**
