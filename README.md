@@ -64,7 +64,7 @@
 
 ### **6.3 Shared Library and DTO Management**
 
-## **7. Deployment and Installation Guide**
+### **7. Deployment , Installation and How to Run the Project Guide**
 
 ### **7.1 Prerequisites and Technical Dependencies**
 
@@ -176,6 +176,14 @@ organized, and engaging.
 
 ### **1.4 Scrum Team Composition and Agile Roles**
 
+The project utilized the Scrum framework to manage the complexity of building a localized Campus Event Management System (CEMS). This iterative approach allowed the team to adapt to changing requirements from the Product Owner (Lecturer) and continuously integrate quality assurance tools.
+
+- Sprint Length: Each sprint lasted 2 weeks, totaling 8 sprints .
+- Ceremonies: The team held regular Sprint Planning, daily stand-ups, and mandatory Sprint Reviews via Zoom to present deliverables.
+- To support the Agile process, the team integrated industry-standard tools:
+  - Project Management: Trello was used for the Kanban board and backlog tracking.
+  - Version Control: GitHub served as the central hub for code and the docs/ repository.
+
 | Sprint       | Scrum Master           | Frontend Team                                                                                        | Backend Team                                                                        |
 |:-------------|:-----------------------|:-----------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------|
 | **Sprint 1** | Puntawat Subhamani     | Jiya Kanhirathan Poyil , Sailesh Karki                                                               | Aroush Irfan, Puntawat Subhamani                                                    |
@@ -186,16 +194,9 @@ organized, and engaging.
 | **Sprint 6** | Puntawat Subhamani     | Aroush Irfan, Jiya Kanhirathan Poyil,Puntawat Subhamani                                              | Ayo Williams, Sailesh Karki,Puntawat Subhamani                                      |
 | **Sprint 7** | Puntawat Subhamani     | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh                  | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh |
 | **Sprint 8** | Jiya Kanhirathan Poyil | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh                  | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh |
+
 ## **2. Project Lifecycle and Iterative Development**
-
-This chapter documents the step-by-step evolution of the CEMS project through four distinct development cycles, following the course's DevOps-oriented workflow.
-
-<span style="color: red;">
-Explain how the project was organized.
-Include:
-• Development methodology (e.g., Agile / Scrum)
-• Sprint length (2 weeks)
-• Overview of all 8 sprints with goals</span>
+This chapter documents the step-by-step evolution of the CEMS project through eight distinct development cycles, following the course's DevOps-oriented workflow.
 
 ### **2.1 Sprint 1: Planning and DevOps Foundations**
 * [Sprint 1 Reports Folder](./docs/sprint_report/Sprint1/)  
@@ -421,14 +422,28 @@ These files support containerization, CI/CD, environment configuration, and proj
 - Transparency: These reports offer the development team visual feedback on untested code paths, allowing for targeted testing in subsequent sprints.
 
 
-<span style="color: red;">
- Testing Instructions
-    Explain how testing can be executed.
-    Include:
-    • How to run unit tests
-    • Test coverage access
-    • Performance testing instructions (If you have done)
-</span>
+### **5.4 Testing Instructions**
+
+This project has a test-driven mindset, ensuring that core logic in both the Spring Boot backend and JavaFX frontend is verified before deployment.
+
+### **5.4.1 Running Automated Unit Tests**
+The project utilizes **JUnit 5** and **Mockito**. You can run tests directly from the terminal or within an IDE like IntelliJ IDEA.
+
+* **Via Terminal (Recommended for CI/CD):**
+  Navigate to the project root and execute:
+    ```bash
+    mvn clean test
+    ```
+* **Via IDE (IntelliJ/Eclipse):**
+  Right-click the `src/test/java` folder in either the `backend` or `frontend` module and select **'Run All Tests'**.
+
+### **5.4.2 Accessing Test Coverage Reports (JaCoCo)**
+We use **JaCoCo** to visualize which lines of code are covered by our tests.
+
+1.  Run the tests using the Maven command: `mvn clean test`.
+2.  Navigate to the following directory: `backend/target/site/jacoco/index.html`
+3.  Open `index.html` in your browser.
+4.  **Quality Gate:** Our project aims for a minimum of **80% line coverage** on all Service-layer components.
 
 ## **6. Technical Implementation Details**
 
@@ -473,7 +488,7 @@ These files support containerization, CI/CD, environment configuration, and proj
 
 - Mapping Logic: Dedicated mappers in both modules handle the conversion between these shared DTOs and internal domain or UI models.
 
-## **7. Deployment and Installation Guide**
+## **7. Deployment , Installation and How to Run the Project Guide**
 
 This section outlines the steps required to set up the development environment and execute the CEMS application locally.
 
@@ -497,22 +512,30 @@ This section outlines the steps required to set up the development environment a
 
 ### **7.3 Build and Local Execution Instructions**
 
--Repository Setup: Clone the project repository and navigate to the project-cems root directory.
+- Repository Setup: Clone the project repository and navigate to the project-cems root directory.
 
 - Project Compilation: Run mvn clean install to build the shared, backend, and frontend modules and verify that all unit tests pass.
 
-- Starting the Backend: Navigate to the backend/ directory and execute mvn spring-boot:run to start the REST API on the default port.
+- Starting the Backend: Navigate to the `backend/` directory and execute mvn spring-boot:run to start the REST API on the default port.
+    
+    ```bash
+    cd backend
+    mvn spring-boot:run
+    ```
 
-- Launching the Frontend: Navigate to the frontend/ directory and run the MainApp class to open the JavaFX user interface.
+- Launching the Frontend: Navigate to the `frontend/` directory and run the MainApp class to open the JavaFX user interface.
 
+    ```bash
+    cd frontend
+    mvn javafx:run
+    ```
 - Docker Deployment (Optional): Alternatively, use the Dockerfile to build and run the backend as a containerized service.
+- 
+    ```bash
+  docker-compose up --build -d
+  ```
 
-<span style="color:red">
-missing
-- Docker commands
-- Kubernetes commands
-- How to access the application (URL, port, credential
-</span>
+
 
 ## **8. Localization and Multi-Language Support**
 
