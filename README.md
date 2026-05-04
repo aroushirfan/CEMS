@@ -100,11 +100,11 @@
 
 ## **9. Project Conclusion**
 
-## **9.1 Milestone Summary and Key Achievements**
+### **9.1 Milestone Summary and Key Achievements**
 
 ### **9.2 Future Enhancements and Scalability Roadmap**
 
-### **10. Authors**
+## **10. Authors**
 
 
 ## **1. Executive Summary**
