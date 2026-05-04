@@ -4,8 +4,7 @@
 
 ### **Table of Contents**
 
-## **1. Executive Summary**
-
+## 1. Executive Summary
 
 ### **1.1 Project Overview**
 ### **1.2 Project Vision and Technologies Used**
@@ -102,8 +101,6 @@
 
 ### **8.7 Troubleshooting Localization Issues**
 
-
-
 ## **9. Project Conclusion**
 
 ### **9.1 Milestone Summary and Key Achievements**
@@ -112,6 +109,12 @@
 
 ## **10. Authors**
 
+
+
+
+
+
+--- 
 
 ## **1. Executive Summary**
 
