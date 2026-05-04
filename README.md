@@ -6,11 +6,13 @@
 
 ## **1. Executive Summary**
 
-### **1.1 Project Vision and Problem Statement**
 
-### **1.2 Core Objectives and System Scope**
+### **1.1 Project Overview**
+### **1.2 Project Vision and Technologies Used**
 
-### **1.3 Scrum Team Composition and Agile Roles**
+### **1.3 Core Objectives and System Scope**
+
+### **1.4 Scrum Team Composition and Agile Roles**
 
 ## **2. Project Lifecycle and Iterative Development**
 
@@ -33,6 +35,8 @@
 #### **3.3.1 Role-Based Access Control (RBAC) in JavaFX**
 
 ### **3.4 Security Framework (JWT and Stateless Authentication)**
+
+### **3.5 Repository Structure**
 
 ## **4. DevOps and Automated Workflow**
 
@@ -84,19 +88,85 @@
 
 ### **8.7 Troubleshooting Localization Issues**
 
+
+
 ## **9. Project Conclusion**
 
 ## **9.1 Milestone Summary and Key Achievements**
 
 ### **9.2 Future Enhancements and Scalability Roadmap**
 
+### **10. Authors**
+
+
 ## **1. Executive Summary**
 
-### **1.1 Project Vision and Problem Statement**
-
+### **1.1 Project Overview**
 Students, faculty, and event organizers face difficulties keeping track of campus events due to scattered communication channels. Existing solutions lack a unified platform for event discovery, RSVP, and attendance tracking. Our product provides a simple campus management system where users can discover events, RSVP, track attendance, and receive notifications—streamlining participation and improving engagement.
+We aim to help students and faculty to actively participate in campus life and
+improve overall event management. Our vision is to create a user-friendly and
+unified platform that improves campus engagement by making events more
+accessible, organized, and impactful.
 
-### **1.2 Core Objectives and System Scope**
+#### **Target Audience**
+Our product is designed for students, teachers, and campus event organizers who
+needs a simple system to view and register for the upcoming academic and
+extracurricular events, and track attendance.
+
+#### **Technologies Used**
+- Frontend: JavaFX
+  Chosen due to prior familiarity and ease of building desktop user interfaces.
+-  Backend: Spring Boot
+   Selected as the primary backend framework because of existing experience and its ability to simplify application development and deployment.
+- Database: MariaDB
+  Used as a relational database solution, aligning with our familiarity and the need for structured data management.
+- **Additional Tools & Frameworks:**
+- Jenkins: Continuous integration and automated builds
+- Docker: Containerization for consistent environments
+- JUnit: Unit testing for code quality
+- JWT (JSON Web Token): Secure authentication and authorization
+- Trello: Project management and task tracking, used to organize development workflow and team collaboration
+
+#### **Overall Duration** 
+8 sprints (2 weeks each), with the final sprint (Sprint 8) lasting 1 week.
+
+
+### **1.2 Project Vision and Technologies Used**
+
+#### **Product Vision**
+Students and faculty often struggle to stay up to date with campus events due to
+fragmented communication channels such as emails, notice boards, and social media.
+Existing solutions lack a unified platform for event discovery, RSVP management,
+and attendance tracking, leading to missed events and low participation.
+
+#### **Value Proposition**
+Our platform provides a centralized campus event management system where users
+can discover events, RSVP, track attendance, and receive notifications. This improves
+event visibility, ensures timely reminders, and reduces missed opportunities.
+
+#### **Vision Statement**
+Our goal is to enable students and faculty to actively participate in campus life by
+providing a user-friendly, unified platform that makes events more accessible,
+organized, and engaging.
+
+#### **Key Features and Functionality**
+- **Event Listing:** Display upcoming campus events such as workshops, seminars, and activities.
+- **RSVP and Participation:** Allow users to RSVP and track attendance status.
+- **Notifications and Reminders:** Send timely updates and reminders to users.
+- **Event Management:** Enable organizers to create, update, and manage events.
+
+#### **Goals and Objectives**
+- Achieve approximately 40% user adoption within one semester.
+- Reach a user satisfaction score of 9.5/10 or higher.
+- Enable campus-wide usage within one academic year.
+
+#### **Definition of Success**
+- Users can easily discover and register for events.
+- Organizers can efficiently manage event details and participants.
+- The system reliably sends notifications and tracks attendance.
+- Overall engagement in campus events shows measurable improvement.
+
+### **1.3 Core Objectives and System Scope**
 
 - Unified Discovery: Centralizing all university activities into a single interface.
 
@@ -104,49 +174,93 @@ Students, faculty, and event organizers face difficulties keeping track of campu
 
 - Secure Interaction: Ensuring user data and event RSVPs are protected via modern authentication.
 
-### **1.3 Scrum Team Composition and Agile Roles**
+### **1.4 Scrum Team Composition and Agile Roles**
 
-### **1.3 Scrum Team Composition and Agile Roles**
-
-| Sprint       | Scrum Master           | Frontend Team                                                                       | Backend Team                          |
-| :----------- | :--------------------- | :---------------------------------------------------------------------------------- | :------------------------------------ |
-| **Sprint 1** | Puntawat Subhamani     | Jiya Kanhirathan Poyil , Sailesh Karki                                              | Aroush Irfan, Puntawat Subhamani      |
-| **Sprint 2** | Aroush Irfan           | Jiya Kanhirathan Poyil , Sailesh Karki                                              | Aroush Irfan, Puntawat Subhamani      |
-| **Sprint 3** | Jiya Kanhirathan Poyil | Aroush Irfan, Puntawat Subhamani, Ayo Williams                                      | Jiya Kanhirathan Poyil, Sailesh Karki |
-| **Sprint 4** | Sailesh Karki          | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh | Ayo Williams, Sailesh                 |
-
+| Sprint       | Scrum Master           | Frontend Team                                                                                        | Backend Team                                                                        |
+|:-------------|:-----------------------|:-----------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------|
+| **Sprint 1** | Puntawat Subhamani     | Jiya Kanhirathan Poyil , Sailesh Karki                                                               | Aroush Irfan, Puntawat Subhamani                                                    |
+| **Sprint 2** | Aroush Irfan           | Jiya Kanhirathan Poyil , Sailesh Karki                                                               | Aroush Irfan, Puntawat Subhamani                                                    |
+| **Sprint 3** | Jiya Kanhirathan Poyil | Aroush Irfan, Puntawat Subhamani, Ayo Williams                                                       | Jiya Kanhirathan Poyil, Sailesh Karki                                               |
+| **Sprint 4** | Sailesh Karki          | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh                  | Ayo Williams, Sailesh                                                               |
+| **Sprint 5** | Ayo Williams           | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh                  | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh |
+| **Sprint 6** | Puntawat Subhamani     | Aroush Irfan, Jiya Kanhirathan Poyil,Puntawat Subhamani                                              | Ayo Williams, Sailesh Karki,Puntawat Subhamani                                      |
+| **Sprint 7** | Puntawat Subhamani     | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh                  | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh |
+| **Sprint 8** | Jiya Kanhirathan Poyil | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh                  | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh |
 ## **2. Project Lifecycle and Iterative Development**
 
 This chapter documents the step-by-step evolution of the CEMS project through four distinct development cycles, following the course's DevOps-oriented workflow.
 
+<span style="color: red;">
+Explain how the project was organized.
+Include:
+• Development methodology (e.g., Agile / Scrum)
+• Sprint length (2 weeks)
+• Overview of all 8 sprints with goals</span>
+
 ### **2.1 Sprint 1: Planning and DevOps Foundations**
+* [Sprint 1 Reports Folder](./docs/sprint_report/Sprint1/)  
 
-Objective: Establish the collaborative environment and project baseline.
-
+- Objective: Establish the collaborative environment and project baseline.
 - Activities: Initialized the GitHub repository and configured the Trello board for task tracking.
 - Outcome: Defined the core Scrum roles and completed the Week 1 Software Engineering basics assignment.
 
 ### **2.2 Sprint 2: Dependency Management and Core Implementation**
+* [Sprint 2 Reports Folder](./docs/sprint_report/Sprint2/)
 
 - Objective: Build the functional backbone of the system.
 - Activities: Configured Maven for multi-module dependency management (Backend, Frontend, Shared) and began REST API development.
 - Outcome: Successful implementation of the initial database schema and connection logic.
 
 ### **2.3 Sprint 3: Quality Assurance and Automated Testing**
+* [Sprint 3 Reports Folder](./docs/sprint_report/Sprint3/)
 
 - Objective: Ensure code reliability and system stability.
 - Activities: Developed unit tests for controllers and services, including AttendanceControllerTest and AuthServiceTest.
 - Outcome: Integrated JaCoCo for code coverage reporting and achieved initial CI pipeline milestones.
 
 ### **2.4 Sprint 4: CI/CD Integration and Final Delivery**
+* [Sprint 4 Reports Folder](./docs/sprint_report/Sprint4/)
 
 - Objective: Automate the deployment lifecycle and finalize the product.
 - Activities: Configured the Jenkinsfile for automated build/test stages and created the Dockerfile for containerized execution.
 - Outcome: Successful end-to-end integration of the RSVP and Attendance features, culminating in the final project presentation.
 
+### **2.5 Sprint 5: Localization Planning and implementation**
+* [Sprint 5 Reports Folder](./docs/sprint_report/Sprint5/)
+
+- Objective: Prepare the application for full multilingual support by externalizing all static UI text and implementing dynamic language switching for both Latin and non-Latin scripts.
+- Activities:Identified and documented all hardcoded user-facing strings (labels, buttons, alerts, and table headers) and moved them into per-page resource bundles. 
+    - Integrated a functional language selector in the JavaFX sidebar that triggers a runtime UI refresh.
+    - Implemented localization for two non-Latin languages: Thai (requiring custom font CSS support) and Urdu (requiring Right-to-Left (RTL) layout verification). 
+    - Added locale-aware formatting for dates, times, and numbers to ensure regional consistency.
+- Outcome: Successfully demonstrated a localized GUI that dynamically updates between English, Thai, and Urdu. The layout correctly adapts to different script orientations (LTR/RTL), and all localization workflow steps were documented in the README for future scalability.
+
+### **2.6 Sprint 6: Database Localization, Code Review, Code Clean-Up, and Acceptance Testing**
+* [Sprint 6 Reports Folder](./docs/sprint_report/Sprint6/)
+
+- Objective: Localize data persistence and resolve technical debt.
+- Activities: Created event_translation table for localized content; migrated database to utf8mb4; performed SonarQube analysis to fix 16 major bugs and 75 code smells.
+- Outcome: Secured persistence for multilingual data and achieved a zero-warning build after a full backend/frontend refactor.
+
+### **2.7 Sprint 7: Testing, Quality Assurance, and Final Validation Report**
+* [Sprint 7 Reports Folder](./docs/sprint_report/Sprint7/)
+
+- Objective: Validate system functionality, usability, and stability through comprehensive testing and automated quality gates.
+- Activities: Conducted final unit and integration testing reaching 82% code coverage.
+  - Integrated Jenkins and SonarQube to resolve 16 major concurrency bugs and security hotspots.
+  - Performed Heuristic Evaluation (Nielsen’s 10 Rules) and User Acceptance Testing (UAT) for all the user stories.
+- Outcome: Confirmed the product is production-ready, fully localized, and compliant with the initial requirements defined by the Product Owner.
+
+### **2.8 Sprint 8: Documentation**
+* [Sprint 8 Reports Folder](./docs/sprint_report/Sprint8/)
+
+- Objective: Consolidate all project artifacts from the 16-week development cycle into a professional final report, presentation, and repository.
+- Activities: Updated all sprint reports (S1–S7) and GitHub README and Docs folder.
+- Outcome: A fully documented, reproducible project repository with an "A" grade quality baseline .
+
 ## **3. System Architecture and Design**
 
-![system-architecture.png](diagrams/system-architecture.png)
+- [system-architecture.png](./docs/resources/system-architecture.png)
 
 ### **3.1 High-Level Software Architecture (JavaFX & Spring Boot)**
 
@@ -162,17 +276,17 @@ Objective: Establish the collaborative environment and project baseline.
 
 - Schema Management: The database handles complex relationships, such as event-user associations, using optimized table structures.
 
-![RelationalDataBase.png](diagrams/RelationalDataBase.png)
+    [RelationalDataBase.png](./docs/resources/RelationalDataBase.png)
 
 - Visual Reference: For complete table mappings and foreign key relationships, refer to diagrams/ErDiagram.png.
 
-![ErDiagram.png](diagrams/ErDiagram.png)
+    [ErDiagram.png](./docs/resources/ErDiagram.png)
 
-### **3.3 UI/UX Design Specifications (Figma Wireframes**
+### **3.3 UI/UX Design Specifications (Figma Wireframes)**
 
--   - **User Flow**: The following diagram illustrates the interaction between Students, Faculty, and the System.
+- **User Flow**: The following diagram illustrates the interaction between Students, Faculty, and the System.
 
-- **![usecase.png](diagrams/usecase.png)**
+    [usecase.png](./docs/resources/usecase.png)
 
 - User Experience: The UI is designed for intuitive event discovery, RSVP management, and attendance tracking.
 
@@ -180,7 +294,7 @@ Objective: Establish the collaborative environment and project baseline.
 
 - Visual Reference: High-fidelity design mockups are located in diagrams/figma.png.
 
-![figma.png](diagrams/figma.png)
+    [figma.png](./docs/resources/figma.png)
 
 #### **3.3.1 Role-Based Access Control (RBAC) in JavaFX**
 
@@ -195,6 +309,56 @@ The CEMS application uses **State-Based View Switching** to render the correct d
 - Authentication: JWT (JSON Web Tokens) are implemented to provide secure, tamper-proof user sessions.
 
 - Stateless Security: The backend utilizes an AuthFilter and JwtService to protect API endpoints and prevent unauthorized tampering with user tokens.
+
+### **3.5 Repository Structure**
+The CEMS repository is organized into modular components to separate backend logic, frontend UI, shared data models, documentation, and deployment resources.
+
+#### /backend
+Spring Boot backend service.  
+Contains:
+- Controllers, services, repositories, models, mappers, helpers, and security configuration
+- Application resources (YAML configs, SQL, message bundles)
+- Backend test suite under `src/test/java/com.cems.cemsbackend`
+- Maven module configuration (`pom.xml`)
+
+#### /frontend
+JavaFX desktop client.  
+Contains:
+- UI controllers, views, services, models, and utilities
+- Java module configuration (`module-info.java`)
+- Frontend test suite under `src/test/java/com.cems.frontend`
+- Maven module configuration (`pom.xml`)
+
+#### /shared
+Shared DTO module used by both backend and frontend.  
+Contains:
+- DTO classes (`UserDTO`, `EventDto`, `AttendanceDto`, `AuthDTO`)
+- Module definition (`module-info.java`)
+- Maven configuration
+
+#### /docs
+Project documentation and design artifacts.  
+Includes:
+- Architecture diagrams
+- ER diagrams
+- Sequence and activity diagrams
+- Figma UI designs
+- Sprint planning and review reports
+- README assets and supporting markdown files
+
+#### Root-Level Deployment & Configuration Files
+These files support containerization, CI/CD, environment configuration, and project setup.
+
+- `docker-compose.yml` — orchestrates database, backend, and frontend containers
+- `Dockerfile` — multi‑stage build for backend and frontend images
+- `Jenkinsfile` — CI/CD pipeline definition
+- `.env.example` — environment variable template
+- `sonar-project.properties` — SonarQube configuration
+- `pom.xml` — root Maven aggregator for the multi-module project
+- `.gitignore`, `.gitattributes` — version control configuration
+- `AuthFlow.md` — authentication flow documentation
+- `package-lock.json` — dependency lock file (for documentation tooling if used)
+
 
 ## **4. DevOps and Automated Workflow**
 
@@ -255,6 +419,16 @@ The CEMS application uses **State-Based View Switching** to render the correct d
 - Automated Quality Reports: Code coverage is automatically calculated during the Jenkins pipeline execution, ensuring that quality standards are met before any build is finalized.
 
 - Transparency: These reports offer the development team visual feedback on untested code paths, allowing for targeted testing in subsequent sprints.
+
+
+<span style="color: red;">
+ Testing Instructions
+    Explain how testing can be executed.
+    Include:
+    • How to run unit tests
+    • Test coverage access
+    • Performance testing instructions (If you have done)
+</span>
 
 ## **6. Technical Implementation Details**
 
@@ -332,6 +506,13 @@ This section outlines the steps required to set up the development environment a
 - Launching the Frontend: Navigate to the frontend/ directory and run the MainApp class to open the JavaFX user interface.
 
 - Docker Deployment (Optional): Alternatively, use the Dockerfile to build and run the backend as a containerized service.
+
+<span style="color:red">
+missing
+- Docker commands
+- Kubernetes commands
+- How to access the application (URL, port, credential
+</span>
 
 ## **8. Localization and Multi-Language Support**
 
@@ -631,3 +812,18 @@ This final chapter summarizes the results of the CEMS project and outlines the s
 - Cloud Infrastructure: Transitioning from a local Docker environment to a cloud provider (e.g., AWS or Azure) to support a larger, campus-wide user base.
 
 - Advanced Analytics: Developing a dashboard for organizers to analyze attendance trends and student engagement levels across different event categories.
+
+
+### **10. Authors**
+
+## **15. Authors**
+
+- **Puntawat Subhamani**
+- **Aroush Irfan** 
+- **Jiya Kanhirathan Poyil** 
+- **Sailesh Karki** 
+- **Ayo Williams** 
+
+### **Course Information**
+- Software Engineering Project 1 (TX00EY27-3011) – Autumn Semester
+- Software Engineering Project 2 (TX00EY30-3011) – Spring Semester
