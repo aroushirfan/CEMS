@@ -9,12 +9,14 @@
   - [Activity Diagram](#activity-diagram)
   - [Class Diagram](#class-diagram)
   - [Sequence Diagram](#sequence-diagram)
+  - [Deployment Diagram](#deployment-diagram)
+  
 
 ## 1. Figma
 
 ![Figma](./figma.png)
 
-## 2. Diagrams
+## 3. Diagrams
 
 ### Use Case Diagram
 
@@ -43,3 +45,7 @@
 ### Sequence Diagram
 
 ![RSVP Sequence Diagram](./sequenceDiagram.png)
+
+### Deployment Diagram
+![Production Deployment Diagram](./DeploymentDiagram.png)
+

@@ -198,109 +198,69 @@ Include:
 • Overview of all 8 sprints with goals</span>
 
 ### **2.1 Sprint 1: Planning and DevOps Foundations**
+* [Sprint 1 Reports Folder](./docs/sprint_report/Sprint1/)  
 
-Objective: Establish the collaborative environment and project baseline.
-
+- Objective: Establish the collaborative environment and project baseline.
 - Activities: Initialized the GitHub repository and configured the Trello board for task tracking.
 - Outcome: Defined the core Scrum roles and completed the Week 1 Software Engineering basics assignment.
 
-<span style="color: red;">
-Describe foundational planning artifacts.
-Include:
-• Project plan summary
-• Backlog creation
-• Vision validation
-• Risk and scope definition
-• Link to detailed planning documents</span>
-
 ### **2.2 Sprint 2: Dependency Management and Core Implementation**
+* [Sprint 2 Reports Folder](./docs/sprint_report/Sprint2/)
 
 - Objective: Build the functional backbone of the system.
 - Activities: Configured Maven for multi-module dependency management (Backend, Frontend, Shared) and began REST API development.
 - Outcome: Successful implementation of the initial database schema and connection logic.
 
-<span style="color: red;">
-Describe system requirements and data design.
-Include:
-• Functional requirements summary
-• Use Case Diagram (linked image)
-• ER Diagram (linked image)
-• Database technology
-• Database implementation overview
-• Unit testing strategy and tools </span>
-
 ### **2.3 Sprint 3: Quality Assurance and Automated Testing**
+* [Sprint 3 Reports Folder](./docs/sprint_report/Sprint3/)
 
 - Objective: Ensure code reliability and system stability.
 - Activities: Developed unit tests for controllers and services, including AttendanceControllerTest and AuthServiceTest.
 - Outcome: Integrated JaCoCo for code coverage reporting and achieved initial CI pipeline milestones.
 
-<span style="color: red;">
-Describe user interface and automation.
-Include:
-• UI framework and design approach
-• Screens implemented
-• Code coverage goals and tools
-• Jenkins pipeline description
-o Build
-o Test
-o Coverage
-</span>
-
 ### **2.4 Sprint 4: CI/CD Integration and Final Delivery**
+* [Sprint 4 Reports Folder](./docs/sprint_report/Sprint4/)
 
 - Objective: Automate the deployment lifecycle and finalize the product.
 - Activities: Configured the Jenkinsfile for automated build/test stages and created the Dockerfile for containerized execution.
 - Outcome: Successful end-to-end integration of the RSVP and Attendance features, culminating in the final project presentation.
-- 
-<span style="color: red;">
-Describe how the system was containerized.
-Include:
-• Purpose of Docker in the project
-• Services containerized
-• Dockerfile and compose overview
-• How containers are used in development/testing
-</span>
 
+### **2.5 Sprint 5: Localization Planning and implementation**
+* [Sprint 5 Reports Folder](./docs/sprint_report/Sprint5/)
 
-### **2.5 Sprint 5:Localization Planning and implementation**
-<span style="color: red;">
-Describe scalability and internationalization.
-Include:
-• Supported UI languages
-• Localization approach (e.g., resource files)
-• Kubernetes usage: (if applied)
-o Deployment strategy
-o Services and scaling</span>
+- Objective: Prepare the application for full multilingual support by externalizing all static UI text and implementing dynamic language switching for both Latin and non-Latin scripts.
+- Activities:Identified and documented all hardcoded user-facing strings (labels, buttons, alerts, and table headers) and moved them into per-page resource bundles. 
+    - Integrated a functional language selector in the JavaFX sidebar that triggers a runtime UI refresh.
+    - Implemented localization for two non-Latin languages: Thai (requiring custom font CSS support) and Urdu (requiring Right-to-Left (RTL) layout verification). 
+    - Added locale-aware formatting for dates, times, and numbers to ensure regional consistency.
+- Outcome: Successfully demonstrated a localized GUI that dynamically updates between English, Thai, and Urdu. The layout correctly adapts to different script orientations (LTR/RTL), and all localization workflow steps were documented in the README for future scalability.
 
-### **2.6 Sprint 6:Database Localization, Code Review, Code Clean-Up, and Acceptance Testing**
-<span style="color: red;">Describe database-level localization.
-Include:
-• Language- or region-specific data handling
-• Migration or schema changes
-• Validation approach</span>
+### **2.6 Sprint 6: Database Localization, Code Review, Code Clean-Up, and Acceptance Testing**
+* [Sprint 6 Reports Folder](./docs/sprint_report/Sprint6/)
 
-### **2.7 Sprint 7:Testing, Quality Assurance, and Final Validation Report**
-<span style="color: red;">Explain how quality was ensured.
-Include:
-• SonarQube usage and metrics
-• Code quality goals
-• JMeter test scenarios (If you have done)
-• Functional and non-functional Testing</span>
+- Objective: Localize data persistence and resolve technical debt.
+- Activities: Created event_translation table for localized content; migrated database to utf8mb4; performed SonarQube analysis to fix 16 major bugs and 75 code smells.
+- Outcome: Secured persistence for multilingual data and achieved a zero-warning build after a full backend/frontend refactor.
 
-### **2.8 Sprint 8:Documentation**
-<span style="color: red;">Explain how the project was finalized.
-Include:
-• Technical documentation
-• User documentation
-• API documentation (if applicable)
-• Final system architecture diagram</span>
+### **2.7 Sprint 7: Testing, Quality Assurance, and Final Validation Report**
+* [Sprint 7 Reports Folder](./docs/sprint_report/Sprint7/)
 
+- Objective: Validate system functionality, usability, and stability through comprehensive testing and automated quality gates.
+- Activities: Conducted final unit and integration testing reaching 82% code coverage.
+  - Integrated Jenkins and SonarQube to resolve 16 major concurrency bugs and security hotspots.
+  - Performed Heuristic Evaluation (Nielsen’s 10 Rules) and User Acceptance Testing (UAT) for all the user stories.
+- Outcome: Confirmed the product is production-ready, fully localized, and compliant with the initial requirements defined by the Product Owner.
 
+### **2.8 Sprint 8: Documentation**
+* [Sprint 8 Reports Folder](./docs/sprint_report/Sprint8/)
+
+- Objective: Consolidate all project artifacts from the 16-week development cycle into a professional final report, presentation, and repository.
+- Activities: Updated all sprint reports (S1–S7) and GitHub README and Docs folder.
+- Outcome: A fully documented, reproducible project repository with an "A" grade quality baseline .
 
 ## **3. System Architecture and Design**
 
-![system-architecture.png](diagrams/system-architecture.png)
+- [system-architecture.png](./docs/resources/system-architecture.png)
 
 ### **3.1 High-Level Software Architecture (JavaFX & Spring Boot)**
 
@@ -316,17 +276,17 @@ Include:
 
 - Schema Management: The database handles complex relationships, such as event-user associations, using optimized table structures.
 
-![RelationalDataBase.png](diagrams/RelationalDataBase.png)
+    [RelationalDataBase.png](./docs/resources/RelationalDataBase.png)
 
 - Visual Reference: For complete table mappings and foreign key relationships, refer to diagrams/ErDiagram.png.
 
-![ErDiagram.png](diagrams/ErDiagram.png)
+    [ErDiagram.png](./docs/resources/ErDiagram.png)
 
-### **3.3 UI/UX Design Specifications (Figma Wireframes**
+### **3.3 UI/UX Design Specifications (Figma Wireframes)**
 
--   - **User Flow**: The following diagram illustrates the interaction between Students, Faculty, and the System.
+- **User Flow**: The following diagram illustrates the interaction between Students, Faculty, and the System.
 
-- **![usecase.png](diagrams/usecase.png)**
+    [usecase.png](./docs/resources/usecase.png)
 
 - User Experience: The UI is designed for intuitive event discovery, RSVP management, and attendance tracking.
 
@@ -334,7 +294,7 @@ Include:
 
 - Visual Reference: High-fidelity design mockups are located in diagrams/figma.png.
 
-![figma.png](diagrams/figma.png)
+    [figma.png](./docs/resources/figma.png)
 
 #### **3.3.1 Role-Based Access Control (RBAC) in JavaFX**
 
@@ -351,17 +311,6 @@ The CEMS application uses **State-Based View Switching** to render the correct d
 - Stateless Security: The backend utilizes an AuthFilter and JwtService to protect API endpoints and prevent unauthorized tampering with user tokens.
 
 ### **3.5 Repository Structure**
-<span style="color:red;">
-Explain the main directories.
-Example:
-• /frontend
-• /backend
-• /docs
-• /docker
-• /k8s
-• /tests
-</span>
-
 The CEMS repository is organized into modular components to separate backend logic, frontend UI, shared data models, documentation, and deployment resources.
 
 #### /backend
