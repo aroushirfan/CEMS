@@ -64,6 +64,12 @@
 
 ### **5.3 Code Coverage Analysis (JaCoCo Integration)**
 
+### **5.4 Testing Instructions**
+
+#### **5.4.1 Running Automated Unit Tests**
+
+#### **5.4.2 Accessing Test Coverage Reports (JaCoCo)**
+
 ## **6. Technical Implementation Details**
 
 ### **6.1 Project Directory Structure and Module Separation**
@@ -72,7 +78,7 @@
 
 ### **6.3 Shared Library and DTO Management**
 
-### **7. Deployment , Installation and How to Run the Project Guide**
+## **7. Deployment , Installation and How to Run the Project Guide**
 
 ### **7.1 Prerequisites and Technical Dependencies**
 
@@ -128,6 +134,7 @@ extracurricular events, and track attendance.
    Selected as the primary backend framework because of existing experience and its ability to simplify application development and deployment.
 - Database: MariaDB
   Used as a relational database solution, aligning with our familiarity and the need for structured data management.
+
 - **Additional Tools & Frameworks:**
 - Jenkins: Continuous integration and automated builds
 - Docker: Containerization for consistent environments
@@ -510,7 +517,7 @@ This section outlines the steps required to set up the development environment a
 
 - Containerization: Docker Desktop is required if you intend to deploy the backend via a containerized environment.
 
-### 7.2 Environment Variable Configuration (.env)\*\*
+### 7.2 Environment Variable Configuration (.env)
 
 - Before launching the application, you must configure a .env file in the project root to manage sensitive credentials securely.
 
@@ -542,8 +549,6 @@ This section outlines the steps required to set up the development environment a
     ```bash
   docker-compose up --build -d
   ```
-
-
 
 ## **8. Localization and Multi-Language Support**
 
@@ -845,9 +850,7 @@ This final chapter summarizes the results of the CEMS project and outlines the s
 - Advanced Analytics: Developing a dashboard for organizers to analyze attendance trends and student engagement levels across different event categories.
 
 
-### **10. Authors**
-
-## **15. Authors**
+## **10. Authors**
 
 - **Puntawat Subhamani**
 - **Aroush Irfan** 
