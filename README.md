@@ -4,7 +4,8 @@
 
 ### **Table of Contents**
 
-## 1. Executive Summary
+## **1. Executive Summary**
+
 
 ### **1.1 Project Overview**
 ### **1.2 Project Vision and Technologies Used**
@@ -199,7 +200,7 @@ The project utilized the Scrum framework to manage the complexity of building a 
 - Sprint Length: Each sprint lasted 2 weeks, totaling 8 sprints .
 - Ceremonies: The team held regular Sprint Planning, daily stand-ups, and mandatory Sprint Reviews via Zoom to present deliverables.
 - To support the Agile process, the team integrated industry-standard tools:
-  - Project Management: Trello was used for the Kanban board and backlog tracking.
+  - Project Management: Trello was used for the Kanban board and backlog tracking. 
   - Version Control: GitHub served as the central hub for code and the docs/ repository.
 
 | Sprint       | Scrum Master           | Frontend Team                                                                                        | Backend Team                                                                        |
@@ -276,6 +277,8 @@ This chapter documents the step-by-step evolution of the CEMS project through ei
 - Objective: Consolidate all project artifacts from the 16-week development cycle into a professional final report, presentation, and repository.
 - Activities: Updated all sprint reports (S1–S7) and GitHub README and Docs folder.
 - Outcome: A fully documented, reproducible project repository with an "A" grade quality baseline .
+
+**For a better overview on the sprint progress. Please refer the trello board: [cems.trello](https://trello.com/invite/b/696d0cf4486d64547088246c/ATTI920e481eed42f804afdfe101ef4701472F64DE5B/sep1group8)**
 
 ## **3. System Architecture and Design**
 
