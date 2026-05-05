@@ -207,7 +207,7 @@ The project utilized the Scrum framework to manage the complexity of building a 
 | **Sprint 4** | Sailesh Karki          | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh                  | Ayo Williams, Sailesh                                                               |
 | **Sprint 5** | Ayo Williams           | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh                  | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh |
 | **Sprint 6** | Puntawat Subhamani     | Aroush Irfan, Jiya Kanhirathan Poyil,Puntawat Subhamani                                              | Ayo Williams, Sailesh Karki,Puntawat Subhamani                                      |
-| **Sprint 7** | Puntawat Subhamani     | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh                  | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh |
+| **Sprint 7** |  Aroush Irfan     | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh                  | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh |
 | **Sprint 8** | Jiya Kanhirathan Poyil | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh                  | Aroush Irfan, Puntawat Subhamani,Ayo Williams, <br/>Jiya Kanhirathan Poyil, Sailesh |
 
 ## **2. Project Lifecycle and Iterative Development**
