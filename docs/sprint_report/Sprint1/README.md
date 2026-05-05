@@ -4,6 +4,9 @@
 
 - [Sprint 1: Foundational planning artifacts.](#sprint-1-foundational-planning-artifacts)
   - [Table of contents](#table-of-contents)
+  - [Sprint Documents](#sprint-documents)
+    - [Sprint Planning Report](#sprint-planning-report)
+    - [Sprint Review Report](#sprint-review-report)
   - [1. Project plan summary](#1-project-plan-summary)
   - [2. Backlog creation](#2-backlog-creation)
   - [3. Project vision](#3-project-vision)
@@ -13,6 +16,16 @@
       - [4.1.2 Process and Pipeline Risks](#412-process-and-pipeline-risks)
     - [4.2 Scope](#42-scope)
   - [5. Detailed project plan](#5-detailed-project-plan)
+
+## Sprint Documents
+
+### Sprint Planning Report
+
+[Sprint Planning Report](./Sprint_1_Planning_Report.md)
+
+### Sprint Review Report
+
+[Sprint Review Report](./Sprint_1_Review_Report.md)
 
 ## 1. Project plan summary
 
