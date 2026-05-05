@@ -19,7 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,6 +33,8 @@ class EventControllerTest {
 
   @Autowired
   public EventController controller;
+
+  private static EventController staticController;
 
   @Autowired
   public UserRepository userRepository;
@@ -48,8 +52,14 @@ class EventControllerTest {
   public EventResponseDTO secondEventResponse;
   public Authentication auth;
 
+  private static List<String> eventIdToBeApproved = new ArrayList<>();
+
   @BeforeEach
   void testContext() {
+    eventIdToBeApproved.clear();
+    if (staticController == null) {
+      staticController = controller;
+    }
 
     // ⭐ FIX: Delete attendance FIRST (FK constraint)
     translationRepository.deleteAll();
@@ -107,12 +117,42 @@ class EventControllerTest {
 
     secondEventResponse = controller.createEvent(secondReq).getBody();
     assertNotNull(secondEventResponse);
+
+    EventRequestDTO thirdReq = new EventRequestDTO(
+            "New Student Meetup",
+            "For use with UX testing",
+            "test location",
+            100L,
+            Instant.now().plus(Duration.ofDays(1))
+    );
+    var thirdEventResponse = controller.createEvent(thirdReq).getBody();
+    assert thirdEventResponse != null;
+    eventIdToBeApproved.add(thirdEventResponse.getId().toString());
+
+    EventRequestDTO forthReq = new EventRequestDTO(
+            "Old Student Meetup",
+            "For use with UX testing",
+            "test location",
+            100L,
+            Instant.now().plus(Duration.ofDays(1))
+    );
+    var forthReqResponse = controller.createEvent(forthReq).getBody();
+    assert forthReqResponse != null;
+    eventIdToBeApproved.add(forthReqResponse.getId().toString());
+  }
+
+  @AfterAll
+  static void afterAll() {
+    eventIdToBeApproved.forEach(eventId -> {
+      System.out.println(eventId);
+      staticController.approveEvent(eventId);
+    });
   }
 
   @Test
   @DisplayName("GET /events Should return all events")
   void getAllEvents() {
-    assertEquals(11, controller.getAllEvents().getBody().size());
+    assertEquals(13, controller.getAllEvents().getBody().size());
   }
 
   @Test
