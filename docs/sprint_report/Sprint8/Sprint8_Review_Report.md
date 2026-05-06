@@ -1,4 +1,4 @@
-# Sprint 7 Deliverable Report
+# Sprint 8 Report
 
 ## 1. Summary of Work Done
 - Finalized Documentation: Completed a comprehensive update of the GitHub repository, ensuring all reports from Sprint 1 to Sprint 8 are linked and accessible.
@@ -32,10 +32,10 @@ Quality Assurance: Maintained a zero-warning build status with a final unit test
 
 | Team Member Name                             | Assigned Tasks | Time Spent (hrs) | Peer Review  |
 |----------------------------------------------|----------------|------------------|--------------|
-| Jiya Jameela Kanhirathan Poyil(Scrum Master) |                |                  | Submitted    |
-| Ayokunle Ogunbiyi                            |                |                  | Submitted    |
-| Aroush Irfan                                 |                |                  | Submitted    |
-| Puntawat Subhamani                           |                |                  | Submitted    |
-| Sailesh Karki                                |                |                  | Submitted    |
+| Jiya Jameela Kanhirathan Poyil(Scrum Master) |                |          10hrs        | Submitted    |
+| Ayokunle Ogunbiyi                            |                |        7hrs          | Submitted    |
+| Aroush Irfan                                 |                |                      | Submitted    |
+| Puntawat Subhamani                           |                |          7.5hrs        | Submitted    |
+| Sailesh Karki                                |                |          9hrs        | Submitted    |
 
 
