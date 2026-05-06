@@ -34,7 +34,7 @@ Quality Assurance: Maintained a zero-warning build status with a final unit test
 |----------------------------------------------|----------------|------------------|--------------|
 | Jiya Jameela Kanhirathan Poyil(Scrum Master) |                |          10hrs        | Submitted    |
 | Ayokunle Ogunbiyi                            |                |        7hrs          | Submitted    |
-| Aroush Irfan                                 |                |                      | Submitted    |
+| Aroush Irfan                                 |                |         5hrs             | Submitted    |
 | Puntawat Subhamani                           |                |          7.5hrs        | Submitted    |
 | Sailesh Karki                                |                |          9hrs        | Submitted    |
 
