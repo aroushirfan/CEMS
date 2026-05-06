@@ -255,6 +255,8 @@ This chapter documents the step-by-step evolution of the CEMS project through ei
     - Added locale-aware formatting for dates, times, and numbers to ensure regional consistency.
 - Outcome: Successfully demonstrated a localized GUI that dynamically updates between English, Thai, and Urdu. The layout correctly adapts to different script orientations (LTR/RTL), and all localization workflow steps were documented in the README for future scalability.
 
+For implementation details, see [Chapter 8: Localization and Multi-Language Support](#8-localization-and-multi-language-support).
+
 ### **2.6 Sprint 6: Database Localization, Code Review, Code Clean-Up, and Acceptance Testing**
 * [Sprint 6 Reports Folder](./docs/sprint_report/Sprint6/)
 

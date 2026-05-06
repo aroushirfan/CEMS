@@ -1,6 +1,6 @@
-# Sprint 7
+# Sprint 6
 
-- [Sprint 7](#sprint-7)
+- [Sprint 6](#sprint-6)
   - [Sprint Documents](#sprint-documents)
     - [Acceptance Test Plan](#acceptance-test-plan)
     - [Sprint Review Report](#sprint-review-report)
