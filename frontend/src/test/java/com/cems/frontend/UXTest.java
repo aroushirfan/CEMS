@@ -5,7 +5,6 @@ import com.cems.frontend.services.AuthService;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -28,7 +27,7 @@ class UXTest extends ApplicationTest {
     }
 
     @BeforeAll
-    public static void beforeAll() {
+    static void beforeAll() {
         AuthService.getInstance().logout();
     }
 
