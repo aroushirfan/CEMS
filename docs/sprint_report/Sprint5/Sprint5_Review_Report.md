@@ -3,9 +3,21 @@
 ### Duration: 19.03.2026 -> 01.04.2026
 
 ## Sprint Goal
+
 Prepare the CEMS application for full multilingual support by implementing UI localization, integrate dynamic language switching, and full GUI localization for two non-Latin languages with LTR/RTL orientation.
 
+## Internationalization (i18n)
+
+The CEMS frontend supports three locales English (en_US, default), Thai (th_TH), and Urdu (ur_PK) implemented via Java's ResourceBundle utility. Each language maps to a dedicated resource bundle .properties file containing all UI string keys. When the user selects a language, the ResourceBundle resolves the correct file and the view UI re-renders. Urdu requires RTL (right-to-left) text direction handling.
+
+## Scalability
+
+The localization approach is scalable for small-to-medium growth. Using Java ResourceBundle with per-view .properties files makes it straightforward to add new languages and maintain translations without changing core UI logic. Runtime language switching and centralized locale handling also support future expansion.
+
+However, scaling to many languages and many screens will increase maintenance cost because each new locale requires a full set of per-view translation files and consistent key management across all pages. In addition, full view re-rendering on language switch may become heavier as UI complexity grows. For a small scale application as this it is feasible and easily scalable and maintainable, if the application should grow, stricter translation key standards would be added,  missing key checks, and naming consistency validation should be enforced.
+
 ## Completed User Stories / Tasks
+
 - Externalized UI static text (labels, buttons, alerts, validation messages, and table headers) into localization resource files (https://www.canva.com/design/DAHEdTKJAUo/hTLd7ummAdt-kLV4O--WOg/edit?utm_content=DAHEdTKJAUo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton).
 - Implemented language selection in the UI and verified runtime language switching behavior.
 - Implemented non-Latin GUI localization for Urdu (`ur`) and Thai (`th`).
@@ -13,11 +25,12 @@ Prepare the CEMS application for full multilingual support by implementing UI lo
 - Verified RTL/LTR behavior and layout alignment for localized screens.
 - Updated localization setup document and usage notes for future maintenance or reference by new team members.
 
-
 ## Demo Summary
+
 The team demonstrated runtime language switching between default language (English), Urdu, and Thai; validated localized labels and messages across major screens, and showed locale-based date/number formatting with RTL/LTR layout adaptation.
 
 ## What Went Well
+
 - Localization architecture and existing resource-based setup reduced implementation friction.
 - Team collaboration between frontend and documentation tasks helped maintain consistency of translated keys.
 - Implementation of a per page based resource bundle helped speed up localization of keys and reduce conflicts between team members
@@ -25,21 +38,24 @@ The team demonstrated runtime language switching between default language (Engli
 - RTL layout for Urdu works well in all screens/pages
 
 ## What Could Be Improved
+
 - Some screens may require additional visual fine-tuning in RTL mode (spacing and alignment edge cases).
 - Translation key naming can be standardized further for consistency.
 
 ## Next Sprint Focus
+
 Sprint 6 will focus on database localization planning and implementation, including multilingual schema strategy, localized content persistence, migration approach, and test coverage for multilingual data handling.
 
 ## Team Member Contribution and In-Class Task Submission
 
-| Team Member Name | Assigned Tasks                                                                                                   | Time Spent (hrs) | In-class tasks |
-|------------------|------------------------------------------------------------------------------------------------------------------|------------------|----------------|
-| Sailesh Karki | English resource bundle updates, Localization documentation update,UI text externalization                       | 21h              | Submitted |
-| Jiya Jameela | User settings update (frontend and backend integration), bug fixes, Localization integration support             | 13h              | Submitted |
-| Puntawat Subhamani | locale formatting checks,Thai UI verification, Thai resource bundle updates, Font support for thai               | 14h              | Submitted |
-| Aroush Irfan | Frontend localization , Urdu UI verification,Urdu resource bundle updates, User management bug fixes/adjustments | 10h              | Submitted |
-| Ayokunle Ogunbiyi | UI text externalization,Language selector integration,English resource bundle updates support                    | 24h              | Submitted |
+| Team Member Name   | Assigned Tasks                                                                                                   | Time Spent (hrs) | In-class tasks |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------- | ---------------- | -------------- |
+| Sailesh Karki      | English resource bundle updates, Localization documentation update,UI text externalization                       | 21h              | Submitted      |
+| Jiya Jameela       | User settings update (frontend and backend integration), bug fixes, Localization integration support             | 13h              | Submitted      |
+| Puntawat Subhamani | locale formatting checks,Thai UI verification, Thai resource bundle updates, Font support for thai               | 14h              | Submitted      |
+| Aroush Irfan       | Frontend localization , Urdu UI verification,Urdu resource bundle updates, User management bug fixes/adjustments | 10h              | Submitted      |
+| Ayokunle Ogunbiyi  | UI text externalization,Language selector integration,English resource bundle updates support                    | 24h              | Submitted      |
 
 ## AI Tools Utilized
+
 - GitHub Copilot (GPT-5.3-Codex): Assisted with documentation drafting, and report structuring.
