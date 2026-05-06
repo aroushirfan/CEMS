@@ -3,10 +3,17 @@ package com.cems.frontend.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LocalHttpClientHelperTest {
+
+  @AfterAll
+  static void setPortBack() {
+    LocalHttpClientHelper.setBaseURL(System.getenv().getOrDefault("BACKEND_URL", "http://localhost:8081"));
+  }
 
   @Test
   void testGetClientAndMapper() {

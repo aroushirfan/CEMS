@@ -152,4 +152,8 @@ public final class LocalHttpClientHelper {
   private HttpRequest build() {
     return this.requestBuilder.build();
   }
+
+  public static void setBaseURL(String baseURL) {
+    LocalHttpClientHelper.baseURL = baseURL;
+  }
 }
